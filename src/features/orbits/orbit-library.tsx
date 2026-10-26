@@ -18,7 +18,6 @@ export function OrbitLibrary({ selected }: { selected: OrbitSlug }) {
           <Link
             key={orbit.slug}
             href={ROUTES.orbit(orbit.slug)}
-            scroll={false}
             className={`library-card ${selected === orbit.slug ? 'selected' : ''}`}
             aria-current={selected === orbit.slug ? 'page' : undefined}
           >

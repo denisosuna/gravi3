@@ -12,3 +12,5 @@ test-results/
 /*.pdf
 /*.png
 next-env.d.ts
+.claude
+.agents

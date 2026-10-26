@@ -16,7 +16,7 @@ const VIEW_LABELS = { front: 'front', '3d': 'threeD' } as const;
 export function PlayerControls({ controller }: { controller: PlaybackController }) {
   const t = useTranslations('player');
   const locale = useLocale();
-  const state = usePlaybackState(controller);
+  const state = usePlaybackState(controller, (session) => session);
   useEffect(() => {
     if (!state.playing) return;
     const timer = window.setInterval(controller.publish, PUBLISH_INTERVAL_MS);
@@ -76,17 +76,18 @@ export function PlayerControls({ controller }: { controller: PlaybackController 
 
 export function ViewControls({ controller }: { controller: PlaybackController }) {
   const t = useTranslations('player');
-  const state = usePlaybackState(controller);
+  const view = usePlaybackState(controller, (session) => session.view);
+  const traces = usePlaybackState(controller, (session) => session.traces);
   return (
     <div className="view-controls">
       <div className="segmented-control">
-        {CAMERA_VIEWS.map((view) => (
+        {CAMERA_VIEWS.map((option) => (
           <button
-            key={view}
-            aria-pressed={state.view === view}
-            onClick={() => controller.setView(view)}
+            key={option}
+            aria-pressed={view === option}
+            onClick={() => controller.setView(option)}
           >
-            {t(VIEW_LABELS[view])}
+            {t(VIEW_LABELS[option])}
           </button>
         ))}
       </div>
@@ -101,7 +102,7 @@ export function ViewControls({ controller }: { controller: PlaybackController })
       <label className="trace-toggle">
         <input
           type="checkbox"
-          checked={state.traces}
+          checked={traces}
           onChange={(event) => controller.update({ traces: event.target.checked })}
         />
         {t('traces')}

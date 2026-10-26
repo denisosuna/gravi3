@@ -57,6 +57,8 @@ test('returning to the gallery restores the originating card and keyboard focus'
   const card = page.locator('#orbit-yin-yang-i');
   await card.scrollIntoViewIfNeeded();
   await card.click();
+  await expect(page).toHaveURL(/\/en\/orbits\/yin-yang-i$/);
+  await expect(page.locator('h1')).toBeInViewport();
   await page.getByRole('link', { name: 'Back to gallery' }).click();
   await expect(card).toBeFocused();
   await card.click();

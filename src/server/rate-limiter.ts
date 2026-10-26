@@ -17,6 +17,8 @@ interface Bucket {
   hourCount: number;
 }
 
+const secondsUntil = (windowEnd: number, now: number) => Math.ceil((windowEnd - now) / 1000);
+
 export class LimitError extends Error {
   constructor(readonly retryAfter: number) {
     super('Tutor request limit reached.');
@@ -29,17 +31,22 @@ export class RateLimiter {
   private active = 0;
   constructor(private limits: Limits) {}
 
-  acquire(key: string, now = Date.now()) {
+  // Clients without a trustworthy key only count against the global and concurrency limits,
+  // so one anonymous user cannot exhaust a per-client quota shared by everyone.
+  acquire(key: string | undefined, now = Date.now()) {
     const minute = Math.floor(now / MINUTE_MS);
     const hour = Math.floor(now / HOUR_MS);
     this.expire(hour);
-    const bucket = this.bucketFor(key, minute, hour);
-    this.assertWithinLimits(key, bucket, now);
-    bucket.minuteCount++;
-    bucket.hourCount++;
+    const bucket = key === undefined ? undefined : this.bucketFor(key, minute, hour);
+    this.assertGlobalLimits(now, hour);
+    if (key !== undefined && bucket) {
+      this.assertClientLimits(key, bucket, now);
+      bucket.minuteCount++;
+      bucket.hourCount++;
+      this.buckets.set(key, bucket);
+    }
     this.global.count++;
     this.active++;
-    this.buckets.set(key, bucket);
     let released = false;
     return () => {
       if (!released) {
@@ -63,15 +70,20 @@ export class RateLimiter {
     return bucket;
   }
 
-  private assertWithinLimits(key: string, bucket: Bucket, now: number) {
-    const secondsUntil = (windowEnd: number) => Math.ceil((windowEnd - now) / 1000);
-    if (this.global.count >= this.limits.globalPerHour || bucket.hourCount >= this.limits.perHour)
-      throw new LimitError(secondsUntil((bucket.hour + 1) * HOUR_MS));
+  private assertGlobalLimits(now: number, hour: number) {
+    if (this.global.count >= this.limits.globalPerHour)
+      throw new LimitError(secondsUntil((hour + 1) * HOUR_MS, now));
+    if (this.active >= this.limits.concurrent)
+      throw new LimitError(CONCURRENCY_RETRY_AFTER_SECONDS);
+  }
+
+  private assertClientLimits(key: string, bucket: Bucket, now: number) {
+    if (bucket.hourCount >= this.limits.perHour)
+      throw new LimitError(secondsUntil((bucket.hour + 1) * HOUR_MS, now));
     if (bucket.minuteCount >= this.limits.perMinute)
-      throw new LimitError(secondsUntil((bucket.minute + 1) * MINUTE_MS));
-    const isNewKey = !this.buckets.has(key);
+      throw new LimitError(secondsUntil((bucket.minute + 1) * MINUTE_MS, now));
     const maxKeys = this.limits.maxKeys ?? DEFAULT_MAX_KEYS;
-    if (this.active >= this.limits.concurrent || (isNewKey && this.buckets.size >= maxKeys))
+    if (!this.buckets.has(key) && this.buckets.size >= maxKeys)
       throw new LimitError(CONCURRENCY_RETRY_AFTER_SECONDS);
   }
 

@@ -52,7 +52,7 @@ const SceneContents = memo(function SceneContents({
   const { size } = useThree();
   const aspect = size.width / size.height;
   const { scale, paths } = useMemo(() => fitTrajectory(trajectory, aspect), [trajectory, aspect]);
-  const state = usePlaybackState(controller);
+  const traces = usePlaybackState(controller, (session) => session.traces);
   return (
     <>
       <ambientLight intensity={1.5} />
@@ -62,7 +62,7 @@ const SceneContents = memo(function SceneContents({
         rotation={[Math.PI / 2, 0, 0]}
         position={[0, 0, -0.25]}
       />
-      {state.traces
+      {traces
         ? paths.map((points, i) => (
             <Line
               key={i}
@@ -97,7 +97,7 @@ export default function OrbitScene({
   visible: boolean;
 }) {
   const { resolvedTheme } = useTheme();
-  const state = usePlaybackState(controller);
+  const playing = usePlaybackState(controller, (session) => session.playing);
   return (
     <Canvas
       camera={{
@@ -107,7 +107,7 @@ export default function OrbitScene({
         far: 100,
       }}
       dpr={[1, MAX_DEVICE_PIXEL_RATIO]}
-      frameloop={state.playing && visible ? 'always' : 'demand'}
+      frameloop={playing && visible ? 'always' : 'demand'}
       gl={{ antialias: true, alpha: true }}
     >
       <SceneContents

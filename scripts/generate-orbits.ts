@@ -3,6 +3,7 @@ import { dirname } from 'node:path';
 import { ASSETS } from '../src/constants/routes';
 import { orbits } from '../src/data/orbits';
 import { integrate } from '../src/physics/integrator';
+import { TRAJECTORY_VERSION } from '../src/physics/trajectory-schema';
 import type { Trajectory } from '../src/physics/types';
 import { compressSamples, diagnose, previewSvg, publicAssetPath, thresholds } from './orbit-tools';
 
@@ -22,7 +23,7 @@ for (const orbit of orbits) {
     gravitationalConstant: orbit.gravitationalConstant,
   });
   const trajectory: Trajectory = {
-    version: 1,
+    version: TRAJECTORY_VERSION,
     slug: orbit.slug,
     period: orbit.period,
     samples: compressSamples(dense, orbit.period),

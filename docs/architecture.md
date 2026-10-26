@@ -51,7 +51,7 @@ The `openai` SDK is used as a generic OpenAI-compatible client: `LLM_BASE_URL`, 
 
 Fixed minute/hour windows and a global concurrent-lease count are held in memory. Reservations happen synchronously before the provider call; leases are released in `finally`. Buckets expire on subsequent use and are bounded to 2,000 keys. Counts survive neither restarts nor separate processes. This is appropriate for a single-instance assessment demo, not a distributed abuse-prevention system.
 
-`TRUST_PROXY=false` is the safe default: incoming IP headers are ignored and requests share a conservative bucket. Only enable it after verifying that the deployment's final trusted proxy appends/overwrites `X-Forwarded-For` and untrusted clients cannot supply its final value. The last valid IP is hashed for a bounded key and is never logged. Shared IPs or the shared fallback can affect legitimate users; global limits remain effective if IPs rotate. CORS/Origin checks are not authentication.
+`TRUSTED_PROXY_HOPS=0` is the safe default: incoming IP headers are ignored and requests only count against the global hourly and concurrency limits, so an anonymous visitor cannot exhaust a shared per-client quota. With `N > 0` trusted proxies, the client IP is the N-th `X-Forwarded-For` entry from the end; earlier entries are client-controlled and ignored. That IP is hashed for a bounded key and never logged. Shared IPs can affect legitimate users; global limits remain effective if IPs rotate. CORS/Origin checks are not authentication.
 
 ## Logging and privacy
 

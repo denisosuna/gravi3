@@ -10,12 +10,11 @@ import {
   type TutorRequest,
 } from '@/data/tutor-contract';
 import type { ServerConfig } from './config';
-import { LOG_EVENTS } from './logger';
+import { LOG_EVENTS } from './log-events';
 import type { RateLimiter } from './rate-limiter';
 import { readJsonBody, RequestError } from './request-body';
 import { classifyTutorError } from './tutor-errors';
 
-const SHARED_CLIENT_KEY = 'shared';
 const ALLOWED_PROTOCOLS = ['http:', 'https:'];
 
 interface Dependencies {
@@ -41,13 +40,13 @@ function acceptsOrigin(request: Request, appUrl: string): boolean {
   }
 }
 
-// Only the last X-Forwarded-For hop is set by a trusted proxy; the raw IP is never stored.
-function clientKey(request: Request, trustProxy: boolean): string {
-  if (!trustProxy) return SHARED_CLIENT_KEY;
-  const address = request.headers.get('x-forwarded-for')?.split(',').at(-1)?.trim();
-  return address && isIP(address)
-    ? createHash('sha256').update(address).digest('hex')
-    : SHARED_CLIENT_KEY;
+// Each trusted proxy appends one X-Forwarded-For entry, so the client is `hops` entries from the end.
+// Earlier entries are client-controlled and ignored. The raw IP is hashed and never stored.
+function clientKey(request: Request, trustedProxyHops: number): string | undefined {
+  if (trustedProxyHops === 0) return undefined;
+  const entries = request.headers.get('x-forwarded-for')?.split(',') ?? [];
+  const address = entries.at(-trustedProxyHops)?.trim();
+  return address && isIP(address) ? createHash('sha256').update(address).digest('hex') : undefined;
 }
 
 function jsonResponse(requestId: string, status: number, body: object, retryAfter?: number) {
@@ -83,7 +82,7 @@ export async function handleTutor(request: Request, dependencies: Dependencies):
     if (!input.success)
       throw new RequestError(HTTP_STATUS.badRequest, TUTOR_ERROR_CODES.invalidRequest);
 
-    release = limiter.acquire(clientKey(request, config.trustProxy));
+    release = limiter.acquire(clientKey(request, config.trustedProxyHops));
     providerSignal = AbortSignal.any([request.signal, AbortSignal.timeout(config.llm.timeoutMs)]);
     providerSignal.throwIfAborted();
     const reply = (await complete(input.data, providerSignal)).trim();
