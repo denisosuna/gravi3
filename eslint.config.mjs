@@ -46,14 +46,21 @@ export default defineConfig([
   {
     files: ['src/features/learning/**'],
     rules: restrictImports(
-      ['@/server/*', '@/features/orbits/*'],
+      ['@/server/*', '@/features/orbits/*', '@/features/home/*'],
+      'Features must not import server code or each other.',
+    ),
+  },
+  {
+    files: ['src/features/home/**'],
+    rules: restrictImports(
+      ['@/server/*', '@/features/learning/*', '@/features/orbits/*'],
       'Features must not import server code or each other.',
     ),
   },
   {
     files: ['src/features/orbits/**'],
     rules: restrictImports(
-      ['@/server/*', '@/features/learning/*'],
+      ['@/server/*', '@/features/learning/*', '@/features/home/*'],
       'Features must not import server code or each other.',
     ),
   },

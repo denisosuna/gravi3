@@ -1,10 +1,20 @@
 # Gravi3
 
-An interactive observatory for learning Newtonian gravity without a physics background. Change masses and distance, test a prediction, ask a contextual AI tutor, and explore six numerically validated periodic three-body solutions.
+Gravi3 is an interactive course that teaches the **three-body problem** to adults with no physics background, through experiments, a contextual AI tutor and six exact periodic orbits rendered in 3D.
 
-- **Learn:** an SVG force laboratory with deterministic SI-unit results, prediction feedback and a real LLM tutor (any OpenAI-compatible provider).
-- **Orbits:** Lagrange, figure eight, Butterfly I, Goggles, Moth I and Yin-Yang I, each with a shared URL, playback controls and scientific details.
-- Spanish/English; light/dark/system themes; keyboard controls; mobile layout; explicit reduced mode without AI credentials.
+## What is the three-body problem?
+
+Given the positions and velocities of three masses that attract each other through Newtonian gravity, where will they be later? For **two** bodies Newton solved it in 1687: they follow ellipses, parabolas or hyperbolas and a formula predicts their motion forever. For **three**, Poincaré showed around 1890 that there is no simple general solution, and that the system is usually **chaotic**: a tiny change in the starting conditions leads to completely different paths. Yet some very precise starting conditions produce **periodic orbits** that repeat exactly, such as Lagrange's equilateral triangle (1772), the figure eight (1993) and the families found by computer in 2013.
+
+The Sun–Earth–Moon system, spacecraft trajectories and the James Webb telescope near the L2 point all depend on these ideas.
+
+## What the app does
+
+1. **Learn** (`/{locale}/learn`): understand the law of gravity with two bodies. Change masses and distance, predict what happens to the force, and check it against deterministic SI calculations.
+2. **Ask the tutor:** an LLM tutor (any OpenAI-compatible provider) answers with the current experiment values. It is optional; every calculation works without it.
+3. **Orbits** (`/{locale}/orbits`): six periodic three-body solutions (Lagrange, figure eight, Butterfly I, Goggles, Moth I, Yin-Yang I), each with a shareable URL, 3D playback controls and scientific details. Trajectories are generated offline from published initial conditions and validated numerically.
+
+Spanish/English, light/dark/system themes, keyboard controls, mobile layout and an explicit reduced mode without AI credentials.
 
 ## Run with Docker
 
@@ -37,13 +47,6 @@ pnpm start
 ```
 
 The build prepares Next.js standalone output with static resources and removes traced environment-file copies. The start helper reads the local environment and runs that standalone server. All application/physics/generation code is TypeScript; the two small Node ESM helpers handle build packaging and startup.
-
-The implementation is delivered through stacked phase pull requests. Until they are merged, the complete application is on `feature/delivery`; a fresh clone can select it directly:
-
-```sh
-git clone --branch feature/delivery https://github.com/denisosuna/gravi3.git
-cd gravi3
-```
 
 ## Enable the real tutor
 
@@ -141,7 +144,7 @@ Orbits start paused. Use Play, Restart, speed, timeline, front/3D, trails and ca
 
 The repository owner manages Render deployment. No hosted URL is claimed until it is actually deployed.
 
-Create a Blueprint from this repository and the branch containing the implementation; `render.yaml` defines a free Docker web service with `/api/health` and deployment after passing checks. For an ordinary service, select Docker, the implementation branch, free plan, one instance, and the same health path. After the PRs are merged, select `main`.
+Create a Blueprint from this repository (`main` branch); `render.yaml` defines a free Docker web service with `/api/health` and deployment after passing checks. For an ordinary service, select Docker, the `main` branch, free plan, one instance, and the same health path.
 
 The app uses Render's [documented `RENDER_EXTERNAL_URL`](https://render.com/docs/environment-variables#render_external_url) when `APP_URL` is absent. Set `APP_URL` explicitly for a custom domain. The blueprint pre-fills the Groq base URL and model; add `LLM_API_KEY` as a runtime secret if you want the tutor enabled (change the other two to use another provider); it is optional for deployment. Keep `TRUSTED_PROXY_HOPS=0` until you have checked what Render puts in `X-Forwarded-For`.
 
