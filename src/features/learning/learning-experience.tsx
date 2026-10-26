@@ -14,9 +14,15 @@ import {
   type Experiment,
 } from '@/data/experiment';
 import { gravitationalForce } from '@/physics/gravity';
-import { ForceDiagram } from './force-diagram';
+import { ForceLab } from './force-lab';
 import { Prediction } from './prediction';
 import { TutorPanel } from '@/components/tutor/tutor-panel';
+
+const INITIAL_FORCE = gravitationalForce(
+  initialExperiment.mass1,
+  initialExperiment.mass2,
+  initialExperiment.distance,
+);
 
 export function LearningExperience() {
   const t = useTranslations('learn');
@@ -34,6 +40,7 @@ export function LearningExperience() {
     maximumSignificantDigits: 4,
   });
   const number = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 });
+  const ratioFormat = new Intl.NumberFormat(locale, { maximumSignificantDigits: 3 });
   return (
     <div className="learning-layout">
       <div className="learning-main">
@@ -49,7 +56,7 @@ export function LearningExperience() {
               <RotateCcw size={16} />
             </button>
           </div>
-          <ForceDiagram experiment={experiment} />
+          <ForceLab experiment={experiment} force={force} />
           <div className="lab-inputs">
             {(['mass1', 'mass2', 'distance'] as const).map((key) => (
               <label key={key}>
@@ -91,6 +98,9 @@ export function LearningExperience() {
             <output data-testid="force-value" data-force={force}>
               {format.format(force)} <small>{UNITS.force}</small>
             </output>
+            <p className="force-ratio">
+              {t('ratio', { ratio: ratioFormat.format(force / INITIAL_FORCE) })}
+            </p>
             <p>{t('equal')}</p>
             <div className="acceleration-values">
               <span>

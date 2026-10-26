@@ -146,7 +146,7 @@
     "distance": "Center-to-center distance",
     "force": "Attractive force on each body",
     "equal": "Equal magnitude, opposite directions. Acceleration is F/m: the smaller mass accelerates more.",
-    "scale": "Body radii and arrows are illustrative; force values are calculated in SI units.",
+    "scale": "Distance to scale; illustrative radii; force arrows on a logarithmic scale. Values are calculated in SI units.",
     "predictionTitle": "Before you try it, what do you predict?",
     "predictionQuestion": "If we double the distance and keep the masses, the force becomes…",
     "half": "One half",
@@ -165,7 +165,11 @@
     "step3": "03 · Connect",
     "forceUnits": "newtons (N)",
     "acceleration": "Acceleration",
-    "predictionHint": "Choose an answer, then check its effect in the laboratory."
+    "predictionHint": "Choose an answer, then check its effect in the laboratory.",
+    "rotateHint": "Drag the scene to rotate it.",
+    "fallback3d": "The 3D view is not available on this device. This diagram shows the same experiment.",
+    "ratio": "{ratio} × the force of the starting setup",
+    "legend": "Experiment values"
   },
   "tutor": {
     "title": "AI tutor",
