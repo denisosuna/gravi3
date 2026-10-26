@@ -1365,13 +1365,177 @@ button.control-button:hover {
 .prediction-feedback.correct {
   color: var(--accent);
 }
-.learning-connection {
-  margin: 34px 0 12px;
+.simulator-panel {
+  margin-top: 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  padding: 24px;
+  display: grid;
+  gap: 16px;
+  min-width: 0;
 }
-.learning-connection p {
-  font-size: 13px;
+.simulator-panel .eyebrow {
+  margin-bottom: 0;
+}
+.simulator-intro,
+.simulator-model,
+.simulator-next p,
+.body-editor p,
+.simulation-readouts details p {
   color: var(--muted);
-  max-width: 600px;
+  font-size: 13px;
+  line-height: 1.7;
+  max-width: 680px;
+}
+.simulator-presets {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.preset-button {
+  text-align: left;
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.preset-button strong {
+  font-size: 13px;
+}
+.preset-button small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.preset-button[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.simulator-stage {
+  position: relative;
+}
+.simulator-scene {
+  height: clamp(300px, 46vh, 460px);
+  border-radius: 12px;
+  background: var(--surface-raised);
+  overflow: hidden;
+}
+.simulator-scene canvas {
+  touch-action: pan-y !important;
+}
+.simulator-fallback {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+.simulator-event:not(:empty) {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.simulator-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.zoom-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.simulation-readouts dl {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+.simulation-readouts dl > div {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  min-width: 0;
+}
+.simulation-readouts dt {
+  color: var(--muted);
+  font-size: 11px;
+}
+.simulation-readouts dd {
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.simulation-readouts details,
+.body-editor {
+  margin-top: 10px;
+}
+.simulation-readouts summary,
+.body-editor summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+.body-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+.body-fieldset {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.body-fieldset legend {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0 4px;
+}
+.body-1 legend {
+  color: var(--blue);
+}
+.body-2 legend {
+  color: var(--amber);
+}
+.body-3 legend {
+  color: var(--violet);
+}
+.body-fieldset label {
+  display: grid;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.body-fieldset span {
+  display: flex;
+  justify-content: space-between;
+}
+.simulator-next {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 16px;
 }
 @media (max-width: 900px) {
   .learning-layout {
@@ -1556,6 +1720,19 @@ button.control-button:hover {
   }
 }
 @media (max-width: 640px) {
+  .simulator-panel {
+    padding: 16px;
+  }
+  .simulator-presets,
+  .simulation-readouts dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .body-editor-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .simulator-scene {
+    height: 320px;
+  }
   .learning-sidebar {
     display: flex;
     flex-direction: column;

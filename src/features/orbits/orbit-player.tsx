@@ -9,6 +9,7 @@ import { parseTrajectory } from '@/physics/trajectory-schema';
 import type { OrbitDefinition, OrbitSlug, Trajectory } from '@/physics/types';
 import { useExperienceMemory } from '@/components/providers';
 import { SceneBoundary } from '@/components/scene-boundary';
+import { useDocumentVisible } from '@/components/use-document-visible';
 import { PlaybackController } from './playback';
 import { PlayerControls, ViewControls } from './player-controls';
 
@@ -26,13 +27,8 @@ function Viewport({
   const common = useTranslations('common');
   const [lost, setLost] = useState(false);
   const [attempt, setAttempt] = useState(0);
-  const [visible, setVisible] = useState(true);
+  const visible = useDocumentVisible();
   const onLost = useCallback(() => setLost(true), []);
-  useEffect(() => {
-    const update = () => setVisible(!document.hidden);
-    document.addEventListener('visibilitychange', update);
-    return () => document.removeEventListener('visibilitychange', update);
-  }, []);
   const fallback = (
     <div className="scene-fallback">
       <Image src={ASSETS.orbitPreview(slug)} width={640} height={400} alt="" />

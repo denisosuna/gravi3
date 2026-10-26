@@ -2,10 +2,8 @@
 
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { ArrowRight, RotateCcw } from 'lucide-react';
-import { Link } from '@/i18n/routing';
+import { RotateCcw } from 'lucide-react';
 import { useExperienceMemory } from '@/components/providers';
-import { ROUTES } from '@/constants/routes';
 import {
   distanceRange,
   initialExperiment,
@@ -15,6 +13,7 @@ import {
 } from '@/data/experiment';
 import { gravitationalForce } from '@/physics/gravity';
 import { ForceLab } from './force-lab';
+import { ThreeBodySimulator } from './simulator/three-body-simulator';
 import { Prediction } from './prediction';
 import { TutorPanel } from '@/components/tutor/tutor-panel';
 
@@ -116,15 +115,7 @@ export function LearningExperience() {
           answer={experiment.prediction}
           onAnswer={(prediction) => update({ prediction })}
         />
-        <section className="learning-connection">
-          <div className="eyebrow">{t('step3')}</div>
-          <h2>{t('nextTitle')}</h2>
-          <p>{t('nextText')}</p>
-          <Link href={ROUTES.orbits} className="button">
-            {t('explore')}
-            <ArrowRight size={16} />
-          </Link>
-        </section>
+        <ThreeBodySimulator />
       </div>
       <aside className="learning-sidebar">
         <TutorPanel context={{ kind: 'learning', ...experiment }} />

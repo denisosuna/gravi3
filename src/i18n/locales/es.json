@@ -135,7 +135,7 @@
     "seconds": "s de reproducción"
   },
   "learn": {
-    "eyebrow": "APRENDER · PASO 1: LA GRAVEDAD ENTRE DOS CUERPOS",
+    "eyebrow": "APRENDER · DE DOS A TRES CUERPOS",
     "title": "La gravedad empieza con dos.",
     "description": "Para entender tres cuerpos primero hay que entender cómo se atraen dos. Mueve las masas, cambia la distancia y predice qué ocurrirá antes de comprobarlo.",
     "formulaTitle": "Una ley, tres ingredientes",
@@ -157,12 +157,8 @@
     "tryDistance": "Duplicar la distancia",
     "tryMass": "Duplicar la primera masa",
     "reset": "Restablecer experimento",
-    "nextTitle": "¿Y si añadimos un tercer cuerpo?",
-    "nextText": "Cada par sigue esta misma ley. Sus interacciones producen movimientos complejos y, en casos especiales, órbitas que se repiten.",
-    "explore": "Descubre las seis órbitas",
     "step1": "01 · Observa",
     "step2": "02 · Predice",
-    "step3": "03 · Conecta",
     "forceUnits": "newtons (N)",
     "acceleration": "Aceleración",
     "predictionHint": "Elige una respuesta y después comprueba el efecto en el laboratorio.",
@@ -199,5 +195,64 @@
     "learnTitle": "Aprende la ley de gravitación",
     "orbitsTitle": "Seis soluciones del problema de los tres cuerpos",
     "description": "Aprende gravitación con experimentos y un tutor IA. Explora seis soluciones periódicas del problema de los tres cuerpos."
+  },
+  "simulator": {
+    "step": "03 · Tres cuerpos",
+    "title": "Añade un tercer cuerpo",
+    "intro": "Cada par de cuerpos se atrae con la misma ley que acabas de probar. Con tres, cada uno tira de los otros dos a la vez y el movimiento ya no tiene fórmula: hay que calcularlo paso a paso. Elige un punto de partida y obsérvalo.",
+    "presets": "Puntos de partida",
+    "preset": {
+      "figure-eight": {
+        "name": "Figura de ocho",
+        "hint": "Periódica: se repite exactamente."
+      },
+      "lagrange": {
+        "name": "Lagrange",
+        "hint": "Periódica: un triángulo que gira."
+      },
+      "pythagorean": {
+        "name": "Pitagórico",
+        "hint": "Caos: masas 3, 4 y 5 en reposo; uno acaba expulsado."
+      },
+      "sun-planet-moon": {
+        "name": "Sol, planeta y luna",
+        "hint": "Jerárquico y casi regular, como el Sol, la Tierra y la Luna."
+      },
+      "custom": {
+        "name": "Personalizado",
+        "hint": "Condiciones editadas por ti."
+      }
+    },
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "reset": "Reiniciar",
+    "perturb": "Perturbar 1 %",
+    "perturbHint": "Cambia un 1 % la velocidad del cuerpo 1 y vuelve a empezar: compara cuánto cambia el resultado.",
+    "speed": "Velocidad de la simulación",
+    "zoomIn": "Acercar",
+    "zoomOut": "Alejar",
+    "zoom": "Zoom",
+    "vectors": "Vectores de velocidad",
+    "readouts": "Lecturas",
+    "time": "Tiempo",
+    "energy": "Energía total",
+    "drift": "Variación de energía",
+    "center": "Centro de masas",
+    "separation": "Separación mínima",
+    "readHelp": "Cómo leer estos valores",
+    "readHelpText": "La energía total debe mantenerse constante: si su variación es casi 0 %, el cálculo es fiable. El centro de masas no se mueve porque no hay fuerzas externas. La separación mínima es la distancia entre los dos cuerpos más próximos: cuanto más pequeña, más fuerte es la atracción entre ellos.",
+    "editor": "Editar cuerpos",
+    "editorHint": "Al cambiar un valor, la simulación vuelve a empezar desde las nuevas condiciones.",
+    "body": "Cuerpo {number}",
+    "mass": "Masa",
+    "vx": "Velocidad x",
+    "vy": "Velocidad y",
+    "collision": "Dos cuerpos se han acercado tanto que la fuerza crece sin límite: con masas puntuales sería una colisión. La simulación se detiene aquí; reinicia o elige otro punto de partida.",
+    "escape": "Un cuerpo se ha alejado mucho de los otros dos: probablemente ha sido expulsado. Es el final más habitual del problema de los tres cuerpos.",
+    "model": "Física exacta de Newton con masas puntuales y G = 1, sin suavizar la fuerza. Unidades normalizadas.",
+    "sceneLabel": "Simulación de tres cuerpos",
+    "fallback": "La simulación necesita WebGL, que no está disponible en este dispositivo.",
+    "next": "Las órbitas periódicas son la excepción: condiciones tan precisas que el movimiento se repite. Explora las seis más conocidas.",
+    "explore": "Descubre las seis órbitas"
   }
 }
