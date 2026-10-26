@@ -1,11 +1,10 @@
-import { pageMetadata } from '@/server/metadata';
+import { ROUTES } from '@/constants/routes';
+import { sectionMetadata } from '@/server/metadata';
 import { getTranslations } from 'next-intl/server';
 import { LearningExperience } from '@/features/learning/learning-experience';
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: 'seo' });
-  return pageMetadata(locale, '/learn', t('learnTitle'), t('description'));
+export function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  return sectionMetadata(params, ROUTES.learn, 'learnTitle');
 }
 
 export default async function LearnPage({ params }: { params: Promise<{ locale: string }> }) {

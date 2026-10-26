@@ -1,214 +1,40 @@
-'use client';
-
-import {
-  memo,
-  type ComponentRef,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useSyncExternalStore,
-} from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Line, OrbitControls } from '@react-three/drei';
-import {
-  AdditiveBlending,
-  CanvasTexture,
-  SRGBColorSpace,
-  BufferAttribute,
-  BufferGeometry,
-  Group,
-  Line as ThreeLine,
-  LineBasicMaterial,
-} from 'three';
+import { memo, useMemo } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
+import { Line } from '@react-three/drei';
 import { useTheme } from 'next-themes';
-import type { Trajectory } from '@/physics/types';
-import { samplePositions } from '@/physics/interpolation';
 import type { PlaybackController } from '@/features/orbits/playback';
+import { usePlaybackState } from '@/features/orbits/use-playback-state';
+import { BODY_INDICES, bodyPosition, type Trajectory } from '@/physics/types';
+import { CameraRig, INITIAL_CAMERA_POSITION } from './camera-rig';
+import { MovingBodies } from './moving-bodies';
+import { scenePalette } from './scene-palette';
 
-const DARK_COLORS = ['#6abaff', '#ffbf67', '#c58bff'];
-const LIGHT_COLORS = ['#286bdb', '#b36c09', '#8b42df'];
-const BODY_IDS = [0, 1, 2];
+const FIELD_OF_VIEW_DEGREES = 42;
+// Leaves a margin so the full trajectory fits inside the initial front view.
+const VIEWPORT_FILL = 0.82;
+const GRID_SIZE = 12;
+const GRID_DIVISIONS = 30;
+const MAX_DEVICE_PIXEL_RATIO = 1.5;
 
-function MovingBodies({
-  trajectory,
-  controller,
-  scale,
-  colors,
-}: {
-  trajectory: Trajectory;
-  controller: PlaybackController;
-  scale: number;
-  colors: string[];
-}) {
-  const labels = useMemo(
-    () =>
-      [1, 2, 3].map((number) => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 64;
-        canvas.height = 64;
-        const context = canvas.getContext('2d');
-        if (!context) throw new Error('Label canvas unavailable.');
-        context.fillStyle = '#142044';
-        context.beginPath();
-        context.arc(32, 32, 29, 0, 2 * Math.PI);
-        context.fill();
-        context.fillStyle = '#ffffff';
-        context.font = 'bold 38px sans-serif';
-        context.textAlign = 'center';
-        context.textBaseline = 'middle';
-        context.fillText(String(number), 32, 34);
-        const texture = new CanvasTexture(canvas);
-        texture.colorSpace = SRGBColorSpace;
-        return texture;
-      }),
-    [],
-  );
-  useEffect(() => () => labels.forEach((label) => label.dispose()), [labels]);
-  const groups = useRef<(Group | null)[]>([]);
-  const target = useMemo(() => Array<number>(6).fill(0), []);
-  const trails = useMemo(
-    () =>
-      colors.map((color) => {
-        const geometry = new BufferGeometry();
-        geometry.setAttribute('position', new BufferAttribute(new Float32Array(129 * 3), 3));
-        return new ThreeLine(
-          geometry,
-          new LineBasicMaterial({ color, transparent: true, opacity: 0.75 }),
-        );
-      }),
-    [colors],
-  );
-  useEffect(
-    () => () => {
-      trails.forEach((trail) => {
-        trail.geometry.dispose();
-        trail.material.dispose();
-      });
-    },
-    [trails],
-  );
-  useFrame((_, delta) => {
-    if (!document.hidden) controller.advance(delta);
-    samplePositions(trajectory, controller.time, target);
-    for (let body = 0; body < 3; body++)
-      groups.current[body]?.position.set(
-        target[2 * body]! * scale,
-        target[2 * body + 1]! * scale,
-        0,
-      );
-    for (let i = 0; i <= 128; i++) {
-      const time =
-        (controller.time - ((1 - i / 128) * trajectory.period) / 3 + trajectory.period) %
-        trajectory.period;
-      samplePositions(trajectory, time, target);
-      for (let body = 0; body < 3; body++)
-        trails[body]!.geometry.attributes.position!.setXYZ(
-          i,
-          target[2 * body]! * scale,
-          target[2 * body + 1]! * scale,
-          0.002,
-        );
-    }
-    trails.forEach((trail) => {
-      trail.visible = controller.snapshot().traces;
-      trail.geometry.attributes.position!.needsUpdate = true;
-      trail.geometry.computeBoundingSphere();
-    });
-  });
-  return (
-    <>
-      {trails.map((trail, i) => (
-        <primitive object={trail} key={`trail-${i}`} />
-      ))}
-      {colors.map((color, body) => (
-        <group
-          key={color}
-          ref={(group) => {
-            groups.current[body] = group;
-          }}
-        >
-          <sprite position={[0.13, 0.13, 0.04]} scale={[0.14, 0.14, 1]}>
-            <spriteMaterial map={labels[body]} depthTest={false} />
-          </sprite>
-          <mesh>
-            <sphereGeometry args={[0.065, 24, 20]} />
-            <meshStandardMaterial
-              color={color}
-              emissive={color}
-              emissiveIntensity={0.7}
-              roughness={0.25}
-            />
-          </mesh>
-          <mesh>
-            <sphereGeometry args={[0.105, 16, 12]} />
-            <meshBasicMaterial
-              color={color}
-              transparent
-              opacity={0.11}
-              depthWrite={false}
-              blending={AdditiveBlending}
-            />
-          </mesh>
-          <mesh>
-            <sphereGeometry args={[0.145, 16, 12]} />
-            <meshBasicMaterial
-              color={color}
-              transparent
-              opacity={0.035}
-              depthWrite={false}
-              blending={AdditiveBlending}
-            />
-          </mesh>
-        </group>
-      ))}
-    </>
-  );
-}
+type Point = [number, number, number];
 
-function CameraRig({ controller, onLost }: { controller: PlaybackController; onLost: () => void }) {
-  const { camera, gl, invalidate } = useThree();
-  const controls = useRef<ComponentRef<typeof OrbitControls> | null>(null);
-  const state = useSyncExternalStore(
-    controller.subscribe,
-    controller.snapshot,
-    controller.snapshot,
+function fitTrajectory(trajectory: Trajectory, aspect: number) {
+  const positions = trajectory.samples.flatMap((sample) =>
+    BODY_INDICES.map((body) => bodyPosition(sample.state, body)),
   );
-  const revision = controller.cameraRevision;
-  useEffect(() => {
-    const saved = controller.export().camera;
-    camera.position.set(
-      ...(saved ?? (state.view === 'front' ? ([0, 0, 6] as const) : ([0.5, -4, 5.8] as const))),
-    );
-    camera.lookAt(0, 0, 0);
-    controls.current?.target.set(0, 0, 0);
-    controls.current?.update();
-    invalidate();
-  }, [camera, controller, state.view, revision, invalidate]);
-  useLayoutEffect(() => {
-    function lost(event: Event) {
-      event.preventDefault();
-      onLost();
-    }
-    gl.domElement.addEventListener('webglcontextlost', lost);
-    gl.domElement.setAttribute('data-ready', 'true');
-    return () => {
-      gl.domElement.removeEventListener('webglcontextlost', lost);
-      gl.domElement.removeAttribute('data-ready');
-    };
-  }, [gl, onLost]);
-  return (
-    <OrbitControls
-      ref={controls}
-      makeDefault
-      enablePan={false}
-      enableDamping={false}
-      enableRotate={state.view === '3d'}
-      minDistance={3}
-      maxDistance={10}
-      onChange={() => controller.saveCamera(camera.position.toArray() as [number, number, number])}
-    />
+  const extentX = Math.max(...positions.map(([x]) => Math.abs(x)));
+  const extentY = Math.max(...positions.map(([, y]) => Math.abs(y)));
+  const cameraDistance = INITIAL_CAMERA_POSITION[2];
+  const halfHeight =
+    cameraDistance * Math.tan((FIELD_OF_VIEW_DEGREES / 2) * (Math.PI / 180)) * VIEWPORT_FILL;
+  const scale = Math.min((halfHeight * aspect) / extentX, halfHeight / extentY);
+  const paths = BODY_INDICES.map((body) =>
+    trajectory.samples.map((sample): Point => {
+      const [x, y] = bodyPosition(sample.state, body);
+      return [x * scale, y * scale, 0];
+    }),
   );
+  return { scale, paths };
 }
 
 const SceneContents = memo(function SceneContents({
@@ -222,49 +48,17 @@ const SceneContents = memo(function SceneContents({
   onLost: () => void;
   dark: boolean;
 }) {
-  const colors = dark ? DARK_COLORS : LIGHT_COLORS;
+  const palette = scenePalette(dark);
   const { size } = useThree();
   const aspect = size.width / size.height;
-  const { scale, paths } = useMemo(() => {
-    const extentX = Math.max(
-      ...trajectory.samples.flatMap((sample) => [
-        Math.abs(sample.state[0]!),
-        Math.abs(sample.state[2]!),
-        Math.abs(sample.state[4]!),
-      ]),
-    );
-    const extentY = Math.max(
-      ...trajectory.samples.flatMap((sample) => [
-        Math.abs(sample.state[1]!),
-        Math.abs(sample.state[3]!),
-        Math.abs(sample.state[5]!),
-      ]),
-    );
-    const halfHeight = 6 * Math.tan((21 * Math.PI) / 180) * 0.82;
-    const scale = Math.min((halfHeight * aspect) / extentX, halfHeight / extentY);
-    const paths = BODY_IDS.map((body) =>
-      trajectory.samples.map(
-        (sample) =>
-          [sample.state[2 * body]! * scale, sample.state[2 * body + 1]! * scale, 0] as [
-            number,
-            number,
-            number,
-          ],
-      ),
-    );
-    return { scale, paths };
-  }, [trajectory, aspect]);
-  const state = useSyncExternalStore(
-    controller.subscribe,
-    controller.snapshot,
-    controller.snapshot,
-  );
+  const { scale, paths } = useMemo(() => fitTrajectory(trajectory, aspect), [trajectory, aspect]);
+  const state = usePlaybackState(controller);
   return (
     <>
       <ambientLight intensity={1.5} />
       <directionalLight position={[-3, 4, 8]} intensity={2} />
       <gridHelper
-        args={[12, 30, dark ? '#263e5a' : '#bbd0ed', dark ? '#16283e' : '#dae5f5']}
+        args={[GRID_SIZE, GRID_DIVISIONS, palette.gridCenter, palette.grid]}
         rotation={[Math.PI / 2, 0, 0]}
         position={[0, 0, -0.25]}
       />
@@ -273,14 +67,19 @@ const SceneContents = memo(function SceneContents({
             <Line
               key={i}
               points={points}
-              color={colors[i]}
+              color={palette.bodies[i]}
               lineWidth={1}
               transparent
-              opacity={dark ? 0.18 : 0.35}
+              opacity={palette.pathOpacity}
             />
           ))
         : null}
-      <MovingBodies trajectory={trajectory} controller={controller} scale={scale} colors={colors} />
+      <MovingBodies
+        trajectory={trajectory}
+        controller={controller}
+        scale={scale}
+        colors={palette.bodies}
+      />
       <CameraRig controller={controller} onLost={onLost} />
     </>
   );
@@ -298,15 +97,16 @@ export default function OrbitScene({
   visible: boolean;
 }) {
   const { resolvedTheme } = useTheme();
-  const state = useSyncExternalStore(
-    controller.subscribe,
-    controller.snapshot,
-    controller.snapshot,
-  );
+  const state = usePlaybackState(controller);
   return (
     <Canvas
-      camera={{ position: [0, 0, 6], fov: 42, near: 0.1, far: 100 }}
-      dpr={[1, 1.5]}
+      camera={{
+        position: INITIAL_CAMERA_POSITION,
+        fov: FIELD_OF_VIEW_DEGREES,
+        near: 0.1,
+        far: 100,
+      }}
+      dpr={[1, MAX_DEVICE_PIXEL_RATIO]}
       frameloop={state.playing && visible ? 'always' : 'demand'}
       gl={{ antialias: true, alpha: true }}
     >

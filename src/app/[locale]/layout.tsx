@@ -15,9 +15,8 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: 'common' });
-  const messages = (await import(`../../../messages/${locale}.json`)).default;
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
+    <NextIntlClientProvider>
       <a href="#main" className="skip-link">
         {t('skip')}
       </a>

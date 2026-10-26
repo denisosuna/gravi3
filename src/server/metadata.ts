@@ -1,6 +1,22 @@
 import 'server-only';
 import type { Metadata } from 'next';
+import { ASSETS, localizedPath } from '@/constants/routes';
+import { SITE } from '@/constants/site';
+import { getTranslations } from 'next-intl/server';
+import { DEFAULT_LOCALE, isLocale, LOCALES, OPEN_GRAPH_LOCALES, type Locale } from '@/i18n/config';
 import { getConfig } from './config';
+
+const OPEN_GRAPH_IMAGE = { width: 1200, height: 630 } as const;
+
+export function localizedUrl(locale: string, path: string): string {
+  return new URL(localizedPath(locale, path), getConfig().appUrl).href;
+}
+
+export function alternateLanguages(path: string): Record<Locale, string> {
+  return Object.fromEntries(
+    LOCALES.map((locale) => [locale, localizedUrl(locale, path)]),
+  ) as Record<Locale, string>;
+}
 
 export function pageMetadata(
   locale: string,
@@ -8,37 +24,41 @@ export function pageMetadata(
   title: string,
   description: string,
 ): Metadata {
-  const base = new URL(getConfig().appUrl);
-  const canonical = new URL(`/${locale}${path}`, base).href;
+  const fullTitle = `${title} | ${SITE.name}`;
+  const canonical = localizedUrl(locale, path);
   return {
-    title: `${title} | Gravi3`,
+    title: fullTitle,
     description,
-    metadataBase: base,
-    alternates: {
-      canonical,
-      languages: { es: new URL(`/es${path}`, base).href, en: new URL(`/en${path}`, base).href },
-    },
+    metadataBase: new URL(getConfig().appUrl),
+    alternates: { canonical, languages: alternateLanguages(path) },
     openGraph: {
-      title: `${title} | Gravi3`,
+      title: fullTitle,
       description,
       url: canonical,
-      siteName: 'Gravi3',
-      locale: locale === 'es' ? 'es_ES' : 'en_US',
+      siteName: SITE.name,
+      locale: OPEN_GRAPH_LOCALES[isLocale(locale) ? locale : DEFAULT_LOCALE],
       type: 'website',
       images: [
-        {
-          url: '/opengraph-image',
-          width: 1200,
-          height: 630,
-          alt: 'Gravi3 · Gravity & the three-body problem',
-        },
+        { url: ASSETS.openGraphImage, ...OPEN_GRAPH_IMAGE, alt: `${SITE.name} · ${SITE.tagline}` },
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${title} | Gravi3`,
+      title: fullTitle,
       description,
-      images: ['/opengraph-image'],
+      images: [ASSETS.openGraphImage],
     },
   };
+}
+
+type SeoTitleKey = 'homeTitle' | 'learnTitle' | 'orbitsTitle';
+
+export async function sectionMetadata(
+  params: Promise<{ locale: string }>,
+  path: string,
+  titleKey: SeoTitleKey,
+): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'seo' });
+  return pageMetadata(locale, path, t(titleKey), t('description'));
 }

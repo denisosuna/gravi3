@@ -2,7 +2,7 @@
 
 An interactive observatory for learning Newtonian gravity without a physics background. Change masses and distance, test a prediction, ask a contextual AI tutor, and explore six numerically validated periodic three-body solutions.
 
-- **Learn:** an SVG force laboratory with deterministic SI-unit results, prediction feedback and a real Groq tutor.
+- **Learn:** an SVG force laboratory with deterministic SI-unit results, prediction feedback and a real LLM tutor (any OpenAI-compatible provider).
 - **Orbits:** Lagrange, figure eight, Butterfly I, Goggles, Moth I and Yin-Yang I, each with a shared URL, playback controls and scientific details.
 - Spanish/English; light/dark/system themes; keyboard controls; mobile layout; explicit reduced mode without AI credentials.
 
@@ -14,7 +14,7 @@ Docker Engine and Compose v2.24 or newer are sufficient. Node.js is not required
 docker compose up --build
 ```
 
-Open http://localhost:3000. The complete learning experience and orbit gallery work without credentials. To enable the tutor, add your own `GROQ_API_KEY` to `.env.local` before starting; optional `.env` is also supported. Compose injects these files at runtime. Neither is copied into the image.
+Open http://localhost:3000. The complete learning experience and orbit gallery work without credentials. To enable the tutor, set `LLM_API_KEY`, `LLM_BASE_URL` and `LLM_MODEL` in `.env.local` before starting; optional `.env` is also supported. Compose injects these files at runtime. Neither is copied into the image.
 
 If port 3000 is occupied, use `GRAVI3_PORT=3100 docker compose up --build`. Stop with `docker compose down`. No database, migrations or separate infrastructure are needed.
 
@@ -47,7 +47,7 @@ cd gravi3
 
 ## Enable the real tutor
 
-Create `.env.local` from `.env.example`, supply your own Groq key, and restart the application. `.env.local` takes precedence over `.env`; existing process environment variables take precedence when running locally. Keep keys out of Git, URLs, browser code and build arguments.
+Create `.env.local` from `.env.example`, supply your provider's key, base URL and model, and restart the application. The tutor talks to any provider exposing the OpenAI Chat Completions API: Groq (the example values), OpenAI, OpenRouter, a local Ollama/vLLM server (any non-empty key when the server ignores it), and so on. `.env.local` takes precedence over `.env`; existing process environment variables take precedence when running locally. Keep keys out of Git, URLs, browser code and build arguments.
 
 `GET /api/health` returns server health and whether the tutor is configured. `GET /api/tutor` reports availability without making a provider call. In Learn, ask what happens when distance doubles: a real answer should explain that force becomes one quarter. Change to Spanish and ask about equal forces versus different accelerations. Live bilingual checks are recorded in [tutor evaluation](docs/tutor-evaluation.md); normal tests use mocks.
 
@@ -57,9 +57,11 @@ With no key or `LLM_ENABLED=false`, the panel explicitly shows reduced mode. Inv
 
 | Variable                     | Default                                                | Meaning                                              |
 | ---------------------------- | ------------------------------------------------------ | ---------------------------------------------------- |
-| `GROQ_API_KEY`               | absent                                                 | Optional server-only Groq credential                 |
+| `LLM_API_KEY`                | absent                                                 | Optional server-only provider credential             |
+| `LLM_BASE_URL`               | absent; required with a key                            | OpenAI-compatible API base URL                       |
 | `LLM_ENABLED`                | `true`                                                 | Explicit `true`/`false` tutor switch                 |
-| `LLM_MODEL`                  | `openai/gpt-oss-20b`                                   | Groq model; access depends on your account           |
+| `LLM_MODEL`                  | absent; required with a key                            | Model id as named by your provider                   |
+| `LLM_REASONING_EFFORT`       | absent                                                 | `low`/`medium`/`high`, only for reasoning models     |
 | `LLM_TIMEOUT_MS`             | `15000`                                                | Provider deadline in milliseconds                    |
 | `LLM_MAX_COMPLETION_TOKENS`  | `2048`                                                 | Generation budget including reasoning                |
 | `RATE_LIMIT_IP_PER_MINUTE`   | `5`                                                    | Accepted requests per minute bucket                  |
@@ -74,6 +76,35 @@ With no key or `LLM_ENABLED=false`, the panel explicitly shows reduced mode. Inv
 Request bodies are bounded to 16 KiB, questions to 1,000 characters, and history to six messages of 1,000 characters each. Body reads have a five-second deadline. Quotas use fixed windows; IP storage is bounded to 2,000 expiring keys. `429` responses include `Retry-After`. Reservations are released on completion, failure, timeout or disconnect.
 
 With `TRUST_PROXY=false`, requests share a conservative bucket rather than trusting arbitrary IP headers. Only enable it after confirming your final proxy controls/appends the last `X-Forwarded-For` value. Quotas are in memory and require **one process/instance**; they reset on restart and do not coordinate across replicas. Provider token/organization quotas can still be exhausted before local request limits.
+
+## Project structure
+
+```text
+src/
+  app/                 Next.js App Router: routes, layouts, metadata and thin API handlers
+    [locale]/          One route tree per language: /es/..., /en/...
+      orbits/[slug]/   One page renders every orbit: /en/orbits/figure-eight
+    api/               /api/tutor and /api/health
+  components/          App-wide client pieces: header, providers, tutor panel
+  constants/           Routes, asset paths, HTTP statuses and site identity
+  data/                Orbit catalog, experiment ranges and the tutor request contract
+  features/            learning/ and orbits/ UI; features never import each other
+  i18n/                Locale config, next-intl routing and locales/{es,en}.json catalogs
+  physics/             Framework-free equations, integrator and interpolation
+  server/              Env config, OpenAI-compatible LLM client, rate limiting, prompts, logging
+  visualization/       React Three Fiber scene, camera and bodies
+scripts/               Offline orbit generation and validation (TypeScript)
+tests/e2e/             Playwright browser tests
+docs/                  Architecture, physics provenance and verification evidence
+```
+
+Conventions worth knowing before changing code:
+
+- **Bracketed folders** are Next.js dynamic segments. `[locale]` puts the language in the URL so links are shareable and indexable per language; `[slug]` serves all six orbits from one page, validated against the catalog (unknown slugs return 404).
+- **`'use client'`** marks the boundary where a Server Component hands over to browser code that needs state, effects or browser APIs. It appears only on boundary files (`header`, `providers`, `gallery`, `learning-experience`, `orbit-player`, `tutor-panel`); modules they import are client code automatically. Everything else renders on the server.
+- **No magic strings:** paths come from `src/constants/routes.ts`, limits and error codes from `src/data/tutor-contract.ts`, log event names from `src/server/logger.ts`.
+- **Lint-enforced boundaries:** `physics`, `data` and `constants` cannot import React, Next.js, Three.js or server code; UI cannot import `src/server`; features cannot import each other. Complexity, nesting depth, parameter count and file length are capped.
+- **Logging:** Pino JSON on the server only, with named events and redaction; prompts, messages, keys and raw IPs are never logged.
 
 ## Tests and scientific data
 
@@ -112,7 +143,7 @@ The repository owner manages Render deployment. No hosted URL is claimed until i
 
 Create a Blueprint from this repository and the branch containing the implementation; `render.yaml` defines a free Docker web service with `/api/health` and deployment after passing checks. For an ordinary service, select Docker, the implementation branch, free plan, one instance, and the same health path. After the PRs are merged, select `main`.
 
-The app uses Render's [documented `RENDER_EXTERNAL_URL`](https://render.com/docs/environment-variables#render_external_url) when `APP_URL` is absent. Set `APP_URL` explicitly for a custom domain. Add `GROQ_API_KEY` only as a runtime secret if you want the tutor enabled; it is optional for deployment. Keep `TRUST_PROXY=false` until proxy headers are verified.
+The app uses Render's [documented `RENDER_EXTERNAL_URL`](https://render.com/docs/environment-variables#render_external_url) when `APP_URL` is absent. Set `APP_URL` explicitly for a custom domain. The blueprint pre-fills the Groq base URL and model; add `LLM_API_KEY` as a runtime secret if you want the tutor enabled (change the other two to use another provider); it is optional for deployment. Keep `TRUST_PROXY=false` until proxy headers are verified.
 
 Free services [sleep after inactivity and have shared usage quotas](https://render.com/docs/free), so an initial visit can wait for startup. No keep-alive pings are provided. A working local Docker path satisfies the delivery alternative if no online deployment is supplied.
 
@@ -124,4 +155,4 @@ Automated mobile Chromium emulation does not replace a physical iPhone/Safari te
 
 Scientific initial conditions are attributed to Šuvakov/Dmitrašinović, Li/Liao and the figure-eight authors in [physics documentation](docs/physics.md). All trajectories and previews are generated by this repository; no third-party animation assets or implementation code are copied. Dependency licenses are listed in [third-party notices](docs/third-party.md). Selection correspondence, the original PDF and design reference images are not published.
 
-AI assistance was used substantially for planning, code, scientific-source research and tests. Decisions were checked against the original brief, primary scientific sources, independent numerical integration, production browser flows and real bilingual Groq responses. Review the code and evidence; generated output alone is not treated as validation.
+AI assistance was used substantially for planning, code, scientific-source research and tests. Decisions were checked against the original brief, primary scientific sources, independent numerical integration, production browser flows and real bilingual LLM responses (Groq `openai/gpt-oss-20b`). Review the code and evidence; generated output alone is not treated as validation.

@@ -1,12 +1,32 @@
 import { APIError, APIConnectionTimeoutError } from 'openai';
+import { HTTP_STATUS } from '@/constants/http';
+import { TUTOR_ERROR_CODES } from '@/data/tutor-contract';
 import { LimitError } from './rate-limiter';
 import { RequestError } from './request-body';
+
+const DEFAULT_RETRY_AFTER_SECONDS = 60;
 
 interface TutorFailure {
   status: number;
   code: string;
   retryAfter?: number;
   upstreamStatus?: number;
+}
+
+// Retry-After may be a number of seconds or an HTTP date.
+function parseRetryAfter(header: string | null | undefined): number {
+  if (!header) return DEFAULT_RETRY_AFTER_SECONDS;
+  const numeric = Number(header);
+  const seconds = Number.isFinite(numeric) ? numeric : (Date.parse(header) - Date.now()) / 1000;
+  return Number.isFinite(seconds) && seconds > 0 ? Math.ceil(seconds) : DEFAULT_RETRY_AFTER_SECONDS;
+}
+
+function isTimeout(error: unknown, timedOut: boolean): boolean {
+  return (
+    timedOut ||
+    error instanceof APIConnectionTimeoutError ||
+    (error instanceof Error && error.name === 'TimeoutError')
+  );
 }
 
 export function classifyTutorError(
@@ -16,32 +36,24 @@ export function classifyTutorError(
 ): TutorFailure {
   if (error instanceof RequestError) return { status: error.status, code: error.code };
   if (error instanceof LimitError)
-    return { status: 429, code: 'rate_limited', retryAfter: error.retryAfter };
-  if (error instanceof APIError && error.status === 429) {
-    const header = error.headers?.get('retry-after');
-    const numeric = Number(header);
-    const seconds =
-      header && Number.isFinite(numeric)
-        ? numeric
-        : header
-          ? (Date.parse(header) - Date.now()) / 1000
-          : NaN;
     return {
-      status: 429,
-      code: 'rate_limited',
-      retryAfter: Number.isFinite(seconds) && seconds > 0 ? Math.ceil(seconds) : 60,
+      status: HTTP_STATUS.tooManyRequests,
+      code: TUTOR_ERROR_CODES.rateLimited,
+      retryAfter: error.retryAfter,
     };
-  }
-  if (disconnected) return { status: 499, code: 'cancelled' };
-  if (
-    timedOut ||
-    error instanceof APIConnectionTimeoutError ||
-    (error instanceof Error && error.name === 'TimeoutError')
-  )
-    return { status: 504, code: 'timeout' };
+  if (error instanceof APIError && error.status === HTTP_STATUS.tooManyRequests)
+    return {
+      status: HTTP_STATUS.tooManyRequests,
+      code: TUTOR_ERROR_CODES.rateLimited,
+      retryAfter: parseRetryAfter(error.headers?.get('retry-after')),
+    };
+  if (disconnected)
+    return { status: HTTP_STATUS.clientClosedRequest, code: TUTOR_ERROR_CODES.cancelled };
+  if (isTimeout(error, timedOut))
+    return { status: HTTP_STATUS.gatewayTimeout, code: TUTOR_ERROR_CODES.timeout };
   return {
-    status: 502,
-    code: 'provider_unavailable',
+    status: HTTP_STATUS.badGateway,
+    code: TUTOR_ERROR_CODES.providerUnavailable,
     upstreamStatus: error instanceof APIError ? error.status : undefined,
   };
 }

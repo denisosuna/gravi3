@@ -1,4 +1,4 @@
-import type { Masses, State } from './types';
+import { STATE_LENGTH, type Masses, type State } from './types';
 
 export const GRAVITATIONAL_CONSTANT = 6.6743e-11;
 
@@ -12,7 +12,7 @@ export function gravitationalForce(mass1: number, mass2: number, distance: numbe
 }
 
 export function validateSystem(state: State, masses: Masses, constant: number) {
-  if (state.length !== 12 || !state.every(Number.isFinite)) {
+  if (state.length !== STATE_LENGTH || !state.every(Number.isFinite)) {
     throw new RangeError('Expected twelve finite state components.');
   }
   if (![...masses, constant].every((value) => Number.isFinite(value) && value > 0)) {

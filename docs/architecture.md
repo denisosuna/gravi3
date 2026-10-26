@@ -11,7 +11,7 @@ flowchart LR
   P --> T[Tutor context verification]
   U[Explicit user question] --> A[Request validation and quotas]
   A --> T
-  T --> G[Groq]
+  T --> G[OpenAI-compatible LLM provider]
 ```
 
 ## Responsibilities
@@ -20,14 +20,16 @@ flowchart LR
 | ----------------------- | ----------------------------------------------------------- | ------------------------------------------------- |
 | `src/app`               | Routing, server composition, metadata and thin API handlers | No numerical integration in pages                 |
 | `src/physics`           | Newtonian equations, integrator, invariants, interpolation  | No React, Three.js, Next.js or server imports     |
+| `src/constants`         | Routes, asset paths, HTTP statuses and site identity        | Plain values; no framework imports                |
 | `src/data`              | Catalog, experiment ranges and shared request contract      | No credentials or provider client                 |
+| `src/i18n`              | Locale config, routing and `locales/{es,en}.json` catalogs  | Locale list defined once in `config.ts`           |
 | `src/features/learning` | Manipulable SVG laboratory and predictions                  | Force results come from pure physics              |
 | `src/features/orbits`   | Library, playback controller and transport UI               | Physical time independent of render frames        |
 | `src/visualization`     | Camera, bodies, trails and WebGL lifecycle                  | Consumes samples; cannot alter the physics        |
 | `src/components/tutor`  | Bounded client conversation and request lifecycle           | No provider key, model selection or system prompt |
-| `src/server`            | Environment validation, Groq, limits, prompts and safe logs | Sensitive modules use `server-only`               |
+| `src/server`            | Env validation, LLM client, limits, prompts and safe logs   | Sensitive modules use `server-only`               |
 
-Features do not import each other's internals. Components are separated where there is a distinct responsibility, not to satisfy arbitrary file-length limits. The physics formula and server evaluation share one implementation.
+Features do not import each other's internals; ESLint `no-restricted-imports` enforces these boundaries. Components are separated where there is a distinct responsibility, not to satisfy arbitrary file-length limits. The physics formula and server evaluation share one implementation.
 
 ## State and rendering
 
@@ -43,7 +45,7 @@ There is one active canvas per detail and no gallery canvas. DPR is capped at 1.
 
 Learning force and acceleration are recomputed on the server. The client cannot choose model, base URL, prompt, tools or generation budget. Messages/history/predictions remain untrusted even after schema validation. Versioned prompts redirect unrelated questions, explain physical relationships and distinguish periodicity from stability. Prompts mitigate instruction attacks; they do not guarantee factual correctness. Deterministic learning and the scientific catalog remain available independently of AI.
 
-The OpenAI-compatible SDK calls Groq directly, as selected for this project. No AI Gateway or paid fallback is added. Requests have zero automatic retries, an abort signal and a configurable deadline; completion length is capped including reasoning. Only a nonempty, normally completed answer is returned. Model output is plain text, never HTML. Retry is an explicit user action. The client keeps at most eight displayed messages and sends at most six truncated history messages.
+The `openai` SDK is used as a generic OpenAI-compatible client: `LLM_BASE_URL`, `LLM_MODEL` and `LLM_API_KEY` select the provider (Groq in the examples), and `LLM_REASONING_EFFORT` is sent only when configured. A key without base URL or model is a configuration error, not reduced mode. No AI Gateway or paid fallback is added. Requests have zero automatic retries, an abort signal and a configurable deadline; completion length is capped including reasoning. Only a nonempty, normally completed answer is returned. Model output is plain text, never HTML. Retry is an explicit user action. The client keeps at most eight displayed messages and sends at most six truncated history messages.
 
 ## Quotas and deployment assumptions
 
@@ -53,9 +55,9 @@ Fixed minute/hour windows and a global concurrent-lease count are held in memory
 
 ## Logging and privacy
 
-Pino emits JSON events to stdout/stderr, with `LOG_LEVEL`. Startup logs record enabled mode and configured model. Tutor completion/failure events contain generated request IDs, duration, status, model and sanitized error codes/upstream status. No provider error object, API key, cookies, authorization header, message, history, body, reply or raw IP is logged. Redaction provides an additional safeguard for known sensitive keys; unit tests use synthetic secrets.
+Pino emits JSON events to stdout/stderr, with `LOG_LEVEL`. Startup logs record enabled mode, provider host and configured model. Tutor completion/failure events contain generated request IDs, duration, status, model and sanitized error codes/upstream status. No provider error object, API key, cookies, authorization header, message, history, body, reply or raw IP is logged. Redaction provides an additional safeguard for known sensitive keys; unit tests use synthetic secrets.
 
-Health checks do not call Groq, consume tutor quotas or emit application events. Next.js may log request paths during development; no message is placed in a URL. No third-party analytics or tracking script is used.
+Health checks do not call the LLM provider, consume tutor quotas or emit application events. Next.js may log request paths during development; no message is placed in a URL. No third-party analytics or tracking script is used.
 
 ## Deliberate limits
 

@@ -1,4 +1,27 @@
-import type { OrbitSession } from '@/components/providers';
+export const CAMERA_VIEWS = ['front', '3d'] as const;
+export type CameraView = (typeof CAMERA_VIEWS)[number];
+export const PLAYBACK_SPEEDS = [0.5, 1, 2, 4] as const;
+// One orbital period lasts this many seconds of wall-clock playback at 1x.
+export const SECONDS_PER_PERIOD = 20;
+// Caps a single frame step so resuming a hidden tab does not jump ahead.
+const MAX_FRAME_DELTA_SECONDS = 0.05;
+
+export interface OrbitSession {
+  time: number;
+  speed: number;
+  playing: boolean;
+  view: CameraView;
+  traces: boolean;
+  camera?: [number, number, number];
+}
+
+const INITIAL_SESSION: OrbitSession = {
+  time: 0,
+  speed: 1,
+  playing: false,
+  view: 'front',
+  traces: true,
+};
 
 export class PlaybackController {
   private value: OrbitSession;
@@ -10,7 +33,7 @@ export class PlaybackController {
     readonly period: number,
     initial?: OrbitSession,
   ) {
-    this.value = initial ?? { time: 0, speed: 1, playing: false, view: 'front', traces: true };
+    this.value = initial ?? INITIAL_SESSION;
     this.frameTime = this.value.time;
   }
 
@@ -35,7 +58,9 @@ export class PlaybackController {
     if (this.value.playing)
       this.frameTime =
         (this.frameTime +
-          Math.min(Math.max(0, delta), 0.05) * (this.period / 20) * this.value.speed) %
+          Math.min(Math.max(0, delta), MAX_FRAME_DELTA_SECONDS) *
+            (this.period / SECONDS_PER_PERIOD) *
+            this.value.speed) %
         this.period;
   }
 
@@ -49,7 +74,7 @@ export class PlaybackController {
     this.cameraRevision++;
     this.update({ camera: undefined });
   }
-  setView(view: OrbitSession['view']) {
+  setView(view: CameraView) {
     this.cameraRevision++;
     this.update({ view, camera: undefined });
   }

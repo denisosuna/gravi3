@@ -1,11 +1,12 @@
 import { readFile } from 'node:fs/promises';
+import { ASSETS } from '../src/constants/routes';
 import { orbits } from '../src/data/orbits';
 import type { Trajectory } from '../src/physics/types';
-import { diagnose } from './orbit-tools';
+import { diagnose, publicAssetPath } from './orbit-tools';
 
 for (const orbit of orbits) {
   const trajectory: Trajectory = JSON.parse(
-    await readFile(`public/orbits/${orbit.slug}.json`, 'utf8'),
+    await readFile(publicAssetPath(ASSETS.orbitTrajectory(orbit.slug)), 'utf8'),
   );
   if (
     trajectory.slug !== orbit.slug ||

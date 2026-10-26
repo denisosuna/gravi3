@@ -1,14 +1,13 @@
-'use client';
-
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { ArrowLeft, Sparkles } from 'lucide-react';
+import { ASSETS, ROUTES } from '@/constants/routes';
 import { Link } from '@/i18n/routing';
-import { OrbitLibrary } from './gallery';
+import { OrbitLibrary } from './orbit-library';
 import { OrbitPlayer } from './orbit-player';
 import { TutorPanel } from '@/components/tutor/tutor-panel';
 import { ScientificDetails } from './scientific-details';
-import type { OrbitDefinition } from '@/physics/types';
+import { BODY_INDICES, type OrbitDefinition } from '@/physics/types';
 
 export function OrbitDetail({ orbit }: { orbit: OrbitDefinition }) {
   const t = useTranslations('orbits');
@@ -19,7 +18,7 @@ export function OrbitDetail({ orbit }: { orbit: OrbitDefinition }) {
       <div className="detail-workspace">
         <section className="orbit-stage" aria-label={t(`${orbit.slug}.name`)}>
           <div className="stage-heading">
-            <Link className="back-link" href="/orbits" scroll={false}>
+            <Link className="back-link" href={ROUTES.orbits} scroll={false}>
               <ArrowLeft size={14} />
               {common('back')}
             </Link>
@@ -31,7 +30,7 @@ export function OrbitDetail({ orbit }: { orbit: OrbitDefinition }) {
           <div className="stage-caption">
             <span className="status-dot" />
             {t('validated')}
-            <span>{[1, 2, 3].map((body) => `${t('body')} ${body}`).join(' · ')}</span>
+            <span>{BODY_INDICES.map((body) => `${t('body')} ${body + 1}`).join(' · ')}</span>
           </div>
         </section>
         <aside className="context-column">
@@ -43,7 +42,7 @@ export function OrbitDetail({ orbit }: { orbit: OrbitDefinition }) {
             </div>
             <p>{t('conceptText')}</p>
             <div className="concept-preview">
-              <Image src={`/previews/${orbit.slug}.svg`} alt="" width={256} height={128} />
+              <Image src={ASSETS.orbitPreview(orbit.slug)} alt="" width={256} height={128} />
             </div>
             <p className="small-copy">{t('planar')}</p>
           </section>

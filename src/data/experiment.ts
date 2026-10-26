@@ -1,8 +1,15 @@
+export const PREDICTIONS = ['half', 'quarter', 'double'] as const;
+export type PredictionAnswer = (typeof PREDICTIONS)[number];
+// Doubling the distance divides the force by four.
+export const CORRECT_PREDICTION: PredictionAnswer = 'quarter';
+
+export const UNITS = { mass: 'kg', distance: 'm', force: 'N', acceleration: 'm/s²' } as const;
+
 export interface Experiment {
   mass1: number;
   mass2: number;
   distance: number;
-  prediction: 'half' | 'quarter' | 'double' | null;
+  prediction: PredictionAnswer | null;
 }
 
 export const initialExperiment: Experiment = {
