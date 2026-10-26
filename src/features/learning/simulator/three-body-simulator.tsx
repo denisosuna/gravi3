@@ -8,16 +8,16 @@ import { ROUTES } from '@/constants/routes';
 import { Link } from '@/i18n/routing';
 import { BodyEditor } from './body-editor';
 import { SimulationReadouts } from './simulation-readouts';
-import { SimulatorController } from './simulator-controller';
+import { SIMULATOR_ID } from '../apply-tutor-action';
+import type { SimulatorController } from './simulator-controller';
 import { SimulatorControls, SimulatorPresets } from './simulator-controls';
 import { useSimulatorState } from './use-simulator-state';
 
 const SimulatorScene = dynamic(() => import('@/visualization/simulator-scene'), { ssr: false });
 const READOUT_INTERVAL_MS = 200;
 
-export function ThreeBodySimulator() {
+export function ThreeBodySimulator({ controller }: { controller: SimulatorController }) {
   const t = useTranslations('simulator');
-  const [controller] = useState(() => new SimulatorController());
   const [showVectors, setShowVectors] = useState(true);
   const visible = useDocumentVisible();
   const playing = useSimulatorState(controller, (state) => state.playing);
@@ -30,7 +30,7 @@ export function ThreeBodySimulator() {
   }, [controller, playing]);
 
   return (
-    <section className="simulator-panel" aria-labelledby="simulator-title">
+    <section className="simulator-panel" id={SIMULATOR_ID} aria-labelledby="simulator-title">
       <div className="eyebrow">{t('step')}</div>
       <h2 id="simulator-title">{t('title')}</h2>
       <p className="simulator-intro">{t('intro')}</p>

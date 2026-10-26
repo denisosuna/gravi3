@@ -24,6 +24,7 @@ const ENV_NAMES = {
   'llm.reasoningEffort': 'LLM_REASONING_EFFORT',
   'llm.timeoutMs': 'LLM_TIMEOUT_MS',
   'llm.maxCompletionTokens': 'LLM_MAX_COMPLETION_TOKENS',
+  'llm.jsonMode': 'LLM_JSON_MODE',
   'rateLimit.perMinute': 'RATE_LIMIT_IP_PER_MINUTE',
   'rateLimit.perHour': 'RATE_LIMIT_IP_PER_HOUR',
   'rateLimit.globalPerHour': 'RATE_LIMIT_GLOBAL_PER_HOUR',
@@ -56,6 +57,8 @@ const schema = z
       reasoningEffort: z.enum(REASONING_EFFORTS).optional(),
       timeoutMs: integer(15000, 1, 60000),
       maxCompletionTokens: integer(2048, 1, 8192),
+      // Asks the provider for a JSON object; disable for providers without JSON mode.
+      jsonMode: boolean('true'),
     }),
     rateLimit: z.object({
       perMinute: integer(5, 1, 100),

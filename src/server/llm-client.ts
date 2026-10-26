@@ -32,6 +32,7 @@ export function createChatCompletion(provider: LlmProvider, config: LlmConfig): 
         messages,
         max_completion_tokens: config.maxCompletionTokens,
         ...(config.reasoningEffort ? { reasoning_effort: config.reasoningEffort } : {}),
+        ...(config.jsonMode ? { response_format: { type: 'json_object' as const } } : {}),
         stream: false,
       },
       { signal },

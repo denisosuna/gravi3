@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { HTTP_STATUS } from '@/constants/http';
 import { API_ROUTES } from '@/constants/routes';
+import { tutorResponseSchema, type TutorAction } from '@/data/tutor-actions';
 import { TUTOR_LIMITS, type TutorContext, type TutorMessage } from '@/data/tutor-contract';
+
+export interface DisplayedMessage extends TutorMessage {
+  actions?: TutorAction[];
+}
 
 export type TutorErrorKey = 'rateLimit' | 'unavailable' | 'error';
 
@@ -17,23 +22,23 @@ class TutorRequestError extends Error {
   }
 }
 
-function keepLatest(messages: TutorMessage[]): TutorMessage[] {
+function keepLatest(messages: DisplayedMessage[]): DisplayedMessage[] {
   return messages.slice(-TUTOR_LIMITS.displayedMessages);
 }
 
 // Retrying the last unanswered question must not duplicate it in the transcript.
-function withoutRetriedQuestion(messages: TutorMessage[], text: string): TutorMessage[] {
+function withoutRetriedQuestion(messages: DisplayedMessage[], text: string): DisplayedMessage[] {
   const previous = messages.at(-1);
   return previous?.role === 'user' && previous.content === text ? messages.slice(0, -1) : messages;
 }
 
-function toHistory(messages: TutorMessage[]): TutorMessage[] {
+function toHistory(messages: DisplayedMessage[]): TutorMessage[] {
   return messages
     .slice(-TUTOR_LIMITS.historyMessages)
-    .map((item) => ({ ...item, content: item.content.slice(0, TUTOR_LIMITS.messageLength) }));
+    .map(({ role, content }) => ({ role, content: content.slice(0, TUTOR_LIMITS.messageLength) }));
 }
 
-async function requestReply(payload: object, signal: AbortSignal): Promise<string> {
+async function requestReply(payload: object, signal: AbortSignal) {
   const response = await fetch(API_ROUTES.tutor, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -41,14 +46,14 @@ async function requestReply(payload: object, signal: AbortSignal): Promise<strin
     signal,
   });
   if (!response.ok) throw new TutorRequestError(errorKey(response.status));
-  const body: { reply?: unknown } = await response.json();
-  if (typeof body.reply !== 'string' || !body.reply.trim()) throw new TutorRequestError('error');
-  return body.reply;
+  const body = tutorResponseSchema.safeParse(await response.json());
+  if (!body.success || !body.data.reply.trim()) throw new TutorRequestError('error');
+  return body.data;
 }
 
 export function useTutor(locale: string, context: TutorContext) {
   const [enabled, setEnabled] = useState<boolean | null>(null);
-  const [messages, setMessages] = useState<TutorMessage[]>([]);
+  const [messages, setMessages] = useState<DisplayedMessage[]>([]);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<TutorErrorKey | null>(null);
   const active = useRef<AbortController | null>(null);
@@ -80,8 +85,10 @@ export function useTutor(locale: string, context: TutorContext) {
     setMessages(keepLatest([...priorMessages, { role: 'user', content: text }]));
     try {
       const payload = { locale, message: text, history: toHistory(priorMessages), context };
-      const reply = await requestReply(payload, abort.signal);
-      setMessages((current) => keepLatest([...current, { role: 'assistant', content: reply }]));
+      const { reply, actions } = await requestReply(payload, abort.signal);
+      setMessages((current) =>
+        keepLatest([...current, { role: 'assistant', content: reply, actions }]),
+      );
     } catch (failure) {
       if (!abort.signal.aborted)
         setError(failure instanceof TutorRequestError ? failure.key : 'error');

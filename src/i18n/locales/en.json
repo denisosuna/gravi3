@@ -180,15 +180,33 @@
     "error": "A response could not be retrieved. You can try again.",
     "rateLimit": "The usage limit has been reached. Wait a little before asking again.",
     "empty": "Write a question before sending.",
-    "suggestion": "What happens if I double the distance?",
-    "suggestionOrbit": "Why does this orbit repeat?",
-    "intro": "Ask, compare, and test your ideas. Explanations use the experiment state when you send your question.",
+    "intro": "Ask about anything you don't understand. The tutor knows your experiment's values and can suggest one-click experiments.",
     "try": "Try it with two bodies",
     "disclaimer": "AI can make mistakes. Check explanations against the experiment.",
     "you": "You",
     "reply": "Tutor response",
     "remaining": "characters",
-    "offline": "Forces and orbits remain available without AI."
+    "offline": "Forces and orbits remain available without AI.",
+    "suggestions": {
+      "learning": [
+        "What happens if I double the distance?",
+        "Why does the smaller mass accelerate more?",
+        "Why are three bodies unpredictable?"
+      ],
+      "orbit": [
+        "Why does this orbit repeat?",
+        "Is this orbit stable?",
+        "How is it different from the figure eight?"
+      ]
+    },
+    "suggestionsLabel": "Suggested questions",
+    "actionsLabel": "Suggested experiments",
+    "actions": {
+      "setExperiment": "Try it: {changes}",
+      "loadPreset": "Try it: {preset} in the simulator",
+      "perturb": "Try it: perturb by 1% in the simulator",
+      "openOrbit": "See the {name} orbit"
+    }
   },
   "seo": {
     "homeTitle": "Gravity and the three-body problem",

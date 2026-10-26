@@ -1618,20 +1618,38 @@ button.control-button:hover {
   display: block;
   margin-top: 7px;
 }
+.tutor-suggestions,
+.tutor-actions {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 13px;
+  display: grid;
+  gap: 8px;
+}
 .suggestion-button {
   width: 100%;
   text-align: left;
   background: var(--surface-raised);
   color: var(--text);
-  font-size: 11px;
-  line-height: 1.7;
+  font-size: 12px;
+  line-height: 1.6;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 13px;
+  padding: 10px 12px;
+}
+.suggestion-button:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+.tutor-actions {
+  margin: 10px 0 0;
+}
+.tutor-action {
+  width: 100%;
+  justify-content: flex-start;
+  text-align: left;
 }
 .tutor-conversation {
-  max-height: 360px;
+  max-height: 440px;
   overflow-y: auto;
   scrollbar-width: thin;
 }

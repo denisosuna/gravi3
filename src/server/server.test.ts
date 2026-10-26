@@ -112,6 +112,8 @@ describe('configuration and deterministic context', () => {
     expect(prompt).toContain('forceAfterDoublingDistance');
     expect(prompt).toContain('prediction');
     expect(prompt).toContain('untrusted');
+    expect(prompt).toContain('"type":"setExperiment"');
+    expect(prompt).not.toContain('"type":"openOrbit"');
   });
 });
 
@@ -143,6 +145,25 @@ describe('bounded limiter', () => {
 });
 
 describe('tutor request boundary', () => {
+  it('returns the reply with only the actions allowed for the context', async () => {
+    const output = JSON.stringify({
+      reply: 'Press Try it to double the distance.',
+      actions: [
+        { type: 'setExperiment', distance: 10 },
+        { type: 'openOrbit', slug: 'goggles' },
+      ],
+    });
+    const deps = dependencies({ complete: vi.fn(async () => output) });
+    const response = await handleTutor(request(), deps);
+    expect(await response.json()).toEqual({
+      reply: 'Press Try it to double the distance.',
+      actions: [{ type: 'setExperiment', distance: 10 }],
+    });
+  });
+  it('treats JSON without a reply as a provider failure', async () => {
+    const deps = dependencies({ complete: vi.fn(async () => '{"actions": []}') });
+    expect((await handleTutor(request(), deps)).status).toBe(502);
+  });
   it('accepts the browser host behind a different internal bind address and rejects unrelated origins', async () => {
     const deps = dependencies();
     const local = new Request('http://0.0.0.0:3000/api/tutor', {
