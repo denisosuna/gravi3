@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState } from 'react';
 import { ThemeProvider } from 'next-themes';
+import { initialExperiment, type Experiment } from '@/data/experiment';
 
 export interface OrbitSession {
   time: number;
@@ -14,6 +15,13 @@ export interface OrbitSession {
 
 class ExperienceMemory {
   private sessions = new Map<string, OrbitSession>();
+  private experiment: Experiment = { ...initialExperiment };
+  getExperiment() {
+    return this.experiment;
+  }
+  saveExperiment(experiment: Experiment) {
+    this.experiment = { ...experiment };
+  }
   gallery: { scroll: number; selected?: string; restoreFocus: boolean } = {
     scroll: 0,
     restoreFocus: false,
