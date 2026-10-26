@@ -31,6 +31,10 @@ flowchart LR
 
 Features do not import each other's internals; ESLint `no-restricted-imports` enforces these boundaries. Components are separated where there is a distinct responsibility, not to satisfy arbitrary file-length limits. The physics formula and server evaluation share one implementation.
 
+## Live simulator
+
+The Learn page also integrates three bodies live in the browser (`src/physics/simulation.ts`), reusing the same Dormand–Prince integrator as the offline generator, in normalized units with G = 1 and no softening. Each frame advances at most 0.05 s of wall time × speed, with a bounded step budget so a close encounter cannot freeze the page. Separations below 10⁻³ or an exhausted step budget halt the run with an explanation (a collision of point masses); a body farther than 12 units from the center of mass is reported as an escape. Edited setups are simulated in their center-of-mass frame. The readouts (energy drift, center of mass, closest separation) are published every 200 ms; positions, trails and velocity vectors update per frame outside React.
+
 ## State and rendering
 
 Root providers live above the locale segment. Their bounded, in-memory session store retains gallery scroll/focus, experiment values and per-orbit playback/camera snapshots during client navigation. Only locale and theme persist after reload, through next-intl and next-themes. A conversation currently belongs to the mounted tutor panel and is discarded when it unmounts or the page reloads; it is never saved to a database or browser storage.

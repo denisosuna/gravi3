@@ -135,7 +135,7 @@
     "seconds": "playback s"
   },
   "learn": {
-    "eyebrow": "LEARN · STEP 1: GRAVITY BETWEEN TWO BODIES",
+    "eyebrow": "LEARN · FROM TWO TO THREE BODIES",
     "title": "Gravity starts with two.",
     "description": "To understand three bodies you first need to understand how two attract each other. Move the masses, change the distance and predict what will happen before you check.",
     "formulaTitle": "One law, three ingredients",
@@ -157,12 +157,8 @@
     "tryDistance": "Double the distance",
     "tryMass": "Double the first mass",
     "reset": "Reset experiment",
-    "nextTitle": "What if we add a third body?",
-    "nextText": "Every pair follows this same law. Their interactions create complex motion and, in special cases, repeating orbits.",
-    "explore": "Discover the six orbits",
     "step1": "01 · Observe",
     "step2": "02 · Predict",
-    "step3": "03 · Connect",
     "forceUnits": "newtons (N)",
     "acceleration": "Acceleration",
     "predictionHint": "Choose an answer, then check its effect in the laboratory.",
@@ -199,5 +195,64 @@
     "learnTitle": "Learn the law of gravity",
     "orbitsTitle": "Six solutions of the three-body problem",
     "description": "Learn gravity through experiments and an AI tutor. Explore six periodic solutions of the three-body problem."
+  },
+  "simulator": {
+    "step": "03 · Three bodies",
+    "title": "Add a third body",
+    "intro": "Every pair of bodies attracts with the same law you just tested. With three, each one pulls on the other two at once and the motion no longer has a formula: it must be computed step by step. Pick a starting point and watch.",
+    "presets": "Starting points",
+    "preset": {
+      "figure-eight": {
+        "name": "Figure eight",
+        "hint": "Periodic: repeats exactly."
+      },
+      "lagrange": {
+        "name": "Lagrange",
+        "hint": "Periodic: a rotating triangle."
+      },
+      "pythagorean": {
+        "name": "Pythagorean",
+        "hint": "Chaos: masses 3, 4 and 5 at rest; one is eventually ejected."
+      },
+      "sun-planet-moon": {
+        "name": "Sun, planet and moon",
+        "hint": "Hierarchical and nearly regular, like the Sun, Earth and Moon."
+      },
+      "custom": {
+        "name": "Custom",
+        "hint": "Conditions you edited."
+      }
+    },
+    "play": "Play",
+    "pause": "Pause",
+    "reset": "Restart",
+    "perturb": "Perturb 1%",
+    "perturbHint": "Changes body 1's velocity by 1% and starts again: compare how much the outcome changes.",
+    "speed": "Simulation speed",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "zoom": "Zoom",
+    "vectors": "Velocity vectors",
+    "readouts": "Readouts",
+    "time": "Time",
+    "energy": "Total energy",
+    "drift": "Energy change",
+    "center": "Center of mass",
+    "separation": "Closest separation",
+    "readHelp": "How to read these values",
+    "readHelpText": "Total energy should stay constant: if its change is close to 0%, the calculation is reliable. The center of mass does not move because there are no external forces. Closest separation is the distance between the two nearest bodies: the smaller it is, the stronger their attraction.",
+    "editor": "Edit bodies",
+    "editorHint": "Changing a value restarts the simulation from the new conditions.",
+    "body": "Body {number}",
+    "mass": "Mass",
+    "vx": "Velocity x",
+    "vy": "Velocity y",
+    "collision": "Two bodies came so close that the force grows without bound: with point masses this is a collision. The simulation stops here; restart or pick another starting point.",
+    "escape": "One body has moved far away from the other two: it has probably been ejected. That is the most common ending of the three-body problem.",
+    "model": "Exact Newtonian physics with point masses and G = 1, without softening the force. Normalized units.",
+    "sceneLabel": "Three-body simulation",
+    "fallback": "The simulation needs WebGL, which is not available on this device.",
+    "next": "Periodic orbits are the exception: conditions so precise that the motion repeats. Explore the six best known.",
+    "explore": "Discover the six orbits"
   }
 }

@@ -10,7 +10,7 @@ The Sun–Earth–Moon system, spacecraft trajectories and the James Webb telesc
 
 ## What the app does
 
-1. **Learn** (`/{locale}/learn`): understand the law of gravity with two bodies. Change masses and distance, predict what happens to the force, and check it against deterministic SI calculations.
+1. **Learn** (`/{locale}/learn`): understand the law of gravity with two bodies. Change masses and distance, predict what happens to the force, and check it in a 3D laboratory backed by deterministic SI calculations. Then add a third body in a live simulator: four starting points (figure eight, Lagrange, the chaotic Pythagorean problem, Sun–planet–moon), energy and center-of-mass readouts, velocity vectors, a 1% perturbation to reveal chaos, and editable masses and velocities.
 2. **Ask the tutor:** an LLM tutor (any OpenAI-compatible provider) answers with the current experiment values. It is optional; every calculation works without it.
 3. **Orbits** (`/{locale}/orbits`): six periodic three-body solutions (Lagrange, figure eight, Butterfly I, Goggles, Moth I, Yin-Yang I), each with a shareable URL, 3D playback controls and scientific details. Trajectories are generated offline from published initial conditions and validated numerically.
 

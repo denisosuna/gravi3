@@ -15,7 +15,7 @@ export type State = readonly number[];
 export type Vec2 = readonly [number, number];
 
 export const BODY_INDICES = [0, 1, 2] as const;
-const VELOCITY_OFFSET = 2 * BODY_INDICES.length;
+export const VELOCITY_OFFSET = 2 * BODY_INDICES.length;
 export const STATE_LENGTH = 2 * VELOCITY_OFFSET;
 
 export function bodyPosition(state: State, body: number): Vec2 {
