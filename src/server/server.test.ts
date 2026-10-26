@@ -57,10 +57,27 @@ describe('configuration and deterministic context', () => {
     expect(getConfig({ ...providerEnv, LLM_REASONING_EFFORT: 'low' }).llm.reasoningEffort).toBe(
       'low',
     );
-    expect(() => getConfig({ LLM_API_KEY: 'key' })).toThrow('Invalid server configuration');
+    expect(getConfig({ ...providerEnv, LLM_REASONING_EFFORT: 'minimal' }).llm.reasoningEffort).toBe(
+      'minimal',
+    );
+    expect(getConfig({ ...providerEnv, LLM_ENABLED: 'FALSE' }).tutorEnabled).toBe(false);
+    expect(() => getConfig({ LLM_API_KEY: 'key' })).toThrow(
+      'LLM_BASE_URL: required when LLM_API_KEY is set; LLM_MODEL: required when LLM_API_KEY is set',
+    );
     expect(() => getConfig({ ...providerEnv, LLM_BASE_URL: 'ftp://llm.example' })).toThrow(
       'Invalid server configuration',
     );
+  });
+  it('names invalid variables without echoing secret values', () => {
+    const error = (() => {
+      try {
+        getConfig({ ...providerEnv, LLM_API_KEY: 'secret-value', LLM_TIMEOUT_MS: 'soon' });
+      } catch (caught) {
+        return String(caught);
+      }
+    })();
+    expect(error).toContain('LLM_TIMEOUT_MS');
+    expect(error).not.toContain('secret-value');
   });
   it('treats blank environment values as unset', () => {
     expect(getConfig({ LLM_API_KEY: ' ', LLM_ENABLED: '', LOG_LEVEL: '' }).tutorEnabled).toBe(
@@ -237,16 +254,32 @@ describe('tutor request boundary', () => {
     expect(deps.complete).not.toHaveBeenCalled();
     expect((await handleTutor(request(), deps)).status).toBe(200);
   });
-  it('does not trust arbitrary forwarded IPs by default', async () => {
+  it('ignores forwarded IPs by default and applies only global limits to unknown clients', async () => {
     const deps = dependencies({
-      limiter: new RateLimiter({ perMinute: 1, perHour: 2, globalPerHour: 5, concurrent: 1 }),
+      limiter: new RateLimiter({ perMinute: 1, perHour: 1, globalPerHour: 2, concurrent: 1 }),
     });
-    const first = request();
-    first.headers.set('x-forwarded-for', '1.2.3.4');
-    const second = request();
-    second.headers.set('x-forwarded-for', '5.6.7.8');
-    expect((await handleTutor(first, deps)).status).toBe(200);
-    expect((await handleTutor(second, deps)).status).toBe(429);
+    const forwarded = (address: string) => {
+      const forwardedRequest = request();
+      forwardedRequest.headers.set('x-forwarded-for', address);
+      return forwardedRequest;
+    };
+    expect((await handleTutor(forwarded('1.2.3.4'), deps)).status).toBe(200);
+    expect((await handleTutor(forwarded('1.2.3.4'), deps)).status).toBe(200);
+    expect((await handleTutor(forwarded('5.6.7.8'), deps)).status).toBe(429);
+  });
+  it('uses the entry appended by trusted proxies and ignores client-supplied entries', async () => {
+    const deps = dependencies({
+      config: { ...config, trustedProxyHops: 1 },
+      limiter: new RateLimiter({ perMinute: 1, perHour: 5, globalPerHour: 10, concurrent: 1 }),
+    });
+    const forwarded = (chain: string) => {
+      const forwardedRequest = request();
+      forwardedRequest.headers.set('x-forwarded-for', chain);
+      return forwardedRequest;
+    };
+    expect((await handleTutor(forwarded('9.9.9.9, 1.2.3.4'), deps)).status).toBe(200);
+    expect((await handleTutor(forwarded('8.8.8.8, 1.2.3.4'), deps)).status).toBe(429);
+    expect((await handleTutor(forwarded('1.2.3.4, 5.6.7.8'), deps)).status).toBe(200);
   });
   it('bounds actual streamed bytes and waiting time without Content-Length', async () => {
     const oversized = new Request('http://localhost', {

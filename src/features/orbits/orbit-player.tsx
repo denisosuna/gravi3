@@ -4,33 +4,14 @@ import { Component, useCallback, useEffect, useState, type ReactNode } from 'rea
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { z } from 'zod';
 import { ASSETS } from '@/constants/routes';
-import {
-  STATE_LENGTH,
-  type OrbitDefinition,
-  type OrbitSlug,
-  type Trajectory,
-} from '@/physics/types';
+import { parseTrajectory } from '@/physics/trajectory-schema';
+import type { OrbitDefinition, OrbitSlug, Trajectory } from '@/physics/types';
 import { useExperienceMemory } from '@/components/providers';
 import { PlaybackController } from './playback';
 import { PlayerControls, ViewControls } from './player-controls';
 
 const OrbitScene = dynamic(() => import('@/visualization/orbit-scene'), { ssr: false });
-const trajectorySchema = z.object({
-  version: z.literal(1),
-  slug: z.string(),
-  period: z.number().positive(),
-  samples: z
-    .array(
-      z.object({
-        time: z.number().nonnegative(),
-        state: z.array(z.number().finite()).length(STATE_LENGTH),
-      }),
-    )
-    .min(2),
-});
-
 class SceneBoundary extends Component<
   { children: ReactNode; fallback: ReactNode },
   { failed: boolean }
@@ -108,43 +89,39 @@ function Viewport({
 }
 
 export function OrbitPlayer({ orbit }: { orbit: OrbitDefinition }) {
+  const { slug, period } = orbit;
   const memory = useExperienceMemory();
-  const [controller] = useState(
-    () => new PlaybackController(orbit.period, memory.getOrbit(orbit.slug)),
-  );
+  const [controller] = useState(() => new PlaybackController(period, memory.getOrbit(slug)));
   const [resource, setResource] = useState<{ data?: Trajectory; error?: boolean }>({});
   const t = useTranslations('player');
   useEffect(() => {
-    const persist = () => memory.saveOrbit(orbit.slug, controller.export());
+    const persist = () => memory.saveOrbit(slug, controller.export());
     persist();
     return controller.subscribe(persist);
-  }, [memory, orbit.slug, controller]);
+  }, [memory, slug, controller]);
   useEffect(() => {
     const abort = new AbortController();
-    fetch(ASSETS.orbitTrajectory(orbit.slug), { signal: abort.signal })
+    fetch(ASSETS.orbitTrajectory(slug), { signal: abort.signal })
       .then(async (response) => {
         if (!response.ok) throw new Error('Trajectory unavailable.');
-        const data = trajectorySchema.parse(await response.json());
-        if (data.slug !== orbit.slug || data.period !== orbit.period)
-          throw new Error('Trajectory manifest mismatch.');
-        setResource({ data });
+        setResource({ data: parseTrajectory(await response.json(), { slug, period }) });
       })
       .catch(() => {
         if (!abort.signal.aborted) setResource({ error: true });
       });
     return () => {
       abort.abort();
-      memory.saveOrbit(orbit.slug, controller.export());
+      memory.saveOrbit(slug, controller.export());
     };
-  }, [orbit.slug, orbit.period, memory, controller]);
+  }, [slug, period, memory, controller]);
   return (
     <div className="orbit-visualization">
       <ViewControls controller={controller} />
       {resource.data ? (
-        <Viewport trajectory={resource.data} controller={controller} slug={orbit.slug} />
+        <Viewport trajectory={resource.data} controller={controller} slug={slug} />
       ) : (
         <div className="scene-fallback" role="status">
-          <Image src={ASSETS.orbitPreview(orbit.slug)} width={640} height={400} alt="" />
+          <Image src={ASSETS.orbitPreview(slug)} width={640} height={400} alt="" />
           <p>{t(resource.error ? 'error' : 'loading')}</p>
         </div>
       )}

@@ -29,7 +29,6 @@ export function Gallery() {
           href={ROUTES.orbit(orbit.slug)}
           key={orbit.slug}
           id={cardId(orbit.slug)}
-          scroll={false}
           className={`gallery-card ${gallery.selected === orbit.slug ? 'was-selected' : ''}`}
           onClick={() => {
             memory.updateGallery({

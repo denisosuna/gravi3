@@ -21,16 +21,16 @@ export function CameraRig({
 }) {
   const { camera, gl, invalidate } = useThree();
   const controls = useRef<ComponentRef<typeof OrbitControls> | null>(null);
-  const state = usePlaybackState(controller);
+  const view = usePlaybackState(controller, (session) => session.view);
   const revision = controller.cameraRevision;
   useEffect(() => {
     const saved = controller.export().camera;
-    camera.position.set(...(saved ?? DEFAULT_CAMERA_POSITIONS[state.view]));
+    camera.position.set(...(saved ?? DEFAULT_CAMERA_POSITIONS[view]));
     camera.lookAt(0, 0, 0);
     controls.current?.target.set(0, 0, 0);
     controls.current?.update();
     invalidate();
-  }, [camera, controller, state.view, revision, invalidate]);
+  }, [camera, controller, view, revision, invalidate]);
   useLayoutEffect(() => {
     function lost(event: Event) {
       event.preventDefault();
@@ -49,7 +49,7 @@ export function CameraRig({
       makeDefault
       enablePan={false}
       enableDamping={false}
-      enableRotate={state.view === '3d'}
+      enableRotate={view === '3d'}
       minDistance={CAMERA_DISTANCE.min}
       maxDistance={CAMERA_DISTANCE.max}
       onChange={() => controller.saveCamera(camera.position.toArray() as Vector3)}

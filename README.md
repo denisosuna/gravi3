@@ -61,21 +61,21 @@ With no key or `LLM_ENABLED=false`, the panel explicitly shows reduced mode. Inv
 | `LLM_BASE_URL`               | absent; required with a key                            | OpenAI-compatible API base URL                       |
 | `LLM_ENABLED`                | `true`                                                 | Explicit `true`/`false` tutor switch                 |
 | `LLM_MODEL`                  | absent; required with a key                            | Model id as named by your provider                   |
-| `LLM_REASONING_EFFORT`       | absent                                                 | `low`/`medium`/`high`, only for reasoning models     |
+| `LLM_REASONING_EFFORT`       | absent                                                 | e.g. `none`/`minimal`/`low`/`high`; reasoning models |
 | `LLM_TIMEOUT_MS`             | `15000`                                                | Provider deadline in milliseconds                    |
 | `LLM_MAX_COMPLETION_TOKENS`  | `2048`                                                 | Generation budget including reasoning                |
 | `RATE_LIMIT_IP_PER_MINUTE`   | `5`                                                    | Accepted requests per minute bucket                  |
 | `RATE_LIMIT_IP_PER_HOUR`     | `30`                                                   | Accepted requests per hour bucket                    |
 | `RATE_LIMIT_GLOBAL_PER_HOUR` | `100`                                                  | Accepted requests per process/hour                   |
 | `LLM_MAX_CONCURRENT`         | `3`                                                    | Global in-flight provider calls                      |
-| `TRUST_PROXY`                | `false`                                                | Enable only after verifying trusted proxy behavior   |
+| `TRUSTED_PROXY_HOPS`         | `0`                                                    | Proxies appending to `X-Forwarded-For`; 0 ignores it |
 | `LOG_LEVEL`                  | `info`                                                 | `debug`, `info`, `warn`, `error` or `silent`         |
 | `APP_URL`                    | Render external URL, otherwise `http://localhost:3000` | Trusted canonical public URL                         |
 | `PORT` / `HOSTNAME`          | `3000` / `0.0.0.0`                                     | Server listen address; platform values are respected |
 
 Request bodies are bounded to 16 KiB, questions to 1,000 characters, and history to six messages of 1,000 characters each. Body reads have a five-second deadline. Quotas use fixed windows; IP storage is bounded to 2,000 expiring keys. `429` responses include `Retry-After`. Reservations are released on completion, failure, timeout or disconnect.
 
-With `TRUST_PROXY=false`, requests share a conservative bucket rather than trusting arbitrary IP headers. Only enable it after confirming your final proxy controls/appends the last `X-Forwarded-For` value. Quotas are in memory and require **one process/instance**; they reset on restart and do not coordinate across replicas. Provider token/organization quotas can still be exhausted before local request limits.
+With `TRUSTED_PROXY_HOPS=0`, IP headers are ignored and requests only count against the global and concurrency limits, so one visitor cannot lock out everyone else. Set it to the number of proxies that append to `X-Forwarded-For` (the client is that many entries from the end) only after checking the header on your deployment. Quotas are in memory and require **one process/instance**; they reset on restart and do not coordinate across replicas. Provider token/organization quotas can still be exhausted before local request limits.
 
 ## Project structure
 
@@ -143,7 +143,7 @@ The repository owner manages Render deployment. No hosted URL is claimed until i
 
 Create a Blueprint from this repository and the branch containing the implementation; `render.yaml` defines a free Docker web service with `/api/health` and deployment after passing checks. For an ordinary service, select Docker, the implementation branch, free plan, one instance, and the same health path. After the PRs are merged, select `main`.
 
-The app uses Render's [documented `RENDER_EXTERNAL_URL`](https://render.com/docs/environment-variables#render_external_url) when `APP_URL` is absent. Set `APP_URL` explicitly for a custom domain. The blueprint pre-fills the Groq base URL and model; add `LLM_API_KEY` as a runtime secret if you want the tutor enabled (change the other two to use another provider); it is optional for deployment. Keep `TRUST_PROXY=false` until proxy headers are verified.
+The app uses Render's [documented `RENDER_EXTERNAL_URL`](https://render.com/docs/environment-variables#render_external_url) when `APP_URL` is absent. Set `APP_URL` explicitly for a custom domain. The blueprint pre-fills the Groq base URL and model; add `LLM_API_KEY` as a runtime secret if you want the tutor enabled (change the other two to use another provider); it is optional for deployment. Keep `TRUSTED_PROXY_HOPS=0` until you have checked what Render puts in `X-Forwarded-For`.
 
 Free services [sleep after inactivity and have shared usage quotas](https://render.com/docs/free), so an initial visit can wait for startup. No keep-alive pings are provided. A working local Docker path satisfies the delivery alternative if no online deployment is supplied.
 

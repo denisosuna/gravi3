@@ -1,7 +1,7 @@
 import { NO_STORE_HEADERS } from '@/constants/http';
 import { getConfig } from '@/server/config';
 import { createChatCompletion } from '@/server/llm-client';
-import { logger } from '@/server/logger';
+import { getLogger } from '@/server/logger';
 import { RateLimiter } from '@/server/rate-limiter';
 import { handleTutor } from '@/server/tutor-handler';
 import { buildTutorMessages } from '@/server/tutor-prompt';
@@ -23,7 +23,7 @@ export function POST(request: Request) {
   return handleTutor(request, {
     config,
     limiter,
-    logger,
+    logger: getLogger(),
     complete: async (input, signal) => {
       if (!completeChat) throw new Error('LLM provider is not configured.');
       return completeChat(buildTutorMessages(input), signal);
