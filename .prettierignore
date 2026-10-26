@@ -1,0 +1,11 @@
+node_modules
+.next
+pnpm-lock.yaml
+public/orbits
+public/previews
+PLAN.local.md
+*.png
+*.pdf
+next-env.d.ts
+playwright-report
+test-results
