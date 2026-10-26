@@ -1,3 +1,13 @@
+export const orbitSlugs = [
+  'lagrange',
+  'figure-eight',
+  'butterfly-i',
+  'goggles',
+  'moth-i',
+  'yin-yang-i',
+] as const;
+export type OrbitSlug = (typeof orbitSlugs)[number];
+
 export type Masses = readonly [number, number, number];
 
 // State layout: x1,y1,x2,y2,x3,y3,vx1,vy1,vx2,vy2,vx3,vy3.
@@ -9,7 +19,7 @@ export interface Sample {
 }
 
 export interface OrbitDefinition {
-  slug: string;
+  slug: OrbitSlug;
   masses: Masses;
   gravitationalConstant: number;
   period: number;

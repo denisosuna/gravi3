@@ -61,7 +61,8 @@ export function PlayerControls({ controller }: { controller: PlaybackController 
           aria-valuetext={`${format.format(state.time)} / ${format.format(controller.period)}`}
         />
         <output>
-          {format.format((state.time / controller.period) * 20)} / 20.0 {t('seconds')}
+          {format.format((state.time / controller.period) * 20)} / {format.format(20)}{' '}
+          {t('seconds')}
         </output>
       </div>
     </div>
