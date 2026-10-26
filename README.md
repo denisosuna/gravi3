@@ -22,7 +22,7 @@ corepack pnpm build
 corepack pnpm start
 ```
 
-The CI runs formatting, linting, type checking, tests and production build without external credentials. At bootstrap there are no domain tests yet; the test runner allows an empty suite until the physics module is introduced.
+The CI runs formatting, linting, type checking, tests and production build without external credentials. Domain tests cover force scaling, invalid inputs, momentum balance, the analytic Lagrange solution, close encounters in Butterfly I and convergence. See [numerical methods and thresholds](docs/physics.md).
 
 ## Structure
 

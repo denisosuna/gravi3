@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "vitest run --passWithNoTests",
+    "test": "vitest run",
     "test:e2e": "playwright test",
     "orbits:generate": "tsx scripts/generate-orbits.ts",
     "orbits:validate": "tsx scripts/validate-orbits.ts"
