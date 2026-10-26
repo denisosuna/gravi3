@@ -9,6 +9,7 @@ import { distanceRange, initialExperiment, massRange, type Experiment } from '@/
 import { gravitationalForce } from '@/physics/gravity';
 import { ForceDiagram } from './force-diagram';
 import { Prediction } from './prediction';
+import { TutorPanel } from '@/components/tutor/tutor-panel';
 
 export function LearningExperience() {
   const t = useTranslations('learn');
@@ -104,6 +105,7 @@ export function LearningExperience() {
         </section>
       </div>
       <aside className="learning-sidebar">
+        <TutorPanel context={{ kind: 'learning', ...experiment }} />
         <section className="formula-panel">
           <h2>{t('formulaTitle')}</h2>
           <p className="formula">F = G · m₁ · m₂ / r²</p>

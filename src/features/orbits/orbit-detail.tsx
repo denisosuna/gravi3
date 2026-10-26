@@ -6,6 +6,7 @@ import { ArrowLeft, Sparkles } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { OrbitLibrary } from './gallery';
 import { OrbitPlayer } from './orbit-player';
+import { TutorPanel } from '@/components/tutor/tutor-panel';
 import { ScientificDetails } from './scientific-details';
 import type { OrbitDefinition } from '@/physics/types';
 
@@ -34,6 +35,7 @@ export function OrbitDetail({ orbit }: { orbit: OrbitDefinition }) {
           </div>
         </section>
         <aside className="context-column">
+          <TutorPanel context={{ kind: 'orbit', slug: orbit.slug }} />
           <section className="concept-panel">
             <div className="panel-heading">
               <Sparkles size={22} />

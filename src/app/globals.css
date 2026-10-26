@@ -1332,3 +1332,152 @@ button.control-button:hover {
     padding: 8px;
   }
 }
+.tutor-panel {
+  margin-bottom: 16px;
+}
+.tutor-panel .panel-heading {
+  margin-bottom: 13px;
+}
+.collapse-button {
+  margin-left: auto;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tutor-intro {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.8;
+}
+.tutor-notice {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 11px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.tutor-notice span {
+  display: block;
+  margin-top: 7px;
+}
+.suggestion-button {
+  width: 100%;
+  text-align: left;
+  background: var(--surface-raised);
+  color: var(--text);
+  font-size: 11px;
+  line-height: 1.7;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 13px;
+}
+.tutor-conversation {
+  max-height: 360px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.tutor-message {
+  padding: 10px 0;
+}
+.tutor-message > span {
+  font-size: 9px;
+  color: var(--accent);
+  font-weight: 600;
+}
+.tutor-message p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  line-height: 1.85;
+  color: var(--muted);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.tutor-message.user {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 10px;
+  margin-bottom: 5px;
+}
+.tutor-message.user > span {
+  color: var(--muted);
+}
+.tutor-panel textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 76px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.tutor-panel textarea::placeholder {
+  color: var(--muted);
+}
+.tutor-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.tutor-form-footer small {
+  color: var(--muted);
+  font-size: 9px;
+}
+.tutor-form-footer .button {
+  font-size: 10px;
+  min-height: 34px;
+  padding: 7px 12px;
+}
+.tutor-disclaimer {
+  color: var(--muted);
+  font-size: 9px;
+  margin: 15px 0 0;
+  line-height: 1.7;
+}
+.tutor-try {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--accent);
+  font-size: 11px;
+  border-top: 1px solid var(--line);
+  padding-top: 15px;
+  margin-top: 18px;
+}
+.tutor-status {
+  color: var(--accent);
+  font-size: 11px;
+}
+.learning-sidebar .tutor-panel + .formula-panel {
+  margin-top: 20px;
+}
+@media (max-width: 900px) and (min-width: 641px) {
+  .context-column .tutor-panel {
+    grid-row: span 2;
+  }
+}
+@media (max-width: 640px) {
+  .learning-sidebar {
+    display: flex;
+    flex-direction: column;
+  }
+  .learning-sidebar .tutor-panel {
+    order: 2;
+    margin-top: 20px;
+  }
+  .learning-sidebar .tutor-panel + .formula-panel {
+    margin-top: 0;
+  }
+}

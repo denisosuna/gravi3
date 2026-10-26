@@ -3,7 +3,7 @@ import type { OrbitDefinition } from '../physics/types';
 const catalogSource = 'https://numericaltank.sjtu.edu.cn/three-body/three-body-movies.htm';
 
 function collinear(
-  slug: string,
+  slug: OrbitDefinition['slug'],
   vx: number,
   vy: number,
   period: number,

@@ -142,7 +142,7 @@
     "empty": "Escribe una pregunta antes de enviar.",
     "suggestion": "¿Qué ocurre si duplico la distancia?",
     "suggestionOrbit": "¿Por qué se repite esta órbita?",
-    "intro": "Pregunta, compara y pon a prueba tus ideas. Las explicaciones parten del estado actual del experimento.",
+    "intro": "Pregunta, compara y pon a prueba tus ideas. Se usa el estado del experimento al enviar la pregunta.",
     "try": "Probar con dos cuerpos",
     "disclaimer": "La IA puede equivocarse. Contrasta su explicación con el experimento.",
     "you": "Tú",

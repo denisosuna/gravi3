@@ -142,7 +142,7 @@
     "empty": "Write a question before sending.",
     "suggestion": "What happens if I double the distance?",
     "suggestionOrbit": "Why does this orbit repeat?",
-    "intro": "Ask, compare, and test your ideas. Explanations start from the current experiment.",
+    "intro": "Ask, compare, and test your ideas. Explanations use the experiment state when you send your question.",
     "try": "Try it with two bodies",
     "disclaimer": "AI can make mistakes. Check explanations against the experiment.",
     "you": "You",
