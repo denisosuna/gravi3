@@ -1,6 +1,6 @@
 'use client';
 
-import { Component, useCallback, useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
@@ -8,23 +8,11 @@ import { ASSETS } from '@/constants/routes';
 import { parseTrajectory } from '@/physics/trajectory-schema';
 import type { OrbitDefinition, OrbitSlug, Trajectory } from '@/physics/types';
 import { useExperienceMemory } from '@/components/providers';
+import { SceneBoundary } from '@/components/scene-boundary';
 import { PlaybackController } from './playback';
 import { PlayerControls, ViewControls } from './player-controls';
 
 const OrbitScene = dynamic(() => import('@/visualization/orbit-scene'), { ssr: false });
-class SceneBoundary extends Component<
-  { children: ReactNode; fallback: ReactNode },
-  { failed: boolean }
-> {
-  state = { failed: false };
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-  render() {
-    return this.state.failed ? this.props.fallback : this.props.children;
-  }
-}
-
 function Viewport({
   trajectory,
   controller,

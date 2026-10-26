@@ -146,7 +146,7 @@
     "distance": "Distancia entre centros",
     "force": "Fuerza de atracción en cada cuerpo",
     "equal": "Igual magnitud, sentidos opuestos. La aceleración es F/m: la masa menor acelera más.",
-    "scale": "Radios y flechas ilustrativos; los valores de fuerza se calculan en unidades SI.",
+    "scale": "Distancia a escala; radios ilustrativos; flechas de fuerza en escala logarítmica. Los valores se calculan en unidades SI.",
     "predictionTitle": "Antes de probar, ¿qué intuyes?",
     "predictionQuestion": "Si duplicamos la distancia y mantenemos las masas, la fuerza será…",
     "half": "La mitad",
@@ -165,7 +165,11 @@
     "step3": "03 · Conecta",
     "forceUnits": "newtons (N)",
     "acceleration": "Aceleración",
-    "predictionHint": "Elige una respuesta y después comprueba el efecto en el laboratorio."
+    "predictionHint": "Elige una respuesta y después comprueba el efecto en el laboratorio.",
+    "rotateHint": "Arrastra la escena para girarla.",
+    "fallback3d": "La vista 3D no está disponible en este dispositivo. Este diagrama muestra el mismo experimento.",
+    "ratio": "{ratio} × la fuerza de la configuración inicial",
+    "legend": "Valores del experimento"
   },
   "tutor": {
     "title": "Tutor IA",

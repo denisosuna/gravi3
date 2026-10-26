@@ -3,6 +3,7 @@ export type ScenePalette = {
   gridCenter: string;
   grid: string;
   pathOpacity: number;
+  ruler: string;
 };
 
 const DARK: ScenePalette = {
@@ -10,6 +11,7 @@ const DARK: ScenePalette = {
   gridCenter: '#263e5a',
   grid: '#16283e',
   pathOpacity: 0.18,
+  ruler: '#8da3c7',
 };
 
 const LIGHT: ScenePalette = {
@@ -17,6 +19,7 @@ const LIGHT: ScenePalette = {
   gridCenter: '#bbd0ed',
   grid: '#dae5f5',
   pathOpacity: 0.35,
+  ruler: '#586886',
 };
 
 export function scenePalette(dark: boolean): ScenePalette {

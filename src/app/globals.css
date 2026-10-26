@@ -1178,17 +1178,81 @@ button.control-button:hover {
 .lab-heading .eyebrow {
   margin: 0;
 }
-.force-diagram {
+.force-lab {
   margin: 0 0 25px;
 }
-.force-diagram svg {
-  width: 100%;
-  height: auto;
+.lab-scene {
+  height: clamp(260px, 38vh, 380px);
+  border-radius: 12px;
+  background: var(--surface-raised);
+  overflow: hidden;
 }
-.force-diagram figcaption {
+.lab-scene canvas {
+  touch-action: pan-y !important;
+}
+.lab-fallback {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
   text-align: center;
   color: var(--muted);
-  font-size: 10px;
+  font-size: 12px;
+}
+.lab-fallback svg {
+  width: 100%;
+  max-height: 200px;
+}
+.lab-legend {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.lab-legend li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.lab-legend li::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.lab-legend .legend-body-1::before {
+  background: var(--blue);
+}
+.lab-legend .legend-body-2::before {
+  background: var(--amber);
+}
+.lab-legend .legend-distance::before {
+  width: 14px;
+  height: 2px;
+  border-radius: 0;
+}
+.force-lab figcaption {
+  margin-top: 10px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+.lab-hint {
+  color: var(--accent);
+}
+.force-ratio {
+  color: var(--accent);
+  font-weight: 600;
 }
 .lab-inputs {
   display: grid;
@@ -1345,8 +1409,8 @@ button.control-button:hover {
   .force-result > output {
     font-size: 28px;
   }
-  .force-diagram {
-    margin-bottom: 23px;
+  .lab-scene {
+    height: 260px;
   }
   .prediction-options .button {
     flex: 1;
