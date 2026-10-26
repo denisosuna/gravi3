@@ -1,38 +1,127 @@
 # Gravi3
 
-An interactive introduction to Newtonian gravity and six periodic solutions of the three-body problem, built with TypeScript and Next.js. Scientific validation, the bilingual learning experience, the real Groq tutor, and Docker execution are delivered in separate pull requests.
+An interactive observatory for learning Newtonian gravity without a physics background. Change masses and distance, test a prediction, ask a contextual AI tutor, and explore six numerically validated periodic three-body solutions.
 
-## Development
+- **Learn:** an SVG force laboratory with deterministic SI-unit results, prediction feedback and a real Groq tutor.
+- **Orbits:** Lagrange, figure eight, Butterfly I, Goggles, Moth I and Yin-Yang I, each with a shared URL, playback controls and scientific details.
+- Spanish/English; light/dark/system themes; keyboard controls; mobile layout; explicit reduced mode without AI credentials.
 
-Use Node.js 24.14.0 (`nvm use`) and pnpm 10.34.9, as pinned in this repository. Enable Corepack if needed.
+## Run with Docker
 
-```sh
-corepack pnpm install --frozen-lockfile
-corepack pnpm dev
-```
-
-Open http://localhost:3000. No credentials are required to build or start the application. Environment configuration is documented in `.env.example`; never commit `.env.local`.
+Docker Engine and Compose v2.24 or newer are sufficient. Node.js is not required on the host.
 
 ```sh
-corepack pnpm format:check
-corepack pnpm lint
-corepack pnpm typecheck
-corepack pnpm test
-corepack pnpm build
-corepack pnpm start
+docker compose up --build
 ```
 
-The CI runs formatting, linting, type checking, tests and production build without external credentials. Domain tests cover force scaling, invalid inputs, momentum balance, the analytic Lagrange solution, close encounters in Butterfly I and convergence. See [numerical methods and thresholds](docs/physics.md).
+Open http://localhost:3000. The complete learning experience and orbit gallery work without credentials. To enable the tutor, add your own `GROQ_API_KEY` to `.env.local` before starting; optional `.env` is also supported. Compose injects these files at runtime. Neither is copied into the image.
 
-## Structure
+If port 3000 is occupied, use `GRAVI3_PORT=3100 docker compose up --build`. Stop with `docker compose down`. No database, migrations or separate infrastructure are needed.
 
-`src/app` contains Next.js routes. Physics, visualization, learning and server modules are added as independently testable responsibilities. Generated scientific data will be committed with provenance and validation reports. Source code, comments and technical documentation are written in English; product content supports Spanish and English.
+## Run locally
 
-## Scientific data
+Use **Node.js 24.14.0** and **pnpm 10.34.9**, as pinned in `.nvmrc` and `package.json`.
 
 ```sh
-corepack pnpm orbits:generate
-corepack pnpm orbits:validate
+nvm use
+corepack enable
+pnpm install --frozen-lockfile
+pnpm dev
 ```
 
-The six committed trajectories and SVG previews are generated with TypeScript, independently validated against a finer integration and loaded one at a time. [Physics documentation](docs/physics.md) includes provenance, normalized units, fixed acceptance thresholds and measured diagnostics.
+For production execution:
+
+```sh
+pnpm build
+pnpm start
+```
+
+The build prepares Next.js standalone output with static resources and removes traced environment-file copies. The start helper reads the local environment and runs that standalone server. All application/physics/generation code is TypeScript; the two small Node ESM helpers handle build packaging and startup.
+
+The implementation is delivered through stacked phase pull requests. Until they are merged, the complete application is on `feature/delivery`; a fresh clone can select it directly:
+
+```sh
+git clone --branch feature/delivery https://github.com/denisosuna/gravi3.git
+cd gravi3
+```
+
+## Enable the real tutor
+
+Create `.env.local` from `.env.example`, supply your own Groq key, and restart the application. `.env.local` takes precedence over `.env`; existing process environment variables take precedence when running locally. Keep keys out of Git, URLs, browser code and build arguments.
+
+`GET /api/health` returns server health and whether the tutor is configured. `GET /api/tutor` reports availability without making a provider call. In Learn, ask what happens when distance doubles: a real answer should explain that force becomes one quarter. Change to Spanish and ask about equal forces versus different accelerations. Live bilingual checks are recorded in [tutor evaluation](docs/tutor-evaluation.md); normal tests use mocks.
+
+With no key or `LLM_ENABLED=false`, the panel explicitly shows reduced mode. Invalid keys, upstream failures and exhausted quota produce controlled errors with manual retry. No static response is presented as an LLM response. The provider receives your question and bounded history/context; conversations are not stored in a database or browser storage, or written to application logs.
+
+### Configuration
+
+| Variable                     | Default                                                | Meaning                                              |
+| ---------------------------- | ------------------------------------------------------ | ---------------------------------------------------- |
+| `GROQ_API_KEY`               | absent                                                 | Optional server-only Groq credential                 |
+| `LLM_ENABLED`                | `true`                                                 | Explicit `true`/`false` tutor switch                 |
+| `LLM_MODEL`                  | `openai/gpt-oss-20b`                                   | Groq model; access depends on your account           |
+| `LLM_TIMEOUT_MS`             | `15000`                                                | Provider deadline in milliseconds                    |
+| `LLM_MAX_COMPLETION_TOKENS`  | `2048`                                                 | Generation budget including reasoning                |
+| `RATE_LIMIT_IP_PER_MINUTE`   | `5`                                                    | Accepted requests per minute bucket                  |
+| `RATE_LIMIT_IP_PER_HOUR`     | `30`                                                   | Accepted requests per hour bucket                    |
+| `RATE_LIMIT_GLOBAL_PER_HOUR` | `100`                                                  | Accepted requests per process/hour                   |
+| `LLM_MAX_CONCURRENT`         | `3`                                                    | Global in-flight provider calls                      |
+| `TRUST_PROXY`                | `false`                                                | Enable only after verifying trusted proxy behavior   |
+| `LOG_LEVEL`                  | `info`                                                 | `debug`, `info`, `warn`, `error` or `silent`         |
+| `APP_URL`                    | Render external URL, otherwise `http://localhost:3000` | Trusted canonical public URL                         |
+| `PORT` / `HOSTNAME`          | `3000` / `0.0.0.0`                                     | Server listen address; platform values are respected |
+
+Request bodies are bounded to 16 KiB, questions to 1,000 characters, and history to six messages of 1,000 characters each. Body reads have a five-second deadline. Quotas use fixed windows; IP storage is bounded to 2,000 expiring keys. `429` responses include `Retry-After`. Reservations are released on completion, failure, timeout or disconnect.
+
+With `TRUST_PROXY=false`, requests share a conservative bucket rather than trusting arbitrary IP headers. Only enable it after confirming your final proxy controls/appends the last `X-Forwarded-For` value. Quotas are in memory and require **one process/instance**; they reset on restart and do not coordinate across replicas. Provider token/organization quotas can still be exhausted before local request limits.
+
+## Tests and scientific data
+
+```sh
+pnpm format:check
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+pnpm exec playwright install chromium
+pnpm test:e2e
+# Against an already-running Docker service:
+PLAYWRIGHT_BASE_URL=http://localhost:3100 pnpm test:e2e
+pnpm orbits:generate
+pnpm orbits:validate
+```
+
+CI runs formatting, linting, strict type checking, unit/server tests, committed-trajectory validation, production build and desktop/mobile Chromium browser tests, including accessibility scans in both themes. It uses no real AI credentials. Docker is also validated before handoff.
+
+The generation pipeline uses adaptive Dormand–Prince 5(4), published high-precision initial conditions and cubic Hermite interpolation. Independent finer integration checks labeled position/velocity return, conserved quantities, convergence and interpolation. No softening, endpoint blending or hand-drawn substitute orbit is used. Each detail loads one trajectory; gzip sizes are about 19–115 KB.
+
+See [physics and provenance](docs/physics.md), [per-orbit measurements](docs/orbit-validation.json), [architecture and tradeoffs](docs/architecture.md), and [verification evidence](docs/verification.md). Regeneration is deterministic/offline for the pinned runtime and is not performed on every request or web build.
+
+## Routes and interaction
+
+- `/es` and `/en`: introduction.
+- `/{locale}/learn`: experiment, prediction and contextual tutor.
+- `/{locale}/orbits`: six-solution gallery.
+- `/{locale}/orbits/{slug}`: direct, shareable animated detail. Slugs are `lagrange`, `figure-eight`, `butterfly-i`, `goggles`, `moth-i`, `yin-yang-i`.
+
+Orbits start paused. Use Play, Restart, speed, timeline, front/3D, trails and camera reset. The physical solution remains planar while the camera changes perspective. A period corresponds to 20 playback seconds at 1×; scientific periods use normalized units. Theme/locale changes retain experiment and orbit context. Returning to the gallery restores its prior scroll/selection/focus during navigation; reloading resets transient state.
+
+## Deploy on Render
+
+The repository owner manages Render deployment. No hosted URL is claimed until it is actually deployed.
+
+Create a Blueprint from this repository and the branch containing the implementation; `render.yaml` defines a free Docker web service with `/api/health` and deployment after passing checks. For an ordinary service, select Docker, the implementation branch, free plan, one instance, and the same health path. After the PRs are merged, select `main`.
+
+The app uses Render's [documented `RENDER_EXTERNAL_URL`](https://render.com/docs/environment-variables#render_external_url) when `APP_URL` is absent. Set `APP_URL` explicitly for a custom domain. Add `GROQ_API_KEY` only as a runtime secret if you want the tutor enabled; it is optional for deployment. Keep `TRUST_PROXY=false` until proxy headers are verified.
+
+Free services [sleep after inactivity and have shared usage quotas](https://render.com/docs/free), so an initial visit can wait for startup. No keep-alive pings are provided. A working local Docker path satisfies the delivery alternative if no online deployment is supplied.
+
+## Limits, attribution and AI use
+
+Numerical checks establish finite-precision agreement over a period, not a proof of stability or indefinite integration accuracy. There is no free three-body editor or new-orbit search. There are no accounts, database, persistent conversation, paid fallback, browsing tools or model-driven app controls. A mounted tutor conversation is cleared when its panel unmounts or the page reloads.
+
+Automated mobile Chromium emulation does not replace a physical iPhone/Safari test. Accessibility scans and manual checks are basic verification, not certification. Frame rate and provider availability depend on device, account and network. The tutor can make mistakes; deterministic calculations remain available to check it.
+
+Scientific initial conditions are attributed to Šuvakov/Dmitrašinović, Li/Liao and the figure-eight authors in [physics documentation](docs/physics.md). All trajectories and previews are generated by this repository; no third-party animation assets or implementation code are copied. Dependency licenses are listed in [third-party notices](docs/third-party.md). Selection correspondence, the original PDF and design reference images are not published.
+
+AI assistance was used substantially for planning, code, scientific-source research and tests. Decisions were checked against the original brief, primary scientific sources, independent numerical integration, production browser flows and real bilingual Groq responses. Review the code and evidence; generated output alone is not treated as validation.

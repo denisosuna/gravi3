@@ -6,7 +6,10 @@ export default defineConfig({
   workers: 1,
   timeout: 60_000,
   expect: { timeout: 15_000 },
-  use: { baseURL: 'http://127.0.0.1:3000', trace: 'retain-on-failure' },
+  use: {
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:3000',
+    trace: 'retain-on-failure',
+  },
   projects: [
     {
       name: 'desktop',
@@ -14,10 +17,12 @@ export default defineConfig({
     },
     { name: 'mobile', use: { ...devices['iPhone 13'], defaultBrowserType: 'chromium' } },
   ],
-  webServer: {
-    command: 'pnpm start',
-    url: 'http://127.0.0.1:3000/es',
-    reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
-  },
+  webServer: process.env.PLAYWRIGHT_BASE_URL
+    ? undefined
+    : {
+        command: 'pnpm start',
+        url: 'http://127.0.0.1:3000/es',
+        reuseExistingServer: !process.env.CI,
+        timeout: 180_000,
+      },
 });

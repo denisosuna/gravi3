@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: gravi3
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: HOSTNAME
+        value: 0.0.0.0
+      - key: NODE_ENV
+        value: production
+      - key: TRUST_PROXY
+        value: 'false'
+      - key: LOG_LEVEL
+        value: info
