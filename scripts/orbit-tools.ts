@@ -124,8 +124,13 @@ export function previewSvg(trajectory: Trajectory): string {
             `${(64 + position[2 * body]! * scale).toFixed(2)},${(56 - position[2 * body + 1]! * scale).toFixed(2)}`,
         )
         .join(' ');
-      const head = positions[body * 80]!;
-      return `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.1" opacity=".85"/><circle cx="${64 + head[2 * body]! * scale}" cy="${56 - head[2 * body + 1]! * scale}" r="3" fill="${color}"/>`;
+      const head = positions[40]!;
+      const trail = Array.from({ length: 161 }, (_, i) => {
+        const time = (((40 - 160 + i + 480) % 480) / 480) * trajectory.period;
+        const position = samplePositions(trajectory, time, []);
+        return `${(64 + position[2 * body]! * scale).toFixed(2)},${(56 - position[2 * body + 1]! * scale).toFixed(2)}`;
+      }).join(' ');
+      return `<polyline points="${points}" fill="none" stroke="${color}" stroke-width=".6" opacity=".15"/><polyline points="${trail}" fill="none" stroke="${color}" stroke-width="1.1" opacity=".9"/><circle cx="${64 + head[2 * body]! * scale}" cy="${56 - head[2 * body + 1]! * scale}" r="3" fill="${color}"/>`;
     })
     .join('');
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 112">${paths}</svg>`;
