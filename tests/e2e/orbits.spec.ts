@@ -3,6 +3,9 @@ import { expect, test } from '@playwright/test';
 test('all six shared URLs open directly with validated data and playback controls', async ({
   page,
 }) => {
+  const socialImage = await page.request.get('/opengraph-image');
+  expect(socialImage.status()).toBe(200);
+  expect(socialImage.headers()['content-type']).toContain('image/png');
   for (const slug of [
     'lagrange',
     'figure-eight',
@@ -85,7 +88,11 @@ test('a rotated camera survives locale navigation without scene lifecycle errors
   await page.addStyleTag({
     content: '.scene-container{height:400px!important;flex:none!important}',
   });
-  await page.locator('canvas').waitFor();
+  await page.locator('canvas[data-ready="true"]').waitFor();
+  const sceneWidth = await page
+    .locator('.scene-container')
+    .evaluate((element) => Math.floor(element.getBoundingClientRect().width) - 32);
+  await page.addStyleTag({ content: `.scene-container{width:${sceneWidth}px!important}` });
   await page.getByRole('button', { name: '3D', exact: true }).click();
   const box = (await page.locator('canvas').boundingBox())!;
   await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);

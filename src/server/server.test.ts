@@ -5,7 +5,7 @@ import { createLogger } from './logger';
 import { LimitError, RateLimiter } from './rate-limiter';
 import { readJsonBody } from './request-body';
 import { handleTutor } from './tutor-handler';
-import { tutorSystemPrompt } from './tutor-prompt';
+import { learningFacts, tutorSystemPrompt } from './tutor-prompt';
 import { tutorRequestSchema } from '@/data/tutor-contract';
 
 const payload = {
@@ -39,6 +39,16 @@ describe('configuration and deterministic context', () => {
     expect(getConfig({}).apiKey).toBeUndefined();
     expect(getConfig({ LLM_ENABLED: 'false' }).enabled).toBe(false);
     expect(() => getConfig({ LLM_TIMEOUT_MS: '-1' })).toThrow('Invalid server configuration');
+  });
+  it('supplies correct acceleration outcomes when only one mass doubles', () => {
+    const input = tutorRequestSchema.parse(payload);
+    if (input.context.kind !== 'learning') throw new Error('Expected learning fixture.');
+    const facts = learningFacts(input.context);
+    expect(facts.afterDoublingMass1.forceNewtons / facts.forceNewtons).toBe(2);
+    expect(facts.afterDoublingMass1.acceleration1).toBe(facts.acceleration1);
+    expect(facts.afterDoublingMass1.acceleration2).toBe(facts.acceleration2 * 2);
+    expect(facts.afterDoublingMass2.acceleration2).toBe(facts.acceleration2);
+    expect(facts.afterDoublingMass2.acceleration1).toBe(facts.acceleration1 * 2);
   });
   it('rejects client-supplied system messages and computed physical facts', () => {
     expect(
