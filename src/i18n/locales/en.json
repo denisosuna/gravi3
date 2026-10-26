@@ -14,24 +14,60 @@
     "skip": "Skip to content",
     "loading": "Loading…",
     "retry": "Try again",
-    "brandNote": "INTERACTIVE OBSERVATORY"
+    "brandNote": "THE THREE-BODY PROBLEM"
   },
   "home": {
-    "eyebrow": "A SMALL INTERACTIVE OBSERVATORY",
-    "title": "Everything attracts.",
-    "accent": "Discover why.",
-    "description": "Experiment with gravity, test your intuition, and discover the surprising dance of three bodies. No physics background needed.",
-    "start": "Start experimenting",
-    "explore": "Explore the orbits",
-    "fact1": "Learn by doing",
-    "fact2": "Six real orbits",
-    "fact3": "A tutor for your questions"
+    "eyebrow": "AN INTERACTIVE COURSE ON GRAVITY",
+    "title": "The three-body problem",
+    "lead": "Can you predict how three objects pulling on each other through gravity will move? With two it is easy; with three there is no general formula. Here you will understand why by experimenting, step by step, with no physics background.",
+    "start": "Start with gravity",
+    "explore": "See the six orbits",
+    "visualCaption": "Figure eight: three equal masses chasing each other along the same curve.",
+    "problemTitle": "What is the three-body problem?",
+    "problemIntro": "It is a simple question to ask: if you know where three masses are and how fast they move, where will they be later? Each one attracts the other two according to Newton's law of gravitation.",
+    "milestones": {
+      "two": {
+        "year": "1687",
+        "title": "Two bodies: solved",
+        "text": "Newton showed that two attracting bodies trace ellipses, parabolas or hyperbolas. A formula predicts their motion forever."
+      },
+      "three": {
+        "year": "1890",
+        "title": "Three bodies: no general formula",
+        "text": "Each body pulls on the other two and everything changes at once. Poincaré showed there is no simple general solution and discovered chaos: a tiny difference at the start ends in completely different paths."
+      },
+      "periodic": {
+        "year": "1772–2013",
+        "title": "Orderly exceptions",
+        "text": "With very precise starting conditions, some orbits repeat: Lagrange's triangle (1772), the figure eight (1993) and new families found by computer in 2013."
+      }
+    },
+    "whyTitle": "Why does it matter?",
+    "whyText": "The Sun, Earth and Moon form a three-body system. Satellites and probes are planned with these ideas: the James Webb telescope orbits near the L2 point, one of the equilibrium positions studied by Euler and Lagrange.",
+    "pathTitle": "How you will learn here",
+    "steps": {
+      "learn": {
+        "title": "Understand gravity",
+        "text": "Change masses and distances between two bodies, make a prediction and check it against the experiment.",
+        "cta": "Go to Learn"
+      },
+      "tutor": {
+        "title": "Ask the AI tutor",
+        "text": "Clear up doubts with a tutor that knows your experiment's values. Everything works without it too: calculations never depend on AI.",
+        "cta": "Open the laboratory"
+      },
+      "orbits": {
+        "title": "Explore six solutions",
+        "text": "Watch six real periodic orbits in 3D, computed from published initial conditions and validated numerically.",
+        "cta": "Go to Orbits"
+      }
+    }
   },
   "orbits": {
     "eyebrow": "THE THREE-BODY PROBLEM",
     "title": "Order in motion.",
     "solutions": "solutions",
-    "description": "Three bodies. One law. Six extraordinary ways to return to the beginning. Choose an orbit and follow the journey.",
+    "description": "With three bodies, almost any start ends in a chaotic dance or with one body thrown out. But with very precise starting conditions, all three return exactly to where they began and repeat the cycle. These are six of those periodic solutions; most are unstable: the slightest nudge breaks them.",
     "periodic": "Periodic orbit",
     "library": "Orbit library",
     "libraryNote": "Three equal masses · Newtonian gravity",
@@ -99,9 +135,9 @@
     "seconds": "playback s"
   },
   "learn": {
-    "eyebrow": "LEARN · 5–10 MINUTES",
+    "eyebrow": "LEARN · STEP 1: GRAVITY BETWEEN TWO BODIES",
     "title": "Gravity starts with two.",
-    "description": "You do not need to memorize a formula. Move the masses, change the distance, and watch what happens.",
+    "description": "To understand three bodies you first need to understand how two attract each other. Move the masses, change the distance and predict what will happen before you check.",
     "formulaTitle": "One law, three ingredients",
     "formulaText": "Force F increases with masses m₁ and m₂ and decreases with the square of center-to-center distance r. G is the universal gravitational constant.",
     "constant": "G = 6.67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²",

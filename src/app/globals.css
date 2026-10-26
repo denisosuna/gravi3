@@ -145,7 +145,7 @@ h2 {
   font-size: 8px;
   letter-spacing: 0.15em;
   line-height: 1.5;
-  max-width: 85px;
+  max-width: 140px;
   white-space: normal;
   color: var(--muted);
   border-left: 1px solid var(--line);
@@ -250,71 +250,131 @@ button.control-button:hover {
   background: #6c53dc;
 }
 .home-page {
-  position: relative;
-  max-width: 1280px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 90px 48px 36px;
-  overflow: hidden;
-  min-height: calc(100svh - 80px);
+  padding: 72px 48px 72px;
+  display: grid;
+  gap: 88px;
 }
-.home-page h1 {
-  font-size: clamp(48px, 6.2vw, 84px);
-  line-height: 1.08;
-  max-width: 730px;
-  margin-bottom: 25px;
-  position: relative;
-  z-index: 1;
+.home-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: 48px;
 }
-.home-page h1 span {
-  display: block;
-  color: var(--accent);
+.home-hero h1 {
+  font-size: clamp(44px, 5.4vw, 72px);
+  line-height: 1.05;
+  margin-bottom: 24px;
 }
 .hero-copy {
   color: var(--muted);
-  max-width: 440px;
-  font-size: 16px;
-  line-height: 1.8;
-  position: relative;
-  z-index: 1;
+  max-width: 540px;
+  font-size: 17px;
+  line-height: 1.75;
 }
 .hero-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
-  margin-top: 30px;
-  position: relative;
-  z-index: 1;
+  margin-top: 32px;
 }
 .home-visual {
-  height: 350px;
-  margin-top: -30px;
-  position: relative;
+  margin: 0;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
 }
-.home-visual > img {
-  width: 650px;
-  max-width: 90%;
-  height: 380px;
+.home-visual img {
+  width: 100%;
+  height: auto;
+  max-height: 300px;
   object-fit: contain;
-  float: right;
-  transform: rotate(-13deg);
-  filter: drop-shadow(0 0 20px #8066f633);
+  filter: drop-shadow(0 0 18px #8066f633);
 }
-.home-orbit-icon {
-  position: absolute;
-  width: 140px;
-  height: 140px;
-  opacity: 0.06;
-  left: 20px;
-  bottom: 25px;
-}
-.home-facts {
-  clear: both;
-  border-top: 1px solid var(--line);
-  padding-top: 22px;
-  display: flex;
-  justify-content: space-between;
+.home-visual figcaption {
+  margin-top: 14px;
   color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 0.02em;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.home-section h2 {
+  font-size: clamp(28px, 3.2vw, 40px);
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+.section-intro {
+  color: var(--muted);
+  max-width: 720px;
+  font-size: 16px;
+  line-height: 1.75;
+  margin-bottom: 32px;
+}
+.milestones,
+.learning-path {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.milestone-card,
+.path-step {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  padding: 24px;
+}
+.milestone-card h3,
+.path-step h3 {
+  font-size: 18px;
+  margin: 10px 0 8px;
+}
+.milestone-card p,
+.path-step p,
+.why-panel p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.milestone-year {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+}
+.why-panel {
+  margin-top: 20px;
+  border-radius: 14px;
+  background: var(--accent-soft);
+  padding: 24px;
+}
+.why-panel h3 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.path-number {
+  position: absolute;
+  top: 20px;
+  right: 22px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 650;
+}
+.path-icon {
+  color: var(--accent);
+}
+.path-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
 }
 .gallery-page {
   max-width: 1260px;
@@ -676,6 +736,11 @@ button.control-button:hover {
   }
 }
 @media (max-width: 900px) {
+  .home-hero,
+  .milestones,
+  .learning-path {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .detail-workspace {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -746,31 +811,22 @@ button.control-button:hover {
     margin-top: 45px !important;
   }
   .home-page {
-    padding: 55px 23px 26px;
-    min-height: calc(100svh - 113px);
+    padding: 40px 16px 48px;
+    gap: 56px;
   }
-  .home-page h1 {
-    font-size: 46px;
+  .home-hero,
+  .milestones,
+  .learning-path {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .home-hero h1 {
+    font-size: 40px;
   }
   .hero-copy {
-    font-size: 14px;
-  }
-  .hero-actions {
-    flex-wrap: wrap;
+    font-size: 15px;
   }
   .home-visual {
-    margin-top: 15px;
-    height: 240px;
-  }
-  .home-visual > img {
-    width: 100%;
-    max-width: 100%;
-    height: 240px;
-  }
-  .home-facts {
-    gap: 18px;
-    flex-wrap: wrap;
-    font-size: 10px;
+    padding: 16px;
   }
   .gallery-page {
     padding: 35px 19px;

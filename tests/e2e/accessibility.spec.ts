@@ -1,10 +1,10 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
-test('learning and orbit controls have no detected serious accessibility violations in either theme', async ({
+test('home, learning and orbit pages have no detected serious accessibility violations in either theme', async ({
   page,
 }) => {
-  for (const route of ['/en/learn', '/en/orbits/figure-eight']) {
+  for (const route of ['/en', '/en/learn', '/en/orbits/figure-eight']) {
     await page.goto(route);
     for (const theme of ['light', 'dark']) {
       await page.getByLabel('Theme', { exact: true }).selectOption(theme);

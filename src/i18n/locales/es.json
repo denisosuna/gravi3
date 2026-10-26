@@ -14,24 +14,60 @@
     "skip": "Saltar al contenido",
     "loading": "Cargando…",
     "retry": "Reintentar",
-    "brandNote": "OBSERVATORIO INTERACTIVO"
+    "brandNote": "EL PROBLEMA DE LOS TRES CUERPOS"
   },
   "home": {
-    "eyebrow": "UN PEQUEÑO OBSERVATORIO INTERACTIVO",
-    "title": "Todo se atrae.",
-    "accent": "Descubre por qué.",
-    "description": "Experimenta con la gravedad, pon a prueba tu intuición y descubre la sorprendente danza de tres cuerpos. Sin conocimientos previos.",
-    "start": "Empieza a experimentar",
-    "explore": "Explora las órbitas",
-    "fact1": "Aprende haciendo",
-    "fact2": "Seis órbitas reales",
-    "fact3": "Un tutor para tus preguntas"
+    "eyebrow": "UN CURSO INTERACTIVO DE GRAVITACIÓN",
+    "title": "El problema de los tres cuerpos",
+    "lead": "¿Puedes predecir cómo se moverán tres objetos que se atraen por la gravedad? Con dos es fácil; con tres no existe una fórmula general. Aquí lo entenderás experimentando, paso a paso y sin conocimientos previos de física.",
+    "start": "Empieza por la gravedad",
+    "explore": "Ver las seis órbitas",
+    "visualCaption": "Figura de ocho: tres masas iguales que se persiguen por la misma curva.",
+    "problemTitle": "¿Qué es el problema de los tres cuerpos?",
+    "problemIntro": "Es una pregunta sencilla de plantear: si conoces dónde están tres masas y a qué velocidad se mueven, ¿dónde estarán dentro de un tiempo? Cada una atrae a las otras dos según la ley de gravitación de Newton.",
+    "milestones": {
+      "two": {
+        "year": "1687",
+        "title": "Dos cuerpos: resuelto",
+        "text": "Newton demostró que dos cuerpos que se atraen describen elipses, parábolas o hipérbolas. Su movimiento se calcula con una fórmula para siempre."
+      },
+      "three": {
+        "year": "1890",
+        "title": "Tres cuerpos: sin fórmula general",
+        "text": "Cada cuerpo tira de los otros dos y todo cambia a la vez. Poincaré mostró que no hay una solución general sencilla y descubrió el caos: una diferencia diminuta al principio acaba en trayectorias completamente distintas."
+      },
+      "periodic": {
+        "year": "1772–2013",
+        "title": "Excepciones ordenadas",
+        "text": "Con condiciones iniciales muy precisas aparecen órbitas que se repiten: el triángulo de Lagrange (1772), la figura de ocho (1993) y nuevas familias halladas por ordenador en 2013."
+      }
+    },
+    "whyTitle": "¿Por qué importa?",
+    "whyText": "El Sol, la Tierra y la Luna forman un sistema de tres cuerpos. Los satélites y las sondas se planifican con estas ideas: el telescopio James Webb orbita cerca del punto L2, una de las posiciones de equilibrio que estudiaron Euler y Lagrange.",
+    "pathTitle": "Cómo aprenderás aquí",
+    "steps": {
+      "learn": {
+        "title": "Entiende la gravedad",
+        "text": "Cambia masas y distancias entre dos cuerpos, haz una predicción y compruébala con el experimento.",
+        "cta": "Ir a Aprender"
+      },
+      "tutor": {
+        "title": "Pregunta al tutor IA",
+        "text": "Resuelve tus dudas con un tutor que conoce los valores de tu experimento. Funciona también sin él: los cálculos no dependen de la IA.",
+        "cta": "Abrir el laboratorio"
+      },
+      "orbits": {
+        "title": "Explora seis soluciones",
+        "text": "Observa en 3D seis órbitas periódicas reales, calculadas a partir de condiciones iniciales publicadas y validadas numéricamente.",
+        "cta": "Ir a Órbitas"
+      }
+    }
   },
   "orbits": {
     "eyebrow": "EL PROBLEMA DE LOS TRES CUERPOS",
     "title": "El orden dentro del movimiento.",
     "solutions": "soluciones",
-    "description": "Tres cuerpos. Una misma ley. Seis formas extraordinarias de volver al principio. Elige una órbita y sigue el viaje.",
+    "description": "Con tres cuerpos, casi cualquier comienzo acaba en un baile caótico o con un cuerpo expulsado. Pero con condiciones iniciales muy precisas, los tres vuelven exactamente a su punto de partida y repiten el ciclo. Estas son seis de esas soluciones periódicas; la mayoría son inestables: un empujón mínimo las rompe.",
     "periodic": "Órbita periódica",
     "library": "Biblioteca de órbitas",
     "libraryNote": "Tres masas iguales · Gravedad newtoniana",
@@ -99,9 +135,9 @@
     "seconds": "s de reproducción"
   },
   "learn": {
-    "eyebrow": "APRENDER · 5–10 MINUTOS",
+    "eyebrow": "APRENDER · PASO 1: LA GRAVEDAD ENTRE DOS CUERPOS",
     "title": "La gravedad empieza con dos.",
-    "description": "No necesitas memorizar una fórmula. Mueve las masas, cambia la distancia y observa qué ocurre.",
+    "description": "Para entender tres cuerpos primero hay que entender cómo se atraen dos. Mueve las masas, cambia la distancia y predice qué ocurrirá antes de comprobarlo.",
     "formulaTitle": "Una ley, tres ingredientes",
     "formulaText": "La fuerza F aumenta con las masas m₁ y m₂ y disminuye con el cuadrado de la distancia r entre sus centros. G es la constante de gravitación universal.",
     "constant": "G = 6,67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²",
