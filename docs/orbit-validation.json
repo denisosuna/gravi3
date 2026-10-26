@@ -1,0 +1,102 @@
+{
+  "method": "Dormand–Prince 5(4), tolerance 1e-12; reference 1e-13",
+  "thresholds": {
+    "returnError": 0.000001,
+    "energy": 1e-8,
+    "conserved": 1e-8,
+    "convergence": 1e-7,
+    "interpolation": 0.00001
+  },
+  "reports": [
+    {
+      "slug": "lagrange",
+      "source": "https://arxiv.org/html/1303.0181v1",
+      "variant": "Analytic circular equilateral solution; unit circumradius, omega=3^(-1/4).",
+      "positionReturn": 1.1595944690578897e-11,
+      "velocityReturn": 8.818334951143925e-12,
+      "relativeEnergyDrift": 2.9104681245977353e-12,
+      "conservedDrift": 3.3164582191602676e-12,
+      "minimumDistance": 1.7320508075674548,
+      "interpolationError": 1.2344479105586004e-8,
+      "convergence": 9.135658896042287e-11,
+      "samples": 157,
+      "referenceSteps": 653,
+      "gzipBytes": 19182
+    },
+    {
+      "slug": "figure-eight",
+      "source": "https://numericaltank.sjtu.edu.cn/three-body/three-body-movies.htm",
+      "variant": "Li/Liao I.A initial condition 1; Moore/Chenciner–Montgomery figure eight.",
+      "positionReturn": 2.8186786238393324e-11,
+      "velocityReturn": 5.100803113222696e-11,
+      "relativeEnergyDrift": 5.791671428980024e-12,
+      "conservedDrift": 1.4885121900198657e-13,
+      "minimumDistance": 0.6905266556675234,
+      "interpolationError": 3.868533660633666e-7,
+      "convergence": 2.9240865284663187e-10,
+      "samples": 189,
+      "referenceSteps": 1598,
+      "gzipBytes": 23203
+    },
+    {
+      "slug": "butterfly-i",
+      "source": "https://numericaltank.sjtu.edu.cn/three-body/three-body-movies.htm",
+      "variant": "Li/Liao I.A initial condition 2; original I.A.1 Butterfly I.",
+      "positionReturn": 8.63746851820224e-11,
+      "velocityReturn": 1.5059314906196164e-10,
+      "relativeEnergyDrift": 5.355217655578836e-11,
+      "conservedDrift": 1.0583200982239305e-13,
+      "minimumDistance": 0.011024464551129801,
+      "interpolationError": 9.984227112846966e-7,
+      "convergence": 2.68005412307204e-9,
+      "samples": 558,
+      "referenceSteps": 10922,
+      "gzipBytes": 67609
+    },
+    {
+      "slug": "goggles",
+      "source": "https://numericaltank.sjtu.edu.cn/three-body/three-body-movies.htm",
+      "variant": "Li/Liao I.B initial condition 3; original I.B.5 Goggles.",
+      "positionReturn": 1.7421340869234472e-9,
+      "velocityReturn": 1.1711789038582054e-9,
+      "relativeEnergyDrift": 5.5943242392661086e-11,
+      "conservedDrift": 4.4191039716423575e-13,
+      "minimumDistance": 0.01847853556506618,
+      "interpolationError": 0.0000010032786180169673,
+      "convergence": 4.526960875606001e-9,
+      "samples": 956,
+      "referenceSteps": 18261,
+      "gzipBytes": 115220
+    },
+    {
+      "slug": "moth-i",
+      "source": "https://numericaltank.sjtu.edu.cn/three-body/three-body-movies.htm",
+      "variant": "Li/Liao I.B initial condition 1; original I.B.1 Moth I.",
+      "positionReturn": 3.0538185478642954e-9,
+      "velocityReturn": 3.6630684596694607e-9,
+      "relativeEnergyDrift": 1.8487152274477132e-11,
+      "conservedDrift": 4.5219383792982626e-13,
+      "minimumDistance": 0.07946755957931693,
+      "interpolationError": 0.0000010126610937577496,
+      "convergence": 2.135600973840468e-9,
+      "samples": 510,
+      "referenceSteps": 6935,
+      "gzipBytes": 61890
+    },
+    {
+      "slug": "yin-yang-i",
+      "source": "https://numericaltank.sjtu.edu.cn/three-body/three-body-movies.htm",
+      "variant": "Li/Liao II.C initial condition 1; original II.C.2b Yin-Yang I.",
+      "positionReturn": 5.42628392696462e-9,
+      "velocityReturn": 6.976562383353979e-9,
+      "relativeEnergyDrift": 3.959500881685253e-11,
+      "conservedDrift": 1.9089933522063995e-13,
+      "minimumDistance": 0.009784426436554182,
+      "interpolationError": 9.984149698383238e-7,
+      "convergence": 3.123362624091186e-9,
+      "samples": 653,
+      "referenceSteps": 11266,
+      "gzipBytes": 78840
+    }
+  ]
+}

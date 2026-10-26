@@ -27,3 +27,12 @@ The CI runs formatting, linting, type checking, tests and production build witho
 ## Structure
 
 `src/app` contains Next.js routes. Physics, visualization, learning and server modules are added as independently testable responsibilities. Generated scientific data will be committed with provenance and validation reports. Source code, comments and technical documentation are written in English; product content supports Spanish and English.
+
+## Scientific data
+
+```sh
+corepack pnpm orbits:generate
+corepack pnpm orbits:validate
+```
+
+The six committed trajectories and SVG previews are generated with TypeScript, independently validated against a finer integration and loaded one at a time. [Physics documentation](docs/physics.md) includes provenance, normalized units, fixed acceptance thresholds and measured diagnostics.
