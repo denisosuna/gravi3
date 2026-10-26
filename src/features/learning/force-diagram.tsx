@@ -1,8 +1,6 @@
-'use client';
-
 import { useId } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import type { Experiment } from '@/data/experiment';
+import { UNITS, type Experiment } from '@/data/experiment';
 
 export function ForceDiagram({ experiment }: { experiment: Experiment }) {
   const t = useTranslations('learn');
@@ -62,16 +60,16 @@ export function ForceDiagram({ experiment }: { experiment: Experiment }) {
           />
         </g>
         <text x={left} y="56" textAnchor="middle" fill="var(--text)" fontSize="12">
-          m₁ · {format.format(experiment.mass1)} kg
+          m₁ · {format.format(experiment.mass1)} {UNITS.mass}
         </text>
         <text x={right} y="56" textAnchor="middle" fill="var(--text)" fontSize="12">
-          m₂ · {format.format(experiment.mass2)} kg
+          m₂ · {format.format(experiment.mass2)} {UNITS.mass}
         </text>
         <line x1={left} y1="192" x2={right} y2="192" stroke="var(--muted)" />
         <line x1={left} y1="187" x2={left} y2="197" stroke="var(--muted)" />
         <line x1={right} y1="187" x2={right} y2="197" stroke="var(--muted)" />
         <text x="320" y="220" textAnchor="middle" fill="var(--muted)" fontSize="12">
-          r = {format.format(experiment.distance)} m
+          r = {format.format(experiment.distance)} {UNITS.distance}
         </text>
       </svg>
       <figcaption>{t('scale')}</figcaption>

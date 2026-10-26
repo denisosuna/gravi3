@@ -5,7 +5,14 @@ import { useLocale, useTranslations } from 'next-intl';
 import { ArrowRight, RotateCcw } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { useExperienceMemory } from '@/components/providers';
-import { distanceRange, initialExperiment, massRange, type Experiment } from '@/data/experiment';
+import { ROUTES } from '@/constants/routes';
+import {
+  distanceRange,
+  initialExperiment,
+  massRange,
+  UNITS,
+  type Experiment,
+} from '@/data/experiment';
 import { gravitationalForce } from '@/physics/gravity';
 import { ForceDiagram } from './force-diagram';
 import { Prediction } from './prediction';
@@ -49,7 +56,8 @@ export function LearningExperience() {
                 <span>
                   {t(key)}
                   <output>
-                    {number.format(experiment[key])} {key === 'distance' ? 'm' : 'kg'}
+                    {number.format(experiment[key])}{' '}
+                    {key === 'distance' ? UNITS.distance : UNITS.mass}
                   </output>
                 </span>
                 <input
@@ -81,12 +89,16 @@ export function LearningExperience() {
           <div className="force-result">
             <span>{t('force')}</span>
             <output data-testid="force-value" data-force={force}>
-              {format.format(force)} <small>N</small>
+              {format.format(force)} <small>{UNITS.force}</small>
             </output>
             <p>{t('equal')}</p>
             <div className="acceleration-values">
-              <span>a₁ = {format.format(force / experiment.mass1)} m/s²</span>
-              <span>a₂ = {format.format(force / experiment.mass2)} m/s²</span>
+              <span>
+                a₁ = {format.format(force / experiment.mass1)} {UNITS.acceleration}
+              </span>
+              <span>
+                a₂ = {format.format(force / experiment.mass2)} {UNITS.acceleration}
+              </span>
             </div>
           </div>
         </section>
@@ -98,7 +110,7 @@ export function LearningExperience() {
           <div className="eyebrow">{t('step3')}</div>
           <h2>{t('nextTitle')}</h2>
           <p>{t('nextText')}</p>
-          <Link href="/orbits" className="button">
+          <Link href={ROUTES.orbits} className="button">
             {t('explore')}
             <ArrowRight size={16} />
           </Link>

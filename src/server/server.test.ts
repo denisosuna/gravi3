@@ -5,7 +5,7 @@ import { createLogger } from './logger';
 import { LimitError, RateLimiter } from './rate-limiter';
 import { readJsonBody } from './request-body';
 import { handleTutor } from './tutor-handler';
-import { learningFacts, tutorSystemPrompt } from './tutor-prompt';
+import { buildTutorMessages, learningFacts, tutorSystemPrompt } from './tutor-prompt';
 import { tutorRequestSchema } from '@/data/tutor-contract';
 
 const payload = {
@@ -14,7 +14,12 @@ const payload = {
   history: [],
   context: { kind: 'learning', mass1: 100, mass2: 200, distance: 5, prediction: 'half' },
 };
-const config = getConfig({ GROQ_API_KEY: 'synthetic-test-key' });
+const providerEnv = {
+  LLM_API_KEY: 'synthetic-test-key',
+  LLM_BASE_URL: 'https://llm.example/v1',
+  LLM_MODEL: 'synthetic-model',
+};
+const config = getConfig(providerEnv);
 const logger = createLogger('silent');
 function request(body: unknown = payload, signal?: AbortSignal) {
   return new Request('http://localhost:3000/api/tutor', {
@@ -36,9 +41,31 @@ function dependencies(overrides = {}) {
 
 describe('configuration and deterministic context', () => {
   it('allows missing credentials and parses explicit false without truthiness bugs', () => {
-    expect(getConfig({}).apiKey).toBeUndefined();
-    expect(getConfig({ LLM_ENABLED: 'false' }).enabled).toBe(false);
+    expect(getConfig({}).llm.provider).toBeUndefined();
+    expect(getConfig({}).tutorEnabled).toBe(false);
+    expect(getConfig({ ...providerEnv, LLM_ENABLED: 'false' }).tutorEnabled).toBe(false);
     expect(() => getConfig({ LLM_TIMEOUT_MS: '-1' })).toThrow('Invalid server configuration');
+  });
+  it('accepts any OpenAI-compatible provider and rejects incomplete provider settings', () => {
+    expect(config.tutorEnabled).toBe(true);
+    expect(config.llm.provider).toEqual({
+      apiKey: 'synthetic-test-key',
+      baseUrl: 'https://llm.example/v1',
+      model: 'synthetic-model',
+    });
+    expect(config.llm.reasoningEffort).toBeUndefined();
+    expect(getConfig({ ...providerEnv, LLM_REASONING_EFFORT: 'low' }).llm.reasoningEffort).toBe(
+      'low',
+    );
+    expect(() => getConfig({ LLM_API_KEY: 'key' })).toThrow('Invalid server configuration');
+    expect(() => getConfig({ ...providerEnv, LLM_BASE_URL: 'ftp://llm.example' })).toThrow(
+      'Invalid server configuration',
+    );
+  });
+  it('treats blank environment values as unset', () => {
+    expect(getConfig({ LLM_API_KEY: ' ', LLM_ENABLED: '', LOG_LEVEL: '' }).tutorEnabled).toBe(
+      false,
+    );
   });
   it('supplies correct acceleration outcomes when only one mass doubles', () => {
     const input = tutorRequestSchema.parse(payload);
@@ -62,6 +89,9 @@ describe('configuration and deterministic context', () => {
         .success,
     ).toBe(false);
     const prompt = tutorSystemPrompt(tutorRequestSchema.parse(payload));
+    const messages = buildTutorMessages(tutorRequestSchema.parse(payload));
+    expect(messages.map((message) => message.role)).toEqual(['system', 'user']);
+    expect(messages[0]?.content).toBe(prompt);
     expect(prompt).toContain('forceAfterDoublingDistance');
     expect(prompt).toContain('prediction');
     expect(prompt).toContain('untrusted');
@@ -190,7 +220,10 @@ describe('tutor request boundary', () => {
           signal.addEventListener('abort', () => reject(signal.reason), { once: true }),
         ),
     );
-    const deps = dependencies({ config: { ...config, timeout: 10 }, complete });
+    const deps = dependencies({
+      config: { ...config, llm: { ...config.llm, timeoutMs: 10 } },
+      complete,
+    });
     expect((await handleTutor(request(), deps)).status).toBe(504);
     expect(
       (await handleTutor(request(), { ...deps, complete: async () => 'Recovered.' })).status,

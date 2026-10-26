@@ -1,21 +1,25 @@
-'use client';
-
-import { useEffect, useSyncExternalStore } from 'react';
+import { useEffect } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Pause, Play, RotateCcw, ScanLine } from 'lucide-react';
-import type { PlaybackController } from './playback';
+import {
+  CAMERA_VIEWS,
+  PLAYBACK_SPEEDS,
+  SECONDS_PER_PERIOD,
+  type PlaybackController,
+} from './playback';
+import { usePlaybackState } from './use-playback-state';
+
+const PUBLISH_INTERVAL_MS = 150;
+const TIMELINE_STEPS = 2000;
+const VIEW_LABELS = { front: 'front', '3d': 'threeD' } as const;
 
 export function PlayerControls({ controller }: { controller: PlaybackController }) {
   const t = useTranslations('player');
   const locale = useLocale();
-  const state = useSyncExternalStore(
-    controller.subscribe,
-    controller.snapshot,
-    controller.snapshot,
-  );
+  const state = usePlaybackState(controller);
   useEffect(() => {
     if (!state.playing) return;
-    const timer = window.setInterval(controller.publish, 150);
+    const timer = window.setInterval(controller.publish, PUBLISH_INTERVAL_MS);
     return () => window.clearInterval(timer);
   }, [controller, state.playing]);
   const format = new Intl.NumberFormat(locale, {
@@ -43,10 +47,11 @@ export function PlayerControls({ controller }: { controller: PlaybackController 
           value={state.speed}
           onChange={(event) => controller.update({ speed: Number(event.target.value) })}
         >
-          <option value={0.5}>0.5×</option>
-          <option value={1}>1×</option>
-          <option value={2}>2×</option>
-          <option value={4}>4×</option>
+          {PLAYBACK_SPEEDS.map((speed) => (
+            <option key={speed} value={speed}>
+              {speed}×
+            </option>
+          ))}
         </select>
       </div>
       <div className="timeline">
@@ -55,14 +60,14 @@ export function PlayerControls({ controller }: { controller: PlaybackController 
           type="range"
           min={0}
           max={controller.period}
-          step={controller.period / 2000}
+          step={controller.period / TIMELINE_STEPS}
           value={state.time}
           onChange={(event) => controller.update({ time: Number(event.target.value) })}
           aria-valuetext={`${format.format(state.time)} / ${format.format(controller.period)}`}
         />
         <output>
-          {format.format((state.time / controller.period) * 20)} / {format.format(20)}{' '}
-          {t('seconds')}
+          {format.format((state.time / controller.period) * SECONDS_PER_PERIOD)} /{' '}
+          {format.format(SECONDS_PER_PERIOD)} {t('seconds')}
         </output>
       </div>
     </div>
@@ -71,20 +76,19 @@ export function PlayerControls({ controller }: { controller: PlaybackController 
 
 export function ViewControls({ controller }: { controller: PlaybackController }) {
   const t = useTranslations('player');
-  const state = useSyncExternalStore(
-    controller.subscribe,
-    controller.snapshot,
-    controller.snapshot,
-  );
+  const state = usePlaybackState(controller);
   return (
     <div className="view-controls">
       <div className="segmented-control">
-        <button aria-pressed={state.view === 'front'} onClick={() => controller.setView('front')}>
-          {t('front')}
-        </button>
-        <button aria-pressed={state.view === '3d'} onClick={() => controller.setView('3d')}>
-          {t('threeD')}
-        </button>
+        {CAMERA_VIEWS.map((view) => (
+          <button
+            key={view}
+            aria-pressed={state.view === view}
+            onClick={() => controller.setView(view)}
+          >
+            {t(VIEW_LABELS[view])}
+          </button>
+        ))}
       </div>
       <button
         className="icon-button"

@@ -5,7 +5,13 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { z } from 'zod';
-import type { OrbitDefinition, Trajectory } from '@/physics/types';
+import { ASSETS } from '@/constants/routes';
+import {
+  STATE_LENGTH,
+  type OrbitDefinition,
+  type OrbitSlug,
+  type Trajectory,
+} from '@/physics/types';
 import { useExperienceMemory } from '@/components/providers';
 import { PlaybackController } from './playback';
 import { PlayerControls, ViewControls } from './player-controls';
@@ -17,7 +23,10 @@ const trajectorySchema = z.object({
   period: z.number().positive(),
   samples: z
     .array(
-      z.object({ time: z.number().nonnegative(), state: z.array(z.number().finite()).length(12) }),
+      z.object({
+        time: z.number().nonnegative(),
+        state: z.array(z.number().finite()).length(STATE_LENGTH),
+      }),
     )
     .min(2),
 });
@@ -42,7 +51,7 @@ function Viewport({
 }: {
   trajectory: Trajectory;
   controller: PlaybackController;
-  slug: string;
+  slug: OrbitSlug;
 }) {
   const t = useTranslations('player');
   const common = useTranslations('common');
@@ -57,7 +66,7 @@ function Viewport({
   }, []);
   const fallback = (
     <div className="scene-fallback">
-      <Image src={`/previews/${slug}.svg`} width={640} height={400} alt="" />
+      <Image src={ASSETS.orbitPreview(slug)} width={640} height={400} alt="" />
       <p>{t('fallback')}</p>
       <button
         className="button"
@@ -112,7 +121,7 @@ export function OrbitPlayer({ orbit }: { orbit: OrbitDefinition }) {
   }, [memory, orbit.slug, controller]);
   useEffect(() => {
     const abort = new AbortController();
-    fetch(`/orbits/${orbit.slug}.json`, { signal: abort.signal })
+    fetch(ASSETS.orbitTrajectory(orbit.slug), { signal: abort.signal })
       .then(async (response) => {
         if (!response.ok) throw new Error('Trajectory unavailable.');
         const data = trajectorySchema.parse(await response.json());
@@ -135,7 +144,7 @@ export function OrbitPlayer({ orbit }: { orbit: OrbitDefinition }) {
         <Viewport trajectory={resource.data} controller={controller} slug={orbit.slug} />
       ) : (
         <div className="scene-fallback" role="status">
-          <Image src={`/previews/${orbit.slug}.svg`} width={640} height={400} alt="" />
+          <Image src={ASSETS.orbitPreview(orbit.slug)} width={640} height={400} alt="" />
           <p>{t(resource.error ? 'error' : 'loading')}</p>
         </div>
       )}

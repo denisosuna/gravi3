@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import { ROUTES } from '@/constants/routes';
 import { pageMetadata } from '@/server/metadata';
 import { notFound } from 'next/navigation';
 import { findOrbit } from '@/data/orbits';
@@ -13,7 +14,12 @@ export async function generateMetadata({
   const orbit = findOrbit(slug);
   if (!orbit) notFound();
   const t = await getTranslations({ locale, namespace: 'orbits' });
-  return pageMetadata(locale, `/orbits/${slug}`, t(`${slug}.name`), t(`${slug}.description`));
+  return pageMetadata(
+    locale,
+    ROUTES.orbit(orbit.slug),
+    t(`${orbit.slug}.name`),
+    t(`${orbit.slug}.description`),
+  );
 }
 
 export default async function OrbitPage({

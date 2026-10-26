@@ -1,11 +1,19 @@
 import { mkdir, writeFile } from 'node:fs/promises';
+import { dirname } from 'node:path';
+import { ASSETS } from '../src/constants/routes';
 import { orbits } from '../src/data/orbits';
 import { integrate } from '../src/physics/integrator';
 import type { Trajectory } from '../src/physics/types';
-import { compressSamples, diagnose, previewSvg, thresholds } from './orbit-tools';
+import { compressSamples, diagnose, previewSvg, publicAssetPath, thresholds } from './orbit-tools';
+
+const sample = orbits[0]!.slug;
 
 await Promise.all(
-  ['public/orbits', 'public/previews', 'docs'].map((path) => mkdir(path, { recursive: true })),
+  [
+    dirname(publicAssetPath(ASSETS.orbitTrajectory(sample))),
+    dirname(publicAssetPath(ASSETS.orbitPreview(sample))),
+    'docs',
+  ].map((path) => mkdir(path, { recursive: true })),
 );
 const reports = [];
 for (const orbit of orbits) {
@@ -21,8 +29,8 @@ for (const orbit of orbits) {
   };
   const metrics = diagnose(orbit, trajectory);
   reports.push({ slug: orbit.slug, source: orbit.source, variant: orbit.variant, ...metrics });
-  await writeFile(`public/orbits/${orbit.slug}.json`, JSON.stringify(trajectory));
-  await writeFile(`public/previews/${orbit.slug}.svg`, previewSvg(trajectory));
+  await writeFile(publicAssetPath(ASSETS.orbitTrajectory(orbit.slug)), JSON.stringify(trajectory));
+  await writeFile(publicAssetPath(ASSETS.orbitPreview(orbit.slug)), previewSvg(trajectory));
   console.log(JSON.stringify({ event: 'orbit.generated', slug: orbit.slug, ...metrics }));
 }
 await writeFile(

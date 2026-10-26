@@ -1,8 +1,12 @@
+import { join } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { invariants } from '../src/physics/gravity';
 import { integrate } from '../src/physics/integrator';
 import { interpolatePosition, samplePositions } from '../src/physics/interpolation';
 import type { OrbitDefinition, Sample, Trajectory } from '../src/physics/types';
+
+const PUBLIC_DIR = 'public';
+export const publicAssetPath = (asset: string) => join(PUBLIC_DIR, asset);
 
 export const thresholds = {
   returnError: 1e-6,

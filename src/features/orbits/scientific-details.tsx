@@ -1,51 +1,38 @@
-'use client';
-
 import { useLocale, useTranslations } from 'next-intl';
 import { ArrowUpRight } from 'lucide-react';
-import type { OrbitDefinition } from '@/physics/types';
+import { BODY_INDICES, bodyPosition, bodyVelocity, type OrbitDefinition } from '@/physics/types';
+
+const PERIOD_DIGITS = 8;
+const CONDITION_DIGITS = 10;
 
 export function ScientificDetails({ orbit }: { orbit: OrbitDefinition }) {
   const t = useTranslations('orbits');
   const locale = useLocale();
+  const period = new Intl.NumberFormat(locale, { maximumFractionDigits: PERIOD_DIGITS });
+  const condition = new Intl.NumberFormat(locale, { maximumFractionDigits: CONDITION_DIGITS });
+  const formatVector = (vector: readonly number[]) =>
+    `(${vector.map((value) => condition.format(value)).join('; ')})`;
   return (
     <details className="scientific-details">
       <summary>{t('scientific')}</summary>
       <div>
         <p>
-          {t('period')}:{' '}
-          <strong>
-            {new Intl.NumberFormat(locale, { maximumFractionDigits: 8 }).format(orbit.period)}
-          </strong>{' '}
-          {t('units')}
+          {t('period')}: <strong>{period.format(orbit.period)}</strong> {t('units')}
         </p>
         <p>{t('equalMasses')}</p>
         <p>{t('planar')}</p>
         <h3>{t('initialConditions')}</h3>
         <ol className="initial-conditions">
-          {[0, 1, 2].map((body) => (
+          {BODY_INDICES.map((body) => (
             <li key={body}>
               <strong>
                 {t('body')} {body + 1}
               </strong>
               <span>
-                {t('position')}: (
-                {orbit.initialState
-                  .slice(body * 2, body * 2 + 2)
-                  .map((value) =>
-                    new Intl.NumberFormat(locale, { maximumFractionDigits: 10 }).format(value),
-                  )
-                  .join('; ')}
-                )
+                {t('position')}: {formatVector(bodyPosition(orbit.initialState, body))}
               </span>
               <span>
-                {t('velocity')}: (
-                {orbit.initialState
-                  .slice(6 + body * 2, 8 + body * 2)
-                  .map((value) =>
-                    new Intl.NumberFormat(locale, { maximumFractionDigits: 10 }).format(value),
-                  )
-                  .join('; ')}
-                )
+                {t('velocity')}: {formatVector(bodyVelocity(orbit.initialState, body))}
               </span>
             </li>
           ))}

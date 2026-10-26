@@ -13,7 +13,8 @@
     "back": "Volver a la galería",
     "skip": "Saltar al contenido",
     "loading": "Cargando…",
-    "retry": "Reintentar"
+    "retry": "Reintentar",
+    "brandNote": "OBSERVATORIO INTERACTIVO"
   },
   "home": {
     "eyebrow": "UN PEQUEÑO OBSERVATORIO INTERACTIVO",
@@ -139,7 +140,7 @@
     "thinking": "Preparando una explicación…",
     "question": "Tu pregunta",
     "unavailable": "El tutor no está disponible. Puedes seguir experimentando y explorando todas las órbitas.",
-    "disabled": "Tutor en modo reducido. Configura una clave de Groq para conversar.",
+    "disabled": "Tutor en modo reducido. Configura un proveedor LLM para conversar.",
     "error": "No se pudo obtener una respuesta. Puedes reintentar.",
     "rateLimit": "Se ha alcanzado el límite de uso. Espera un poco antes de volver a preguntar.",
     "empty": "Escribe una pregunta antes de enviar.",

@@ -3,15 +3,10 @@
 import { createContext, useContext, useState } from 'react';
 import { ThemeProvider } from 'next-themes';
 import { initialExperiment, type Experiment } from '@/data/experiment';
+import type { OrbitSession } from '@/features/orbits/playback';
 
-export interface OrbitSession {
-  time: number;
-  speed: number;
-  playing: boolean;
-  view: 'front' | '3d';
-  traces: boolean;
-  camera?: [number, number, number];
-}
+export const THEMES = ['system', 'dark', 'light'] as const;
+export const DEFAULT_THEME = 'system';
 
 class ExperienceMemory {
   private sessions = new Map<string, OrbitSession>();
@@ -43,7 +38,7 @@ const MemoryContext = createContext<ExperienceMemory | null>(null);
 export function Providers({ children }: { children: React.ReactNode }) {
   const [memory] = useState(() => new ExperienceMemory());
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider attribute="class" defaultTheme={DEFAULT_THEME} enableSystem>
       <MemoryContext.Provider value={memory}>{children}</MemoryContext.Provider>
     </ThemeProvider>
   );

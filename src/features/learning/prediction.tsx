@@ -1,17 +1,16 @@
-'use client';
-
 import { useTranslations } from 'next-intl';
 import { Lightbulb } from 'lucide-react';
-import type { Experiment } from '@/data/experiment';
+import { CORRECT_PREDICTION, PREDICTIONS, type PredictionAnswer } from '@/data/experiment';
 
 export function Prediction({
   answer,
   onAnswer,
 }: {
-  answer: Experiment['prediction'];
-  onAnswer: (answer: Experiment['prediction']) => void;
+  answer: PredictionAnswer | null;
+  onAnswer: (answer: PredictionAnswer) => void;
 }) {
   const t = useTranslations('learn');
+  const isCorrect = answer === CORRECT_PREDICTION;
   return (
     <section className="prediction-panel">
       <div className="eyebrow">{t('step2')}</div>
@@ -21,7 +20,7 @@ export function Prediction({
       </h2>
       <p>{t('predictionQuestion')}</p>
       <div className="prediction-options">
-        {(['half', 'quarter', 'double'] as const).map((value) => (
+        {PREDICTIONS.map((value) => (
           <button
             key={value}
             className="button"
@@ -32,8 +31,8 @@ export function Prediction({
           </button>
         ))}
       </div>
-      <p className={`prediction-feedback ${answer === 'quarter' ? 'correct' : ''}`} role="status">
-        {answer ? t(answer === 'quarter' ? 'correct' : 'incorrect') : t('predictionHint')}
+      <p className={`prediction-feedback ${isCorrect ? 'correct' : ''}`} role="status">
+        {answer ? t(isCorrect ? 'correct' : 'incorrect') : t('predictionHint')}
       </p>
     </section>
   );

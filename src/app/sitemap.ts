@@ -1,16 +1,23 @@
 import type { MetadataRoute } from 'next';
+import { ROUTES } from '@/constants/routes';
 import { orbits } from '@/data/orbits';
-import { getConfig } from '@/server/config';
+import { LOCALES } from '@/i18n/config';
+import { alternateLanguages, localizedUrl } from '@/server/metadata';
 
 export const dynamic = 'force-dynamic';
+
+const PATHS = [
+  ROUTES.home,
+  ROUTES.learn,
+  ROUTES.orbits,
+  ...orbits.map((orbit) => ROUTES.orbit(orbit.slug)),
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = getConfig().appUrl;
-  return ['es', 'en'].flatMap((locale) =>
-    ['', '/learn', '/orbits', ...orbits.map((orbit) => `/orbits/${orbit.slug}`)].map((path) => ({
-      url: new URL(`/${locale}${path}`, base).href,
-      alternates: {
-        languages: { es: new URL(`/es${path}`, base).href, en: new URL(`/en${path}`, base).href },
-      },
+  return LOCALES.flatMap((locale) =>
+    PATHS.map((path) => ({
+      url: localizedUrl(locale, path),
+      alternates: { languages: alternateLanguages(path) },
     })),
   );
 }

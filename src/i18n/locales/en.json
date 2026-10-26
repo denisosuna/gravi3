@@ -13,7 +13,8 @@
     "back": "Back to gallery",
     "skip": "Skip to content",
     "loading": "Loading…",
-    "retry": "Try again"
+    "retry": "Try again",
+    "brandNote": "INTERACTIVE OBSERVATORY"
   },
   "home": {
     "eyebrow": "A SMALL INTERACTIVE OBSERVATORY",
@@ -139,7 +140,7 @@
     "thinking": "Preparing an explanation…",
     "question": "Your question",
     "unavailable": "The tutor is unavailable. You can keep experimenting and exploring every orbit.",
-    "disabled": "Reduced tutor mode. Configure a Groq key to start a conversation.",
+    "disabled": "Reduced tutor mode. Configure an LLM provider to start a conversation.",
     "error": "A response could not be retrieved. You can try again.",
     "rateLimit": "The usage limit has been reached. Wait a little before asking again.",
     "empty": "Write a question before sending.",

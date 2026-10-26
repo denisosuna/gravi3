@@ -3,7 +3,8 @@
 import { useId, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { ArrowUp, Minus, Plus, Sparkles, ArrowUpRight } from 'lucide-react';
-import type { TutorContext } from '@/data/tutor-contract';
+import { ROUTES } from '@/constants/routes';
+import { TUTOR_LIMITS, type TutorContext } from '@/data/tutor-contract';
 import { Link } from '@/i18n/routing';
 import { useTutor } from './use-tutor';
 
@@ -15,6 +16,7 @@ export function TutorPanel({ context }: { context: TutorContext }) {
   const [input, setInput] = useState('');
   const [expanded, setExpanded] = useState(true);
   const { enabled, messages, pending, error, send, cancel } = useTutor(locale, context);
+  const suggestion = t(context.kind === 'orbit' ? 'suggestionOrbit' : 'suggestion');
   function submit(message = input) {
     void send(message);
     setInput('');
@@ -45,9 +47,9 @@ export function TutorPanel({ context }: { context: TutorContext }) {
         <button
           className="suggestion-button"
           disabled={!enabled || pending}
-          onClick={() => submit(t(context.kind === 'orbit' ? 'suggestionOrbit' : 'suggestion'))}
+          onClick={() => submit(suggestion)}
         >
-          {t(context.kind === 'orbit' ? 'suggestionOrbit' : 'suggestion')}
+          {suggestion}
         </button>
         <div className="tutor-conversation" role="log" aria-label={t('reply')} aria-live="polite">
           {messages.map((message, index) => (
@@ -91,13 +93,15 @@ export function TutorPanel({ context }: { context: TutorContext }) {
             id={`${id}-question`}
             value={input}
             disabled={!enabled || pending}
-            maxLength={1000}
+            maxLength={TUTOR_LIMITS.messageLength}
             rows={3}
             placeholder={t('placeholder')}
             onChange={(event) => setInput(event.target.value)}
           />
           <div className="tutor-form-footer">
-            <small>{input.length}/1000</small>
+            <small>
+              {input.length}/{TUTOR_LIMITS.messageLength}
+            </small>
             {pending ? (
               <button type="button" className="button" onClick={cancel}>
                 {t('cancel')}
@@ -111,7 +115,7 @@ export function TutorPanel({ context }: { context: TutorContext }) {
           </div>
         </form>
         {context.kind === 'orbit' ? (
-          <Link href="/learn" className="tutor-try">
+          <Link href={ROUTES.learn} className="tutor-try">
             {t('try')}
             <ArrowUpRight size={14} />
           </Link>

@@ -1,14 +1,14 @@
 export async function register() {
-  if (process.env.NEXT_RUNTIME === 'nodejs') {
-    const [{ getConfig }, { logger }] = await Promise.all([
-      import('./server/config'),
-      import('./server/logger'),
-    ]);
-    const config = getConfig();
-    logger.info({
-      event: 'server.started',
-      tutorEnabled: config.enabled && Boolean(config.apiKey),
-      model: config.model,
-    });
-  }
+  if (process.env.NEXT_RUNTIME !== 'nodejs') return;
+  const [{ getConfig }, { logger, LOG_EVENTS }] = await Promise.all([
+    import('./server/config'),
+    import('./server/logger'),
+  ]);
+  const { tutorEnabled, llm } = getConfig();
+  logger.info({
+    event: LOG_EVENTS.serverStarted,
+    tutorEnabled,
+    llmHost: llm.provider && new URL(llm.provider.baseUrl).host,
+    model: llm.provider?.model,
+  });
 }
