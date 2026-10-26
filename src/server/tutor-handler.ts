@@ -15,6 +15,22 @@ interface Dependencies {
   complete: (input: TutorRequest, signal: AbortSignal) => Promise<string>;
 }
 
+function acceptsOrigin(request: Request, appUrl: string): boolean {
+  const origin = request.headers.get('origin');
+  if (!origin) return true;
+  try {
+    const parsed = new URL(origin);
+    if (!['http:', 'https:'].includes(parsed.protocol)) return false;
+    return (
+      origin === new URL(appUrl).origin ||
+      origin === new URL(request.url).origin ||
+      parsed.host === request.headers.get('host')
+    );
+  } catch {
+    return false;
+  }
+}
+
 export async function handleTutor(request: Request, dependencies: Dependencies): Promise<Response> {
   const { config, limiter, complete, logger } = dependencies;
   const requestId = randomUUID();
@@ -32,13 +48,7 @@ export async function handleTutor(request: Request, dependencies: Dependencies):
     });
   try {
     if (!config.enabled || !config.apiKey) return respond(503, { error: 'tutor_disabled' });
-    const origin = request.headers.get('origin');
-    if (
-      origin &&
-      origin !== new URL(request.url).origin &&
-      origin !== new URL(config.appUrl).origin
-    )
-      throw new RequestError(403, 'invalid_origin');
+    if (!acceptsOrigin(request, config.appUrl)) throw new RequestError(403, 'invalid_origin');
     const input = tutorRequestSchema.safeParse(await readJsonBody(request));
     if (!input.success) throw new RequestError(400, 'invalid_request');
     const address = config.trustProxy

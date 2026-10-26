@@ -76,7 +76,10 @@
       "name": "Yin-Yang I",
       "subtitle": "Dos mitades, un ciclo",
       "description": "Una solución periódica con simetría central y pasos cercanos entre los cuerpos."
-    }
+    },
+    "initialConditions": "Condiciones iniciales",
+    "position": "Posición",
+    "velocity": "Velocidad"
   },
   "player": {
     "play": "Reproducir",
@@ -149,5 +152,11 @@
     "reply": "Respuesta del tutor",
     "remaining": "caracteres",
     "offline": "La fuerza y las órbitas siguen disponibles sin IA."
+  },
+  "seo": {
+    "homeTitle": "Gravedad y problema de los tres cuerpos",
+    "learnTitle": "Aprende la ley de gravitación",
+    "orbitsTitle": "Seis soluciones del problema de los tres cuerpos",
+    "description": "Aprende gravitación con experimentos y un tutor IA. Explora seis soluciones periódicas del problema de los tres cuerpos."
   }
 }

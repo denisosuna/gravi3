@@ -38,7 +38,7 @@ export function getConfig(env: Readonly<Record<string, string | undefined>> = pr
     globalPerHour: env.RATE_LIMIT_GLOBAL_PER_HOUR,
     concurrent: env.LLM_MAX_CONCURRENT,
     logLevel: env.LOG_LEVEL,
-    appUrl: env.APP_URL,
+    appUrl: env.APP_URL || env.RENDER_EXTERNAL_URL,
     trustProxy: env.TRUST_PROXY,
   });
   if (!result.success)

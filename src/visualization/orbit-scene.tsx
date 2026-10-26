@@ -1,10 +1,20 @@
 'use client';
 
-import { memo, type ComponentRef, useEffect, useMemo, useRef, useSyncExternalStore } from 'react';
+import {
+  memo,
+  type ComponentRef,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useSyncExternalStore,
+} from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Html, Line, OrbitControls } from '@react-three/drei';
+import { Line, OrbitControls } from '@react-three/drei';
 import {
   AdditiveBlending,
+  CanvasTexture,
+  SRGBColorSpace,
   BufferAttribute,
   BufferGeometry,
   Group,
@@ -16,22 +26,50 @@ import type { Trajectory } from '@/physics/types';
 import { samplePositions } from '@/physics/interpolation';
 import type { PlaybackController } from '@/features/orbits/playback';
 
-const COLORS = ['#55b7ff', '#ffbc62', '#b875ff'];
+const DARK_COLORS = ['#6abaff', '#ffbf67', '#c58bff'];
+const LIGHT_COLORS = ['#286bdb', '#b36c09', '#8b42df'];
+const BODY_IDS = [0, 1, 2];
 
 function MovingBodies({
   trajectory,
   controller,
   scale,
+  colors,
 }: {
   trajectory: Trajectory;
   controller: PlaybackController;
   scale: number;
+  colors: string[];
 }) {
+  const labels = useMemo(
+    () =>
+      [1, 2, 3].map((number) => {
+        const canvas = document.createElement('canvas');
+        canvas.width = 64;
+        canvas.height = 64;
+        const context = canvas.getContext('2d');
+        if (!context) throw new Error('Label canvas unavailable.');
+        context.fillStyle = '#142044';
+        context.beginPath();
+        context.arc(32, 32, 29, 0, 2 * Math.PI);
+        context.fill();
+        context.fillStyle = '#ffffff';
+        context.font = 'bold 38px sans-serif';
+        context.textAlign = 'center';
+        context.textBaseline = 'middle';
+        context.fillText(String(number), 32, 34);
+        const texture = new CanvasTexture(canvas);
+        texture.colorSpace = SRGBColorSpace;
+        return texture;
+      }),
+    [],
+  );
+  useEffect(() => () => labels.forEach((label) => label.dispose()), [labels]);
   const groups = useRef<(Group | null)[]>([]);
   const target = useMemo(() => Array<number>(6).fill(0), []);
   const trails = useMemo(
     () =>
-      COLORS.map((color) => {
+      colors.map((color) => {
         const geometry = new BufferGeometry();
         geometry.setAttribute('position', new BufferAttribute(new Float32Array(129 * 3), 3));
         return new ThreeLine(
@@ -39,7 +77,7 @@ function MovingBodies({
           new LineBasicMaterial({ color, transparent: true, opacity: 0.75 }),
         );
       }),
-    [],
+    [colors],
   );
   useEffect(
     () => () => {
@@ -83,16 +121,16 @@ function MovingBodies({
       {trails.map((trail, i) => (
         <primitive object={trail} key={`trail-${i}`} />
       ))}
-      {COLORS.map((color, body) => (
+      {colors.map((color, body) => (
         <group
           key={color}
           ref={(group) => {
             groups.current[body] = group;
           }}
         >
-          <Html position={[0.12, 0.12, 0]} center>
-            <span className="body-label">{body + 1}</span>
-          </Html>
+          <sprite position={[0.13, 0.13, 0.04]} scale={[0.14, 0.14, 1]}>
+            <spriteMaterial map={labels[body]} depthTest={false} />
+          </sprite>
           <mesh>
             <sphereGeometry args={[0.065, 24, 20]} />
             <meshStandardMaterial
@@ -147,13 +185,17 @@ function CameraRig({ controller, onLost }: { controller: PlaybackController; onL
     controls.current?.update();
     invalidate();
   }, [camera, controller, state.view, revision, invalidate]);
-  useEffect(() => {
+  useLayoutEffect(() => {
     function lost(event: Event) {
       event.preventDefault();
       onLost();
     }
     gl.domElement.addEventListener('webglcontextlost', lost);
-    return () => gl.domElement.removeEventListener('webglcontextlost', lost);
+    gl.domElement.setAttribute('data-ready', 'true');
+    return () => {
+      gl.domElement.removeEventListener('webglcontextlost', lost);
+      gl.domElement.removeAttribute('data-ready');
+    };
   }, [gl, onLost]);
   return (
     <OrbitControls
@@ -180,6 +222,7 @@ const SceneContents = memo(function SceneContents({
   onLost: () => void;
   dark: boolean;
 }) {
+  const colors = dark ? DARK_COLORS : LIGHT_COLORS;
   const { size } = useThree();
   const aspect = size.width / size.height;
   const { scale, paths } = useMemo(() => {
@@ -199,7 +242,7 @@ const SceneContents = memo(function SceneContents({
     );
     const halfHeight = 6 * Math.tan((21 * Math.PI) / 180) * 0.82;
     const scale = Math.min((halfHeight * aspect) / extentX, halfHeight / extentY);
-    const paths = COLORS.map((_, body) =>
+    const paths = BODY_IDS.map((body) =>
       trajectory.samples.map(
         (sample) =>
           [sample.state[2 * body]! * scale, sample.state[2 * body + 1]! * scale, 0] as [
@@ -230,14 +273,14 @@ const SceneContents = memo(function SceneContents({
             <Line
               key={i}
               points={points}
-              color={COLORS[i]}
+              color={colors[i]}
               lineWidth={1}
               transparent
-              opacity={0.18}
+              opacity={dark ? 0.18 : 0.35}
             />
           ))
         : null}
-      <MovingBodies trajectory={trajectory} controller={controller} scale={scale} />
+      <MovingBodies trajectory={trajectory} controller={controller} scale={scale} colors={colors} />
       <CameraRig controller={controller} onLost={onLost} />
     </>
   );

@@ -21,3 +21,10 @@ jobs:
       - run: pnpm test
       - run: pnpm orbits:validate
       - run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-test-artifacts
+          path: test-results/

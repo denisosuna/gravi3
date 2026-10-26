@@ -31,7 +31,7 @@ export function OrbitDetail({ orbit }: { orbit: OrbitDefinition }) {
           <div className="stage-caption">
             <span className="status-dot" />
             {t('validated')}
-            <span>{t('equalMasses')}</span>
+            <span>{[1, 2, 3].map((body) => `${t('body')} ${body}`).join(' · ')}</span>
           </div>
         </section>
         <aside className="context-column">
