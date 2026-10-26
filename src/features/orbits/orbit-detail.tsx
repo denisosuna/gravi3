@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { ArrowLeft, Sparkles } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { OrbitLibrary } from './gallery';
+import { OrbitPlayer } from './orbit-player';
 import { ScientificDetails } from './scientific-details';
 import type { OrbitDefinition } from '@/physics/types';
 
@@ -25,14 +26,7 @@ export function OrbitDetail({ orbit }: { orbit: OrbitDefinition }) {
             <h1>{t(`${orbit.slug}.name`)}</h1>
             <p>{t(`${orbit.slug}.description`)}</p>
           </div>
-          <div className="static-stage">
-            <Image
-              src={`/previews/${orbit.slug}.svg`}
-              alt={t(`${orbit.slug}.name`)}
-              width={640}
-              height={500}
-            />
-          </div>
+          <OrbitPlayer key={orbit.slug} orbit={orbit} />
           <div className="stage-caption">
             <span className="status-dot" />
             {t('validated')}

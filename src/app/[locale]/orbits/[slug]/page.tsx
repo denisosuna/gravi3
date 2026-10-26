@@ -10,5 +10,5 @@ export default async function OrbitPage({
   const { slug } = await params;
   const orbit = findOrbit(slug);
   if (!orbit) notFound();
-  return <OrbitDetail orbit={orbit} />;
+  return <OrbitDetail key={orbit.slug} orbit={orbit} />;
 }
