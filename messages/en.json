@@ -76,7 +76,10 @@
       "name": "Yin-Yang I",
       "subtitle": "Two halves, one cycle",
       "description": "A periodic solution with central symmetry and close passages between bodies."
-    }
+    },
+    "initialConditions": "Initial conditions",
+    "position": "Position",
+    "velocity": "Velocity"
   },
   "player": {
     "play": "Play",
@@ -149,5 +152,11 @@
     "reply": "Tutor response",
     "remaining": "characters",
     "offline": "Forces and orbits remain available without AI."
+  },
+  "seo": {
+    "homeTitle": "Gravity and the three-body problem",
+    "learnTitle": "Learn the law of gravity",
+    "orbitsTitle": "Six solutions of the three-body problem",
+    "description": "Learn gravity through experiments and an AI tutor. Explore six periodic solutions of the three-body problem."
   }
 }

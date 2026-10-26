@@ -1,7 +1,14 @@
+import { pageMetadata } from '@/server/metadata';
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { ArrowRight, MoveUpRight, Orbit } from 'lucide-react';
 import { Link } from '@/i18n/routing';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'seo' });
+  return pageMetadata(locale, '', t('homeTitle'), t('description'));
+}
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

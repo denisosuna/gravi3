@@ -1,5 +1,6 @@
 import { getConfig } from '@/server/config';
 
+export const dynamic = 'force-dynamic';
 export function GET() {
   const config = getConfig();
   return Response.json(

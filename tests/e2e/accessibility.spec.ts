@@ -1,0 +1,24 @@
+import AxeBuilder from '@axe-core/playwright';
+import { expect, test } from '@playwright/test';
+
+test('learning and orbit controls have no detected serious accessibility violations in either theme', async ({
+  page,
+}) => {
+  for (const route of ['/en/learn', '/en/orbits/figure-eight']) {
+    await page.goto(route);
+    for (const theme of ['light', 'dark']) {
+      await page.getByLabel('Theme', { exact: true }).selectOption(theme);
+      if (route.includes('figure-eight'))
+        await page.getByRole('button', { name: 'Play', exact: true }).waitFor();
+      const results = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
+        .analyze();
+      expect(
+        results.violations.map(({ id, nodes }) => ({
+          id,
+          elements: nodes.map((node) => node.target),
+        })),
+      ).toEqual([]);
+    }
+  }
+});

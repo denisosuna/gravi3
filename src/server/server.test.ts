@@ -86,6 +86,24 @@ describe('bounded limiter', () => {
 });
 
 describe('tutor request boundary', () => {
+  it('accepts the browser host behind a different internal bind address and rejects unrelated origins', async () => {
+    const deps = dependencies();
+    const local = new Request('http://0.0.0.0:3000/api/tutor', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Origin: 'http://127.0.0.1:3000',
+        Host: '127.0.0.1:3000',
+      },
+      body: JSON.stringify(payload),
+    });
+    expect((await handleTutor(local, deps)).status).toBe(200);
+    const remote = request();
+    remote.headers.set('origin', 'https://unrelated.example');
+    remote.headers.set('host', 'localhost:3000');
+    expect((await handleTutor(remote, deps)).status).toBe(403);
+    expect(deps.complete).toHaveBeenCalledOnce();
+  });
   it('rejects invalid/oversized bodies before contacting a provider', async () => {
     const deps = dependencies();
     expect((await handleTutor(request({ ...payload, model: 'client-model' }), deps)).status).toBe(

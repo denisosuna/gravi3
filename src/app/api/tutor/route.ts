@@ -4,6 +4,7 @@ import { logger } from '@/server/logger';
 import { RateLimiter } from '@/server/rate-limiter';
 import { handleTutor } from '@/server/tutor-handler';
 
+export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 const limiter = new RateLimiter(getConfig());
 

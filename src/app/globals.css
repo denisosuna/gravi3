@@ -242,9 +242,9 @@ button.control-button:hover {
   background: var(--surface-raised);
 }
 .button.primary {
-  background: #8066f6;
+  background: #7055df;
   color: #fff;
-  border-color: #8066f6;
+  border-color: #7055df;
 }
 .button.primary:hover {
   background: #6c53dc;
@@ -522,19 +522,7 @@ button.control-button:hover {
   line-height: 1.7;
   margin-bottom: 0;
 }
-.static-stage {
-  min-height: 430px;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-image: radial-gradient(ellipse at 50% 80%, #8066f60b, transparent 70%);
-}
-.static-stage img {
-  width: 75%;
-  height: 400px;
-  object-fit: contain;
-}
+
 .stage-caption {
   display: flex;
   align-items: center;
@@ -702,9 +690,7 @@ button.control-button:hover {
     margin-top: 0;
     align-self: start;
   }
-  .static-stage {
-    min-height: 340px;
-  }
+
   .gallery-card {
     padding: 20px;
   }
@@ -876,13 +862,7 @@ button.control-button:hover {
   .stage-heading p {
     font-size: 12px;
   }
-  .static-stage {
-    min-height: 300px;
-  }
-  .static-stage img {
-    height: 270px;
-    width: 92%;
-  }
+
   .stage-caption {
     padding: 13px 20px;
     font-size: 8px;
@@ -1116,19 +1096,6 @@ button.control-button:hover {
   .scene-fallback {
     min-height: 300px;
   }
-}
-.body-label {
-  color: var(--text);
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 8px;
-  pointer-events: none;
 }
 .learning-layout {
   display: grid;
@@ -1480,4 +1447,21 @@ button.control-button:hover {
   .learning-sidebar .tutor-panel + .formula-panel {
     margin-top: 0;
   }
+}
+.scientific-details h3 {
+  font-size: 11px;
+  margin: 20px 0 10px;
+  color: var(--text);
+}
+.initial-conditions {
+  margin: 0 0 18px;
+  padding-left: 16px;
+  font-size: 9px;
+}
+.initial-conditions li {
+  margin: 10px 0;
+}
+.initial-conditions span {
+  display: block;
+  overflow-wrap: anywhere;
 }
