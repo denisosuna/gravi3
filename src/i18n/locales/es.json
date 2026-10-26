@@ -180,15 +180,33 @@
     "error": "No se pudo obtener una respuesta. Puedes reintentar.",
     "rateLimit": "Se ha alcanzado el límite de uso. Espera un poco antes de volver a preguntar.",
     "empty": "Escribe una pregunta antes de enviar.",
-    "suggestion": "¿Qué ocurre si duplico la distancia?",
-    "suggestionOrbit": "¿Por qué se repite esta órbita?",
-    "intro": "Pregunta, compara y pon a prueba tus ideas. Se usa el estado del experimento al enviar la pregunta.",
+    "intro": "Pregunta lo que no entiendas. El tutor conoce los valores de tu experimento y puede proponerte pruebas con un clic.",
     "try": "Probar con dos cuerpos",
     "disclaimer": "La IA puede equivocarse. Contrasta su explicación con el experimento.",
     "you": "Tú",
     "reply": "Respuesta del tutor",
     "remaining": "caracteres",
-    "offline": "La fuerza y las órbitas siguen disponibles sin IA."
+    "offline": "La fuerza y las órbitas siguen disponibles sin IA.",
+    "suggestions": {
+      "learning": [
+        "¿Qué ocurre si duplico la distancia?",
+        "¿Por qué la masa pequeña acelera más?",
+        "¿Por qué tres cuerpos son impredecibles?"
+      ],
+      "orbit": [
+        "¿Por qué se repite esta órbita?",
+        "¿Es estable esta órbita?",
+        "¿En qué se diferencia de la figura de ocho?"
+      ]
+    },
+    "suggestionsLabel": "Preguntas sugeridas",
+    "actionsLabel": "Experimentos propuestos",
+    "actions": {
+      "setExperiment": "Probar: {changes}",
+      "loadPreset": "Probar: {preset} en el simulador",
+      "perturb": "Probar: perturbar un 1 % en el simulador",
+      "openOrbit": "Ver la órbita {name}"
+    }
   },
   "seo": {
     "homeTitle": "Gravedad y problema de los tres cuerpos",

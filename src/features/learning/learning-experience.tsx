@@ -13,7 +13,10 @@ import {
 } from '@/data/experiment';
 import { gravitationalForce } from '@/physics/gravity';
 import { ForceLab } from './force-lab';
+import { applyTutorAction, LABORATORY_ID } from './apply-tutor-action';
+import { SimulatorController } from './simulator/simulator-controller';
 import { ThreeBodySimulator } from './simulator/three-body-simulator';
+import { useSimulatorState } from './simulator/use-simulator-state';
 import { Prediction } from './prediction';
 import { TutorPanel } from '@/components/tutor/tutor-panel';
 
@@ -28,6 +31,9 @@ export function LearningExperience() {
   const locale = useLocale();
   const memory = useExperienceMemory();
   const [experiment, setExperiment] = useState(() => memory.getExperiment());
+  const [simulator] = useState(() => new SimulatorController());
+  const simulatorPreset = useSimulatorState(simulator, (state) => state.presetId);
+  const simulatorEvent = useSimulatorState(simulator, (state) => state.event ?? null);
   function update(patch: Partial<Experiment>) {
     const next = { ...experiment, ...patch };
     memory.saveExperiment(next);
@@ -43,7 +49,7 @@ export function LearningExperience() {
   return (
     <div className="learning-layout">
       <div className="learning-main">
-        <section className="laboratory-panel">
+        <section className="laboratory-panel" id={LABORATORY_ID}>
           <div className="lab-heading">
             <div className="eyebrow">{t('step1')}</div>
             <button
@@ -115,10 +121,17 @@ export function LearningExperience() {
           answer={experiment.prediction}
           onAnswer={(prediction) => update({ prediction })}
         />
-        <ThreeBodySimulator />
+        <ThreeBodySimulator controller={simulator} />
       </div>
       <aside className="learning-sidebar">
-        <TutorPanel context={{ kind: 'learning', ...experiment }} />
+        <TutorPanel
+          context={{
+            kind: 'learning',
+            ...experiment,
+            simulator: { preset: simulatorPreset, event: simulatorEvent },
+          }}
+          onAction={(action) => applyTutorAction(action, update, simulator)}
+        />
         <section className="formula-panel">
           <h2>{t('formulaTitle')}</h2>
           <p className="formula">F = G · m₁ · m₂ / r²</p>

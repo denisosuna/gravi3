@@ -9,6 +9,7 @@ import {
   tutorRequestSchema,
   type TutorRequest,
 } from '@/data/tutor-contract';
+import { parseTutorOutput } from '@/data/tutor-actions';
 import type { ServerConfig } from './config';
 import { LOG_EVENTS } from './log-events';
 import type { RateLimiter } from './rate-limiter';
@@ -85,12 +86,19 @@ export async function handleTutor(request: Request, dependencies: Dependencies):
     release = limiter.acquire(clientKey(request, config.trustedProxyHops));
     providerSignal = AbortSignal.any([request.signal, AbortSignal.timeout(config.llm.timeoutMs)]);
     providerSignal.throwIfAborted();
-    const reply = (await complete(input.data, providerSignal)).trim();
+    const output = await complete(input.data, providerSignal);
+    const { reply, actions } = parseTutorOutput(output, input.data.context.kind);
     if (!reply) throw new Error('Empty tutor response.');
 
-    logger.info({ event: LOG_EVENTS.tutorCompleted, status: HTTP_STATUS.ok, ...logContext() });
+    logger.info({
+      event: LOG_EVENTS.tutorCompleted,
+      status: HTTP_STATUS.ok,
+      actions: actions.map((action) => action.type),
+      ...logContext(),
+    });
     return jsonResponse(requestId, HTTP_STATUS.ok, {
       reply: reply.slice(0, TUTOR_LIMITS.replyLength),
+      actions,
     });
   } catch (error) {
     const { status, code, retryAfter, upstreamStatus } = classifyTutorError(

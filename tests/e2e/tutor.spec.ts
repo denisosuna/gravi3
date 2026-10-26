@@ -51,3 +51,33 @@ test('reduced mode is explicit without replacing AI replies with static content'
   await page.getByRole('button', { name: 'Double the first mass' }).click();
   await expect(page.getByRole('slider', { name: 'Body 1 mass' })).toHaveValue('200');
 });
+
+test('the tutor proposes experiments that run with one click', async ({ page }) => {
+  await page.route('**/api/tutor', (route) =>
+    route.fulfill(
+      route.request().method() === 'GET'
+        ? { json: { enabled: true } }
+        : {
+            json: {
+              reply: 'Press Try it to double the distance, then watch chaos.',
+              actions: [
+                { type: 'setExperiment', distance: 10 },
+                { type: 'loadPreset', preset: 'pythagorean' },
+              ],
+            },
+          },
+    ),
+  );
+  await page.goto('/en/learn');
+  await page.getByRole('button', { name: 'Why are three bodies unpredictable?' }).click();
+  const experiments = page.getByRole('list', { name: 'Suggested experiments' });
+  await experiments.getByRole('button', { name: 'Try it: r = 10 m' }).click();
+  await expect(page.getByRole('slider', { name: 'Center-to-center distance' })).toHaveValue('10');
+  await experiments.getByRole('button', { name: 'Try it: Pythagorean in the simulator' }).click();
+  const simulator = page.getByRole('region', { name: 'Add a third body' });
+  await expect(simulator.getByRole('button', { name: /^Pythagorean/ })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await expect(simulator.getByRole('button', { name: 'Pause' })).toBeVisible();
+});

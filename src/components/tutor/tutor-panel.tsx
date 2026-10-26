@@ -1,14 +1,24 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { ArrowUp, Minus, Plus, Sparkles, ArrowUpRight } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
 import { TUTOR_LIMITS, type TutorContext } from '@/data/tutor-contract';
-import { Link } from '@/i18n/routing';
+import type { TutorAction } from '@/data/tutor-actions';
+import { Link, useRouter } from '@/i18n/routing';
+import { TutorActionButtons } from './tutor-action-buttons';
+import { TutorSuggestions } from './tutor-suggestions';
 import { useTutor } from './use-tutor';
 
-export function TutorPanel({ context }: { context: TutorContext }) {
+// `onAction` applies experiments the tutor proposes; navigation actions are handled here.
+export function TutorPanel({
+  context,
+  onAction,
+}: {
+  context: TutorContext;
+  onAction?: (action: TutorAction) => void;
+}) {
   const t = useTranslations('tutor');
   const common = useTranslations('common');
   const locale = useLocale();
@@ -16,7 +26,17 @@ export function TutorPanel({ context }: { context: TutorContext }) {
   const [input, setInput] = useState('');
   const [expanded, setExpanded] = useState(true);
   const { enabled, messages, pending, error, send, cancel } = useTutor(locale, context);
-  const suggestion = t(context.kind === 'orbit' ? 'suggestionOrbit' : 'suggestion');
+  const router = useRouter();
+  const conversation = useRef<HTMLDivElement>(null);
+  // Keep the latest reply and its experiment buttons in view.
+  useEffect(() => {
+    const log = conversation.current;
+    if (log) log.scrollTop = log.scrollHeight;
+  }, [messages]);
+  function run(action: TutorAction) {
+    if (action.type === 'openOrbit') router.push(ROUTES.orbit(action.slug));
+    else onAction?.(action);
+  }
   function submit(message = input) {
     void send(message);
     setInput('');
@@ -44,18 +64,23 @@ export function TutorPanel({ context }: { context: TutorContext }) {
             <span>{t('offline')}</span>
           </p>
         ) : null}
-        <button
-          className="suggestion-button"
-          disabled={!enabled || pending}
-          onClick={() => submit(suggestion)}
+        {messages.length === 0 ? (
+          <TutorSuggestions kind={context.kind} disabled={!enabled || pending} onAsk={submit} />
+        ) : null}
+        <div
+          ref={conversation}
+          className="tutor-conversation"
+          role="log"
+          aria-label={t('reply')}
+          aria-live="polite"
         >
-          {suggestion}
-        </button>
-        <div className="tutor-conversation" role="log" aria-label={t('reply')} aria-live="polite">
           {messages.map((message, index) => (
             <div key={index} className={`tutor-message ${message.role}`}>
               <span>{t(message.role === 'user' ? 'you' : 'title')}</span>
               <p>{message.content}</p>
+              {message.actions ? (
+                <TutorActionButtons actions={message.actions} onRun={run} />
+              ) : null}
             </div>
           ))}
         </div>
