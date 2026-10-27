@@ -101,9 +101,16 @@ test('a rotated camera survives locale navigation without scene lifecycle errors
   await page.mouse.down();
   await page.mouse.move(box.x + box.width / 2 + 60, box.y + box.height / 2 + 30, { steps: 10 });
   await page.mouse.up();
+  const canvasSize = async () => {
+    const { width, height } = (await page.locator('canvas').boundingBox())!;
+    return [Math.round(width), Math.round(height)];
+  };
+  const sizeBefore = await canvasSize();
   const before = await page.locator('canvas').screenshot();
   await page.getByLabel('Language', { exact: true }).selectOption('es');
   await page.getByRole('button', { name: 'Reproducir', exact: true }).waitFor();
+  // The canvas may still be settling its layout right after the locale switch.
+  await expect.poll(canvasSize).toEqual(sizeBefore);
   const after = await page.locator('canvas').screenshot();
   const fractionChanged = await page.evaluate(
     async (images) => {

@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes';
 import { Vector3 } from 'three';
 import type { Experiment } from '@/data/experiment';
 import { forceLabLayout, VISIBLE_HALF_WIDTH } from './force-lab-layout';
-import { scenePalette } from './scene-palette';
+import { scenePalette } from '@/components/scene/scene-palette';
 
 const CAMERA_POSITION: [number, number, number] = [0, 0.7, 4];
 const MIN_CAMERA_DISTANCE = 3.2;

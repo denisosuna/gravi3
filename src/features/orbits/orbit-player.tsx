@@ -7,13 +7,15 @@ import { useTranslations } from 'next-intl';
 import { ASSETS } from '@/constants/routes';
 import { parseTrajectory } from '@/physics/trajectory-schema';
 import type { OrbitDefinition, OrbitSlug, Trajectory } from '@/physics/types';
-import { useExperienceMemory } from '@/components/providers';
-import { SceneBoundary } from '@/components/scene-boundary';
-import { useDocumentVisible } from '@/components/use-document-visible';
-import { PlaybackController } from './playback';
+import { createSessionKey, useSessionMemory } from '@/components/providers';
+import { SceneBoundary } from '@/components/scene/scene-boundary';
+import { useDocumentVisible } from '@/components/scene/use-document-visible';
+import { PlaybackController, type OrbitSession } from './playback';
 import { PlayerControls, ViewControls } from './player-controls';
 
-const OrbitScene = dynamic(() => import('@/visualization/orbit-scene'), { ssr: false });
+const ORBIT_SESSIONS = createSessionKey('orbit-sessions', () => new Map<OrbitSlug, OrbitSession>());
+
+const OrbitScene = dynamic(() => import('./scene/orbit-scene'), { ssr: false });
 function Viewport({
   trajectory,
   controller,
@@ -74,15 +76,15 @@ function Viewport({
 
 export function OrbitPlayer({ orbit }: { orbit: OrbitDefinition }) {
   const { slug, period } = orbit;
-  const memory = useExperienceMemory();
-  const [controller] = useState(() => new PlaybackController(period, memory.getOrbit(slug)));
+  const sessions = useSessionMemory().get(ORBIT_SESSIONS);
+  const [controller] = useState(() => new PlaybackController(period, sessions.get(slug)));
   const [resource, setResource] = useState<{ data?: Trajectory; error?: boolean }>({});
   const t = useTranslations('player');
   useEffect(() => {
-    const persist = () => memory.saveOrbit(slug, controller.export());
+    const persist = () => sessions.set(slug, controller.export());
     persist();
     return controller.subscribe(persist);
-  }, [memory, slug, controller]);
+  }, [sessions, slug, controller]);
   useEffect(() => {
     const abort = new AbortController();
     fetch(ASSETS.orbitTrajectory(slug), { signal: abort.signal })
@@ -95,9 +97,9 @@ export function OrbitPlayer({ orbit }: { orbit: OrbitDefinition }) {
       });
     return () => {
       abort.abort();
-      memory.saveOrbit(slug, controller.export());
+      sessions.set(slug, controller.export());
     };
-  }, [slug, period, memory, controller]);
+  }, [slug, period, sessions, controller]);
   return (
     <div className="orbit-visualization">
       <ViewControls controller={controller} />
