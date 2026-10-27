@@ -13,8 +13,7 @@
     "back": "Back to gallery",
     "skip": "Skip to content",
     "loading": "Loading…",
-    "retry": "Try again",
-    "brandNote": "THE THREE-BODY PROBLEM"
+    "retry": "Try again"
   },
   "errors": {
     "notFoundTitle": "This page does not exist",
@@ -26,7 +25,6 @@
     "errorText": "Something failed while showing it. Your experiment values are kept; try again."
   },
   "home": {
-    "eyebrow": "AN INTERACTIVE COURSE ON GRAVITY",
     "title": "The three-body problem",
     "lead": "Can you predict how three objects pulling on each other through gravity will move? With two it is easy; with three there is no general formula. Here you will understand why by experimenting, step by step, with no physics background.",
     "start": "Start with gravity",
@@ -73,7 +71,6 @@
     }
   },
   "orbits": {
-    "eyebrow": "THE THREE-BODY PROBLEM",
     "title": "Order in motion.",
     "solutions": "solutions",
     "description": "With three bodies, almost any start ends in a chaotic dance or with one body thrown out. But with very precise starting conditions, all three return exactly to where they began and repeat the cycle. These are six of those periodic solutions; most are unstable: the slightest nudge breaks them.",
@@ -81,7 +78,6 @@
     "library": "Orbit library",
     "libraryNote": "Three equal masses · Newtonian gravity",
     "note": "These are not hand-drawn curves: trajectories are generated from published initial conditions and numerically validated.",
-    "orbit": "ORBIT",
     "concept": "Behind the motion",
     "conceptText": "Each body attracts the other two. With very specific initial conditions, their positions and velocities return to the starting point.",
     "scientific": "Scientific details",
@@ -144,7 +140,6 @@
     "seconds": "playback s"
   },
   "learn": {
-    "eyebrow": "LEARN · FROM TWO TO THREE BODIES",
     "title": "Gravity starts with two.",
     "description": "To understand three bodies you first need to understand how two attract each other. Move the masses, change the distance and predict what will happen before you check.",
     "formulaTitle": "One law, three ingredients",
@@ -166,8 +161,8 @@
     "tryDistance": "Double the distance",
     "tryMass": "Double the first mass",
     "reset": "Reset experiment",
-    "step1": "01 · Observe",
-    "step2": "02 · Predict",
+    "step1": "Step 1 of 3: observe",
+    "step2": "Step 2 of 3: predict",
     "forceUnits": "newtons (N)",
     "acceleration": "Acceleration",
     "predictionHint": "Choose an answer, then check its effect in the laboratory.",
@@ -226,7 +221,7 @@
     "description": "Learn gravity through experiments and an AI tutor. Explore six periodic solutions of the three-body problem."
   },
   "simulator": {
-    "step": "03 · Three bodies",
+    "step": "Step 3 of 3: three bodies",
     "title": "Add a third body",
     "intro": "Every pair of bodies attracts with the same law you just tested. With three, each one pulls on the other two at once and the motion no longer has a formula: it must be computed step by step. Pick a starting point and watch.",
     "presets": "Starting points",

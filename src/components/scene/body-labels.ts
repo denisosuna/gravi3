@@ -1,7 +1,7 @@
 import { CanvasTexture, SRGBColorSpace } from 'three';
 
 const LABEL_SIZE = 64;
-const LABEL_BACKGROUND = '#142044';
+const LABEL_BACKGROUND = '#1b2540';
 const LABEL_FOREGROUND = '#ffffff';
 
 function createLabelTexture(text: string): CanvasTexture {

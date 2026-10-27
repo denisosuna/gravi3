@@ -13,8 +13,7 @@
     "back": "Volver a la galería",
     "skip": "Saltar al contenido",
     "loading": "Cargando…",
-    "retry": "Reintentar",
-    "brandNote": "EL PROBLEMA DE LOS TRES CUERPOS"
+    "retry": "Reintentar"
   },
   "errors": {
     "notFoundTitle": "Esta página no existe",
@@ -26,7 +25,6 @@
     "errorText": "Algo ha fallado al mostrarla. Los valores de tu experimento se conservan; vuelve a intentarlo."
   },
   "home": {
-    "eyebrow": "UN CURSO INTERACTIVO DE GRAVITACIÓN",
     "title": "El problema de los tres cuerpos",
     "lead": "¿Puedes predecir cómo se moverán tres objetos que se atraen por la gravedad? Con dos es fácil; con tres no existe una fórmula general. Aquí lo entenderás experimentando, paso a paso y sin conocimientos previos de física.",
     "start": "Empieza por la gravedad",
@@ -73,7 +71,6 @@
     }
   },
   "orbits": {
-    "eyebrow": "EL PROBLEMA DE LOS TRES CUERPOS",
     "title": "El orden dentro del movimiento.",
     "solutions": "soluciones",
     "description": "Con tres cuerpos, casi cualquier comienzo acaba en un baile caótico o con un cuerpo expulsado. Pero con condiciones iniciales muy precisas, los tres vuelven exactamente a su punto de partida y repiten el ciclo. Estas son seis de esas soluciones periódicas; la mayoría son inestables: un empujón mínimo las rompe.",
@@ -81,7 +78,6 @@
     "library": "Biblioteca de órbitas",
     "libraryNote": "Tres masas iguales · Gravedad newtoniana",
     "note": "No son curvas dibujadas a mano: las trayectorias se generan a partir de condiciones iniciales publicadas y se validan numéricamente.",
-    "orbit": "ÓRBITA",
     "concept": "Detrás del movimiento",
     "conceptText": "Cada cuerpo atrae a los otros dos. Con unas condiciones iniciales muy concretas, sus posiciones y velocidades vuelven al punto de partida.",
     "scientific": "Ficha científica",
@@ -144,7 +140,6 @@
     "seconds": "s de reproducción"
   },
   "learn": {
-    "eyebrow": "APRENDER · DE DOS A TRES CUERPOS",
     "title": "La gravedad empieza con dos.",
     "description": "Para entender tres cuerpos primero hay que entender cómo se atraen dos. Mueve las masas, cambia la distancia y predice qué ocurrirá antes de comprobarlo.",
     "formulaTitle": "Una ley, tres ingredientes",
@@ -166,8 +161,8 @@
     "tryDistance": "Duplicar la distancia",
     "tryMass": "Duplicar la primera masa",
     "reset": "Restablecer experimento",
-    "step1": "01 · Observa",
-    "step2": "02 · Predice",
+    "step1": "Paso 1 de 3: observa",
+    "step2": "Paso 2 de 3: predice",
     "forceUnits": "newtons (N)",
     "acceleration": "Aceleración",
     "predictionHint": "Elige una respuesta y después comprueba el efecto en el laboratorio.",
@@ -226,7 +221,7 @@
     "description": "Aprende gravitación con experimentos y un tutor IA. Explora seis soluciones periódicas del problema de los tres cuerpos."
   },
   "simulator": {
-    "step": "03 · Tres cuerpos",
+    "step": "Paso 3 de 3: tres cuerpos",
     "title": "Añade un tercer cuerpo",
     "intro": "Cada par de cuerpos se atrae con la misma ley que acabas de probar. Con tres, cada uno tira de los otros dos a la vez y el movimiento ya no tiene fórmula: hay que calcularlo paso a paso. Elige un punto de partida y obsérvalo.",
     "presets": "Puntos de partida",

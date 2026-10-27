@@ -107,6 +107,7 @@ Conventions worth knowing before changing code:
 - **`'use client'`** marks the boundary where a Server Component hands over to browser code that needs state, effects or browser APIs. It appears only on boundary files (`header`, `providers`, `gallery`, `learning-experience`, `orbit-player`, `tutor-panel`, and `error`, which Next.js requires to be a client component); modules they import are client code automatically. Everything else renders on the server.
 - **No magic strings:** paths come from `src/constants/routes.ts`, limits and error codes from `src/data/tutor-contract.ts`, log event names from `src/server/logger.ts`.
 - **Lint-enforced boundaries:** `physics`, `data` and `constants` cannot import React, Next.js, Three.js or server code; UI cannot import `src/server`; features cannot import each other and shared components cannot import a feature. Complexity, nesting depth, parameter count and file length are capped.
+- **Design tokens and fonts:** colors, type scale and font roles are CSS custom properties at the top of `src/app/globals.css`; no text is smaller than 12 px. Fonts come from `next/font/google` (`src/app/fonts.ts`), which downloads them at build time and serves them from the app, so pages make no runtime request to Google.
 - **Logging:** Pino JSON on the server only, with named events and redaction; prompts, messages, keys and raw IPs are never logged.
 
 ## Tests and scientific data
