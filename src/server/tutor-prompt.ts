@@ -1,11 +1,15 @@
-import type { TutorContext, TutorRequest } from '@/data/tutor-contract';
-import { ORBIT_CATALOG, orbitFor } from '@/data/orbits';
-import { PLAYBACK_SPEEDS } from '@/data/playback';
+import type { TutorContext, TutorRequest } from '@/features/tutor/model/tutor-contract';
+import { ORBIT_CATALOG, orbitFor } from '@/physics/orbit-catalog';
+import { PLAYBACK_SPEEDS } from '@/features/orbits/model/playback';
 import type { Locale } from '@/i18n/config';
 import { gravitationalForce } from '@/physics/gravity';
 import { orbitSlugs } from '@/physics/types';
-import { distanceRange, massRange, type PredictionAnswer } from '@/data/experiment';
-import type { TutorContextKind } from '@/data/tutor-actions';
+import {
+  distanceRange,
+  massRange,
+  type PredictionAnswer,
+} from '@/features/learning/model/experiment';
+import type { TutorContextKind } from '@/features/tutor/model/tutor-actions';
 import type { ChatMessage } from './llm-client';
 
 const RESPONSE_LANGUAGES: Record<Locale, string> = { es: 'Spanish', en: 'English' };

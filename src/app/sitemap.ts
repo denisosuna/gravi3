@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
-import { ROUTES } from '@/constants/routes';
-import { orbits } from '@/data/orbits';
+import { ROUTES } from '@/shared/constants/routes';
+import { orbits } from '@/physics/orbit-catalog';
 import { LOCALES } from '@/i18n/config';
 import { alternateLanguages, localizedUrl } from '@/server/metadata';
 

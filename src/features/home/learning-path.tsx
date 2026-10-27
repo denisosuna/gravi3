@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { ArrowRight, Atom, Orbit, Sparkles, type LucideIcon } from 'lucide-react';
-import { ROUTES } from '@/constants/routes';
+import { ROUTES } from '@/shared/constants/routes';
 import { Link } from '@/i18n/routing';
 
 const STEPS: readonly { key: 'learn' | 'tutor' | 'orbits'; href: string; icon: LucideIcon }[] = [

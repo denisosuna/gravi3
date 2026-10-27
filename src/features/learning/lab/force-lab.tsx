@@ -2,10 +2,10 @@ import { Play, RotateCcw } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useLocale, useTranslations } from 'next-intl';
-import { SceneBoundary } from '@/components/scene/scene-boundary';
-import { UNITS, type Experiment } from '@/data/experiment';
+import { SceneBoundary } from '@/shared/three/scene-boundary';
+import { UNITS, type Experiment } from '@/features/learning/model/experiment';
 import { ForceDiagram } from './force-diagram';
-import styles from '../learning.module.css';
+import styles from '../components/learning.module.css';
 
 const ForceLabScene = dynamic(() => import('./force-lab-scene'), {
   ssr: false,

@@ -1,6 +1,6 @@
 import { useId } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { UNITS, type Experiment } from '@/data/experiment';
+import { UNITS, type Experiment } from '@/features/learning/model/experiment';
 import { forceLabLayout } from './force-lab-layout';
 
 // Same logarithmic arrow scale as the 3D laboratory, converted from world units to SVG pixels.

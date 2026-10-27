@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
-import { LessonStep } from '../lesson-step';
-import styles from '../learning.module.css';
+import { LessonStep } from '../components/lesson-step';
+import styles from '../components/learning.module.css';
 
 export function ExplainStep() {
   const t = useTranslations('learn');

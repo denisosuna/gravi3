@@ -1,8 +1,8 @@
 import { useTranslations } from 'next-intl';
 import { ArrowRight, MoveUpRight } from 'lucide-react';
-import { ROUTES } from '@/constants/routes';
+import { ROUTES } from '@/shared/constants/routes';
 import { Link } from '@/i18n/routing';
-import { OrbitTrace } from '@/components/scene/orbit-trace';
+import { OrbitTrace } from '@/shared/three/orbit-trace';
 
 export function HomeHero() {
   const t = useTranslations('home');

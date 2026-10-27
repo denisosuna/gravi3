@@ -6,10 +6,10 @@ import {
   massRange,
   UNITS,
   type Experiment,
-} from '@/data/experiment';
+} from '@/features/learning/model/experiment';
 import { ForceLab } from '../lab/force-lab';
-import { LessonStep } from '../lesson-step';
-import styles from '../learning.module.css';
+import { LessonStep } from '../components/lesson-step';
+import styles from '../components/learning.module.css';
 
 const SLIDERS = ['mass1', 'mass2', 'distance'] as const;
 

@@ -89,12 +89,14 @@ src/
     [locale]/          One route tree per language: /es/..., /en/...
       orbits/[slug]/   One page renders every orbit: /en/orbits/figure-eight
     api/               /api/tutor and /api/health
-  components/          Shared client pieces: header, session providers, tutor panel, scene helpers
-  constants/           Routes, asset paths, HTTP statuses and site identity
-  data/                Orbit catalog, experiment ranges and the tutor request contract
-  features/            home/, learning/ and orbits/, each with its own 3D scene; never import each other
+  features/            One folder per feature, each with components/, model/ (pure logic) and its 3D scene
+    home/              Landing page sections
+    learning/          Force lab, step-by-step lessons and the live three-body simulator
+    orbits/            Gallery, orbit detail and playback controls
+    tutor/             Tutor panel, conversation hook and the action contract
+  shared/              ui/ (header, providers), three/ (scene helpers) and constants/ (routes, site, HTTP)
   i18n/                Locale config, next-intl routing and locales/{es,en}.json catalogs
-  physics/             Framework-free equations, integrator and interpolation
+  physics/             Framework-free equations, integrator, interpolation and the orbit catalog
   server/              Env config, OpenAI-compatible LLM client, rate limiting, prompts, logging
 scripts/               Offline orbit generation and validation (TypeScript)
 tests/e2e/             Playwright browser tests
@@ -105,8 +107,8 @@ Conventions worth knowing before changing code:
 
 - **Bracketed folders** are Next.js dynamic segments. `[locale]` puts the language in the URL so links are shareable and indexable per language; `[slug]` serves all six orbits from one page, validated against the catalog (unknown slugs return 404). `[...rest]` catches any other path under a locale so it gets the translated `not-found` page; `error.tsx` is the translated error boundary for each page.
 - **`'use client'`** marks the boundary where a Server Component hands over to browser code that needs state, effects or browser APIs. It appears only on boundary files (`header`, `providers`, `gallery`, `learning-experience`, `orbit-player`, `tutor-panel`, and `error`, which Next.js requires to be a client component); modules they import are client code automatically. Everything else renders on the server.
-- **No magic strings:** paths come from `src/constants/routes.ts`, limits and error codes from `src/data/tutor-contract.ts`, log event names from `src/server/logger.ts`.
-- **Lint-enforced boundaries:** `physics`, `data` and `constants` cannot import React, Next.js, Three.js or server code; UI cannot import `src/server`; features cannot import each other and shared components cannot import a feature. Complexity, nesting depth, parameter count and file length are capped.
+- **No magic strings:** paths come from `src/shared/constants/routes.ts`, limits and error codes from `src/features/tutor/model/tutor-contract.ts`, log event names from `src/server/logger.ts`.
+- **Lint-enforced boundaries:** `physics`, each feature's `model/` and `shared/constants` cannot import React, Next.js, Three.js or server code; UI cannot import `src/server`; a feature's UI cannot be imported by another feature (only its `model/`, and the tutor panel) and `shared` cannot import a feature. Complexity, nesting depth, parameter count and file length are capped.
 - **Design tokens and fonts:** colors, type scale and font roles are CSS custom properties at the top of `src/app/globals.css`; no text is smaller than 12 px. Fonts come from `next/font/google` (`src/app/fonts.ts`), which downloads them at build time and serves them from the app, so pages make no runtime request to Google.
 - **Logging:** Pino JSON on the server only, with named events and redaction; prompts, messages, keys and raw IPs are never logged.
 

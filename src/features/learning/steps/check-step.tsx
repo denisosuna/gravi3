@@ -5,11 +5,11 @@ import {
   massRange,
   UNITS,
   type Experiment,
-} from '@/data/experiment';
+} from '@/features/learning/model/experiment';
 import { gravitationalForce } from '@/physics/gravity';
 import { ForceDiagram } from '../lab/force-diagram';
-import { LessonStep } from '../lesson-step';
-import styles from '../learning.module.css';
+import { LessonStep } from '../components/lesson-step';
+import styles from '../components/learning.module.css';
 
 const INITIAL_FORCE = gravitationalForce(
   initialExperiment.mass1,

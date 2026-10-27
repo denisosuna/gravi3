@@ -1,7 +1,7 @@
 import 'server-only';
 import type { Metadata } from 'next';
-import { ASSETS, localizedPath } from '@/constants/routes';
-import { SITE } from '@/constants/site';
+import { ASSETS, localizedPath } from '@/shared/constants/routes';
+import { SITE } from '@/shared/constants/site';
 import { getTranslations } from 'next-intl/server';
 import { DEFAULT_LOCALE, isLocale, LOCALES, OPEN_GRAPH_LOCALES, type Locale } from '@/i18n/config';
 import { getConfig } from './config';

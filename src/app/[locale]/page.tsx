@@ -1,4 +1,4 @@
-import { ROUTES } from '@/constants/routes';
+import { ROUTES } from '@/shared/constants/routes';
 import { HomeHero } from '@/features/home/home-hero';
 import { LearningPath } from '@/features/home/learning-path';
 import { ProblemSection } from '@/features/home/problem-section';

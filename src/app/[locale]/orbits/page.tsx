@@ -1,8 +1,8 @@
-import { ROUTES } from '@/constants/routes';
+import { ROUTES } from '@/shared/constants/routes';
 import { sectionMetadata } from '@/server/metadata';
 import { getTranslations } from 'next-intl/server';
-import { Gallery } from '@/features/orbits/gallery';
-import { parseGalleryQuery } from '@/features/orbits/gallery-query';
+import { Gallery } from '@/features/orbits/components/gallery';
+import { parseGalleryQuery } from '@/features/orbits/model/gallery-query';
 
 export function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   return sectionMetadata(params, ROUTES.orbits, 'orbitsTitle');

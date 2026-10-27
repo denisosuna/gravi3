@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { distanceRange, massRange, type Experiment } from '@/data/experiment';
+import { distanceRange, massRange, type Experiment } from '@/features/learning/model/experiment';
 import { gravitationalForce } from '@/physics/gravity';
 import { ARROW_LENGTH, forceLabLayout } from './force-lab-layout';
 

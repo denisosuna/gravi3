@@ -1,4 +1,4 @@
-import { distanceRange, massRange, type Experiment } from '@/data/experiment';
+import { distanceRange, massRange, type Experiment } from '@/features/learning/model/experiment';
 import { gravitationalForce } from '@/physics/gravity';
 
 // Distance is drawn to scale: the largest distance spans this many world units from the center.

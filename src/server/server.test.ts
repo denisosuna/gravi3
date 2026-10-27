@@ -6,7 +6,7 @@ import { LimitError, RateLimiter } from './rate-limiter';
 import { readJsonBody } from './request-body';
 import { handleTutor } from './tutor-handler';
 import { buildTutorMessages, learningFacts, tutorSystemPrompt } from './tutor-prompt';
-import { tutorRequestSchema } from '@/data/tutor-contract';
+import { tutorRequestSchema } from '@/features/tutor/model/tutor-contract';
 
 const payload = {
   locale: 'en',

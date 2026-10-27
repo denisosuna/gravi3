@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { findOrbit } from '@/data/orbits';
+import { findOrbit } from '@/physics/orbit-catalog';
 import { invariants } from './gravity';
 import { ThreeBodySimulation, toCenterOfMassFrame } from './simulation';
 import type { Masses, State } from './types';
