@@ -1,6 +1,8 @@
 {
   "common": {
     "home": "Inicio de Gravi3",
+    "pauseAnimation": "Pausar animación",
+    "playAnimation": "Reproducir animación",
     "navigation": "Navegación principal",
     "learn": "Aprender",
     "orbits": "Órbitas",

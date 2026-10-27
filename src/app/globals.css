@@ -298,6 +298,20 @@ button.control-button:hover {
   height: 100%;
   object-fit: contain;
 }
+.orbit-trace-toggle {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+}
 .orbit-trace[data-ready] img {
   visibility: hidden;
 }

@@ -23,7 +23,7 @@ export function HomeHero() {
         </div>
       </div>
       <figure className="home-visual">
-        <OrbitTrace slug="figure-eight" width={560} height={330} />
+        <OrbitTrace slug="figure-eight" width={560} height={330} pausable />
         <figcaption>{t('visualCaption')}</figcaption>
       </figure>
     </section>

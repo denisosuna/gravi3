@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
+import { Pause, Play } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 import { ASSETS } from '@/shared/constants/routes';
 import { findOrbit } from '@/physics/orbit-catalog';
@@ -121,13 +123,18 @@ export function OrbitTrace({
   width,
   height,
   phase,
+  pausable = false,
 }: {
   slug: OrbitSlug;
   width: number;
   height: number;
   // Without a source the trace runs on its own clock, or stays still under reduced motion.
   phase?: PhaseSource;
+  // Offers a pause button, as continuous motion must be stoppable by the user.
+  pausable?: boolean;
 }) {
+  const t = useTranslations('common');
+  const [paused, setPaused] = useState(false);
   const canvas = useRef<HTMLCanvasElement>(null);
   const trajectory = useTrajectory(slug);
   const visible = useDocumentVisible();
@@ -145,7 +152,7 @@ export function OrbitTrace({
 
   useEffect(() => {
     const element = canvas.current;
-    if (!element || !trajectory || !visible) return;
+    if (!element || !trajectory || !visible || paused) return;
     const style = getComputedStyle(element);
     const colors = [...BODY_COLOR_TOKENS, PATH_COLOR_TOKEN].map((token) =>
       style.getPropertyValue(token).trim(),
@@ -166,12 +173,23 @@ export function OrbitTrace({
     };
     request = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(request);
-  }, [trajectory, visible, extent, resolvedTheme, phase]);
+  }, [trajectory, visible, paused, extent, resolvedTheme, phase]);
 
   return (
     <div className="orbit-trace" data-ready={trajectory ? 'true' : undefined}>
       <Image src={ASSETS.orbitPreview(slug)} alt="" width={width} height={height} priority />
       <canvas ref={canvas} aria-hidden="true" />
+      {pausable && (
+        <button
+          type="button"
+          className="orbit-trace-toggle"
+          aria-pressed={paused}
+          aria-label={paused ? t('playAnimation') : t('pauseAnimation')}
+          onClick={() => setPaused((value) => !value)}
+        >
+          {paused ? <Play size={16} aria-hidden="true" /> : <Pause size={16} aria-hidden="true" />}
+        </button>
+      )}
     </div>
   );
 }
