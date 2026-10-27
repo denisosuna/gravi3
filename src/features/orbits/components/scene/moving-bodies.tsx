@@ -18,7 +18,7 @@ const TRAIL_SEGMENTS = 128;
 const TRAIL_PERIOD_FRACTION = 1 / 3;
 const TRAIL_DEPTH = 0.002;
 const TRAIL_OPACITY = 0.75;
-const BODY_RADIUS = 0.065;
+const BODY_RADIUS = 0.085;
 const GLOW_LAYERS = [
   { radius: 0.105, opacity: 0.11 },
   { radius: 0.145, opacity: 0.035 },
@@ -99,7 +99,7 @@ export function MovingBodies({
             groups.current[body] = group;
           }}
         >
-          <sprite position={[0.13, 0.13, 0.04]} scale={[0.14, 0.14, 1]}>
+          <sprite position={[0.18, 0.18, 0.04]} scale={[0.22, 0.22, 1]}>
             <spriteMaterial map={labels[body]} depthTest={false} />
           </sprite>
           <mesh>
