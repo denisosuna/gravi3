@@ -1,4 +1,4 @@
-export type ScenePalette = {
+type ScenePalette = {
   bodies: readonly [string, string, string];
   gridCenter: string;
   grid: string;

@@ -3,8 +3,8 @@ import type { TutorAction } from '@/features/tutor/model/tutor-actions';
 import type { SimulatorController } from '../simulator/state/simulator-controller';
 import type { LearnStep } from './learn-steps';
 
-export const LABORATORY_ID: LearnStep = 'observe';
-export const SIMULATOR_ID: LearnStep = 'three-bodies';
+const LABORATORY_ID: LearnStep = 'observe';
+const SIMULATOR_ID: LearnStep = 'three-bodies';
 
 function reveal(id: string) {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

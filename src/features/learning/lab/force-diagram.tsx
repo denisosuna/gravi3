@@ -2,6 +2,7 @@ import { useId } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { UNITS, type Experiment } from '@/features/learning/model/experiment';
 import { forceLabLayout } from './force-lab-layout';
+import { numberFormat } from '@/shared/i18n/number-format';
 
 // Same logarithmic arrow scale as the 3D laboratory, converted from world units to SVG pixels.
 const ARROW_PIXELS_PER_UNIT = 60;
@@ -14,7 +15,7 @@ export function ForceDiagram({ experiment, force }: { experiment: Experiment; fo
   const right = 320 + experiment.distance * 10;
   const radius1 = 12 + experiment.mass1 / 160;
   const radius2 = 12 + experiment.mass2 / 160;
-  const format = new Intl.NumberFormat(locale);
+  const format = numberFormat(locale);
   const arrow = forceLabLayout(experiment, force).arrowLength * ARROW_PIXELS_PER_UNIT;
   return (
     <svg viewBox="0 0 640 265" role="img" aria-label={t('equal')}>

@@ -8,6 +8,7 @@ import {
   type PlaybackController,
 } from '../model/playback';
 import { usePlaybackState } from '../model/use-playback-state';
+import { numberFormat } from '@/shared/i18n/number-format';
 
 const PUBLISH_INTERVAL_MS = 150;
 const TIMELINE_STEPS = 2000;
@@ -22,7 +23,7 @@ export function PlayerControls({ controller }: { controller: PlaybackController 
     const timer = window.setInterval(controller.publish, PUBLISH_INTERVAL_MS);
     return () => window.clearInterval(timer);
   }, [controller, state.playing]);
-  const format = new Intl.NumberFormat(locale, {
+  const format = numberFormat(locale, {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
   });

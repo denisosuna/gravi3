@@ -1,6 +1,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import type { SimulatorController } from '../state/simulator-controller';
 import { useSimulatorState } from '../state/use-simulator-state';
+import { numberFormat } from '@/shared/i18n/number-format';
 
 const FRACTION_DIGITS = 3;
 const ROUNDING = 10 ** FRACTION_DIGITS;
@@ -15,9 +16,9 @@ export function SimulationReadouts({ controller }: { controller: SimulatorContro
   const locale = useLocale();
   const time = useSimulatorState(controller, (state) => state.time);
   const diagnostics = useSimulatorState(controller, (state) => state.diagnostics);
-  const number = new Intl.NumberFormat(locale, { maximumFractionDigits: FRACTION_DIGITS });
-  const significant = new Intl.NumberFormat(locale, { maximumSignificantDigits: 4 });
-  const percent = new Intl.NumberFormat(locale, { style: 'percent', maximumSignificantDigits: 2 });
+  const number = numberFormat(locale, { maximumFractionDigits: FRACTION_DIGITS });
+  const significant = numberFormat(locale, { maximumSignificantDigits: 4 });
+  const percent = numberFormat(locale, { style: 'percent', maximumSignificantDigits: 2 });
   const [centerX, centerY] = diagnostics.centerOfMass;
   const rows = [
     ['time', number.format(time)],

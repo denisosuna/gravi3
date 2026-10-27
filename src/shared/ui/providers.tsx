@@ -7,7 +7,7 @@ export const THEMES = ['system', 'dark', 'light'] as const;
 export const DEFAULT_THEME = 'system';
 
 // Each feature declares the keys it stores, so this provider does not depend on any feature.
-export interface SessionKey<T> {
+interface SessionKey<T> {
   readonly id: symbol;
   readonly initial: () => T;
 }

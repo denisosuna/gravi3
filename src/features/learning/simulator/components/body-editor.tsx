@@ -3,6 +3,7 @@ import { MASS_RANGE, VELOCITY_RANGE } from '@/features/learning/model/simulator-
 import { BODY_INDICES, bodyVelocity } from '@/physics/types';
 import type { BodyEdit, SimulatorController } from '../state/simulator-controller';
 import { useSimulatorState } from '../state/use-simulator-state';
+import { numberFormat } from '@/shared/i18n/number-format';
 
 interface SliderScale {
   min: number;
@@ -29,7 +30,7 @@ const VELOCITY_SCALE: SliderScale = {
 
 export function BodyEditor({ controller }: { controller: SimulatorController }) {
   const t = useTranslations('simulator');
-  const number = new Intl.NumberFormat(useLocale(), { maximumSignificantDigits: 4 });
+  const number = numberFormat(useLocale(), { maximumSignificantDigits: 4 });
   const setup = useSimulatorState(controller, (state) => state.setup);
 
   function field(body: number, key: keyof BodyEdit, value: number, scale: SliderScale) {

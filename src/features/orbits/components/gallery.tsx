@@ -18,6 +18,7 @@ import {
 } from '../model/gallery-query';
 import { GALLERY_SESSION } from '../model/gallery-session';
 import styles from './gallery.module.css';
+import { numberFormat } from '@/shared/i18n/number-format';
 
 const PERIOD_DIGITS = 2;
 const cardId = (slug: string) => `orbit-${slug}`;
@@ -25,7 +26,7 @@ const cardId = (slug: string) => `orbit-${slug}`;
 function Plate({ orbit, query }: { orbit: OrbitDefinition; query: GalleryQuery }) {
   const t = useTranslations('orbits');
   const memory = useSessionMemory();
-  const period = new Intl.NumberFormat(useLocale(), { maximumFractionDigits: PERIOD_DIGITS });
+  const period = numberFormat(useLocale(), { maximumFractionDigits: PERIOD_DIGITS });
   const { code, family, discovery } = ORBIT_CATALOG[orbit.slug];
   const name = t(`${orbit.slug}.name`);
   const compared = query.compare.includes(orbit.slug);

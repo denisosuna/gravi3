@@ -6,6 +6,7 @@ import { orbitFor } from '@/physics/orbit-catalog';
 import { Link } from '@/i18n/routing';
 import { galleryHref, toggleCompared, type GalleryQuery } from '../model/gallery-query';
 import styles from './gallery.module.css';
+import { numberFormat } from '@/shared/i18n/number-format';
 
 const SECONDS_PER_PERIOD = 10;
 const PUBLISH_INTERVAL_MS = 150;
@@ -51,8 +52,8 @@ export function ComparePanel({ query }: { query: GalleryQuery }) {
     return () => window.clearInterval(timer);
   }, [clock, playing]);
   if (query.compare.length === 0) return null;
-  const percent = new Intl.NumberFormat(locale, { style: 'percent' });
-  const period = new Intl.NumberFormat(locale, { maximumFractionDigits: 2 });
+  const percent = numberFormat(locale, { style: 'percent' });
+  const period = numberFormat(locale, { maximumFractionDigits: 2 });
   function toggle() {
     clock.setRunning(!playing, performance.now());
     setPlaying(!playing);

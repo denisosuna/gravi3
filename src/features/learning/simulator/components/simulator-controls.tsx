@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { Minus, Pause, Play, Plus, RotateCcw, Shuffle } from 'lucide-react';
+import { isHaltingEvent } from '@/physics/simulation';
 import { SIMULATOR_PRESETS } from '@/features/learning/model/simulator-presets';
 import {
   SIMULATOR_SPEEDS,
@@ -41,10 +42,7 @@ export function SimulatorControls({
   const playing = useSimulatorState(controller, (state) => state.playing);
   const speed = useSimulatorState(controller, (state) => state.speed);
   const zoomIndex = useSimulatorState(controller, (state) => state.zoomIndex);
-  const halted = useSimulatorState(
-    controller,
-    (state) => state.event === 'collision' || state.event === 'closeEncounter',
-  );
+  const halted = useSimulatorState(controller, (state) => isHaltingEvent(state.event));
   const zoomTo = (index: number) =>
     controller.update({ zoomIndex: Math.min(ZOOM_LEVELS.length - 1, Math.max(0, index)) });
   return (

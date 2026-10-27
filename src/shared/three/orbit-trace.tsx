@@ -113,7 +113,7 @@ function useTrajectory(slug: OrbitSlug): Trajectory | undefined {
 }
 
 // Fraction of the period to draw at a frame timestamp, in [0, 1); lets traces share one clock.
-export type PhaseSource = (now: number) => number;
+type PhaseSource = (now: number) => number;
 
 // The real, validated trajectory in motion; the static preview is shown until it loads.
 export function OrbitTrace({

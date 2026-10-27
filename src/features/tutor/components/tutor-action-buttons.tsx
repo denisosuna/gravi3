@@ -2,14 +2,15 @@ import { useLocale, useTranslations } from 'next-intl';
 import { FlaskConical } from 'lucide-react';
 import { UNITS } from '@/features/learning/model/experiment';
 import type { TutorAction } from '@/features/tutor/model/tutor-actions';
+import { numberFormat } from '@/shared/i18n/number-format';
 
 function useActionLabel() {
   const t = useTranslations('tutor.actions');
   const simulator = useTranslations('simulator.preset');
   const orbits = useTranslations('orbits');
   const locale = useLocale();
-  const number = new Intl.NumberFormat(locale);
-  const percent = new Intl.NumberFormat(locale, { style: 'percent' });
+  const number = numberFormat(locale);
+  const percent = numberFormat(locale, { style: 'percent' });
   return (action: TutorAction): string => {
     switch (action.type) {
       case 'setExperiment': {

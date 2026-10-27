@@ -7,11 +7,11 @@ export interface ChatMessage {
   content: string;
 }
 
-export type ChatCompletion = (messages: ChatMessage[], signal: AbortSignal) => Promise<string>;
+type ChatCompletion = (messages: ChatMessage[], signal: AbortSignal) => Promise<string>;
 
 const COMPLETED_FINISH_REASON = 'stop';
 
-export class IncompleteCompletionError extends Error {
+class IncompleteCompletionError extends Error {
   constructor() {
     super('The provider returned an empty or truncated completion.');
   }

@@ -1,4 +1,4 @@
-export interface TwoBodyState {
+interface TwoBodyState {
   position1: number;
   position2: number;
   velocity1: number;

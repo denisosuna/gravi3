@@ -1,11 +1,11 @@
+import { MAX_FRAME_DELTA_SECONDS } from '@/shared/constants/animation';
+
 export const CAMERA_VIEWS = ['front', '3d'] as const;
 export type CameraView = (typeof CAMERA_VIEWS)[number];
 // Speeds offered by the orbit player; the tutor may only propose these.
 export const PLAYBACK_SPEEDS = [0.5, 1, 2, 4] as const;
 // One orbital period lasts this many seconds of wall-clock playback at 1x.
 export const SECONDS_PER_PERIOD = 20;
-// Caps a single frame step so resuming a hidden tab does not jump ahead.
-const MAX_FRAME_DELTA_SECONDS = 0.05;
 
 export interface OrbitSession {
   time: number;

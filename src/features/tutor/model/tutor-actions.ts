@@ -18,7 +18,7 @@ const setExperiment = z
   .strict()
   .refine(({ mass1, mass2, distance }) => [mass1, mass2, distance].some((v) => v !== undefined));
 
-export const tutorActionSchema = z.discriminatedUnion('type', [
+const tutorActionSchema = z.discriminatedUnion('type', [
   setExperiment,
   z.object({ type: z.literal('loadPreset'), preset: z.enum(SIMULATOR_PRESETS) }).strict(),
   z.object({ type: z.literal('perturb') }).strict(),
@@ -29,10 +29,10 @@ export const tutorActionSchema = z.discriminatedUnion('type', [
 ]);
 
 export type TutorAction = z.infer<typeof tutorActionSchema>;
-export type TutorActionType = TutorAction['type'];
+type TutorActionType = TutorAction['type'];
 
 // What the tutor may propose on each page; anything else is discarded on the server.
-export const ACTIONS_BY_CONTEXT = {
+const ACTIONS_BY_CONTEXT = {
   learning: ['setExperiment', 'loadPreset', 'perturb'],
   orbit: ['openOrbit', 'seekOrbit', 'setOrbitSpeed'],
 } as const satisfies Record<string, readonly TutorActionType[]>;
@@ -42,7 +42,7 @@ export const tutorResponseSchema = z.object({
   reply: z.string().min(1),
   actions: z.array(tutorActionSchema).max(MAX_TUTOR_ACTIONS).default([]),
 });
-export type TutorResponse = z.infer<typeof tutorResponseSchema>;
+type TutorResponse = z.infer<typeof tutorResponseSchema>;
 
 const JSON_OBJECT = /\{[\s\S]*\}/;
 

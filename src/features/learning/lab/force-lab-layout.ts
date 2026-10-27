@@ -12,7 +12,7 @@ export const ARROW_LENGTH = { min: 0.25, max: 1.6 } as const;
 const WEAKEST_FORCE = gravitationalForce(massRange.min, massRange.min, distanceRange.max);
 const STRONGEST_FORCE = gravitationalForce(massRange.max, massRange.max, distanceRange.min);
 
-export interface ForceLabLayout {
+interface ForceLabLayout {
   positions: readonly [number, number];
   radii: readonly [number, number];
   arrowLength: number;

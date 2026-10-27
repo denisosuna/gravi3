@@ -27,7 +27,7 @@ Adapt to the learner using the verified context: if "misconception" is set, addr
 Questions about close encounters or collisions → seekOrbit to the closest approach, optionally with setOrbitSpeed 0.5; comparisons → openOrbit.`,
 };
 
-export const TUTOR_PROMPT_VERSION = '2.7';
+const TUTOR_PROMPT_VERSION = '2.7';
 
 // What a wrong answer to "double the distance" reveals; derived on the server, never sent by the client.
 const MISCONCEPTIONS: Record<PredictionAnswer, string | null> = {

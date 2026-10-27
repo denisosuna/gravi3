@@ -4,7 +4,7 @@ import { ORBIT_CATALOG, ORBIT_FAMILIES, orbits, type OrbitFamily } from '@/physi
 import { orbitSlugs, type OrbitDefinition, type OrbitSlug } from '@/physics/types';
 
 export const GALLERY_SORTS = ['catalog', 'period', 'year'] as const;
-export type GallerySort = (typeof GALLERY_SORTS)[number];
+type GallerySort = (typeof GALLERY_SORTS)[number];
 export const MAX_COMPARED = 3;
 const DEFAULT_SORT: GallerySort = 'catalog';
 const LIST_SEPARATOR = ',';

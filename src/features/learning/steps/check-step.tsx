@@ -10,6 +10,7 @@ import { gravitationalForce } from '@/physics/gravity';
 import { ForceDiagram } from '../lab/force-diagram';
 import { LessonStep } from '../components/lesson-step';
 import styles from '../components/learning.module.css';
+import { numberFormat } from '@/shared/i18n/number-format';
 
 const INITIAL_FORCE = gravitationalForce(
   initialExperiment.mass1,
@@ -29,11 +30,11 @@ export function CheckStep({
 }) {
   const t = useTranslations('learn');
   const locale = useLocale();
-  const scientific = new Intl.NumberFormat(locale, {
+  const scientific = numberFormat(locale, {
     notation: 'scientific',
     maximumSignificantDigits: 4,
   });
-  const ratio = new Intl.NumberFormat(locale, { maximumSignificantDigits: 3 });
+  const ratio = numberFormat(locale, { maximumSignificantDigits: 3 });
   return (
     <LessonStep step="check" title={t('checkTitle')}>
       <p className={styles.stepIntro}>{t('checkIntro')}</p>

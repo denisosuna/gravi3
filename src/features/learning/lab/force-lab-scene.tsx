@@ -5,6 +5,7 @@ import { useTheme } from 'next-themes';
 import type { ArrowHelper, Group } from 'three';
 import type { Experiment } from '@/features/learning/model/experiment';
 import { forceLabLayout, VISIBLE_HALF_WIDTH } from './force-lab-layout';
+import { MAX_FRAME_DELTA_SECONDS } from '@/shared/constants/animation';
 import { scenePalette } from '@/shared/three/scene-palette';
 import { GRAVITATIONAL_CONSTANT, gravitationalForce } from '@/physics/gravity';
 import { TwoBodySimulation } from '@/physics/two-body-simulation';
@@ -157,7 +158,9 @@ function ForceLabContents({
   useFrame((_, delta) => {
     if (!active.current || !simulation.current) return;
     const currentSimulation = simulation.current;
-    currentSimulation.advance(Math.min(delta, 0.05) * NORMALIZED_TIME_PER_SECOND);
+    currentSimulation.advance(
+      Math.min(delta, MAX_FRAME_DELTA_SECONDS) * NORMALIZED_TIME_PER_SECOND,
+    );
     applySimulationState(currentSimulation);
     if (currentSimulation.halted) {
       active.current = false;

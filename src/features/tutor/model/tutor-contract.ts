@@ -2,7 +2,8 @@ import { z } from 'zod';
 import { LOCALES } from '@/i18n/config';
 import { orbitSlugs } from '@/physics/types';
 import { distanceRange, massRange, PREDICTIONS } from '@/features/learning/model/experiment';
-import { SIMULATOR_PRESETS } from '@/features/learning/model/simulator-presets';
+import { CUSTOM_PRESET, SIMULATOR_PRESETS } from '@/features/learning/model/simulator-presets';
+import { SIMULATION_EVENTS } from '@/physics/simulation';
 
 export const TUTOR_LIMITS = {
   messageLength: 1000,
@@ -31,8 +32,8 @@ const learningContext = z
     checked: z.boolean().optional(),
     simulator: z
       .object({
-        preset: z.enum([...SIMULATOR_PRESETS, 'custom']),
-        event: z.enum(['collision', 'closeEncounter', 'escape']).nullable(),
+        preset: z.enum([...SIMULATOR_PRESETS, CUSTOM_PRESET]),
+        event: z.enum(SIMULATION_EVENTS).nullable(),
       })
       .strict()
       .optional(),

@@ -8,13 +8,13 @@ import {
   type TutorMessage,
 } from '@/features/tutor/model/tutor-contract';
 
-export interface DisplayedMessage extends TutorMessage {
+interface DisplayedMessage extends TutorMessage {
   // Stable React key: the list is trimmed from the front, so indexes shift.
   id: number;
   actions?: TutorAction[];
 }
 
-export type TutorErrorKey = 'rateLimit' | 'unavailable' | 'error';
+type TutorErrorKey = 'rateLimit' | 'unavailable' | 'error';
 
 function errorKey(status: number): TutorErrorKey {
   if (status === HTTP_STATUS.tooManyRequests) return 'rateLimit';

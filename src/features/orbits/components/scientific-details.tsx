@@ -1,6 +1,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { ArrowUpRight } from 'lucide-react';
 import { BODY_INDICES, bodyPosition, bodyVelocity, type OrbitDefinition } from '@/physics/types';
+import { numberFormat } from '@/shared/i18n/number-format';
 
 const PERIOD_DIGITS = 8;
 const CONDITION_DIGITS = 10;
@@ -8,8 +9,8 @@ const CONDITION_DIGITS = 10;
 export function ScientificDetails({ orbit }: { orbit: OrbitDefinition }) {
   const t = useTranslations('orbits');
   const locale = useLocale();
-  const period = new Intl.NumberFormat(locale, { maximumFractionDigits: PERIOD_DIGITS });
-  const condition = new Intl.NumberFormat(locale, { maximumFractionDigits: CONDITION_DIGITS });
+  const period = numberFormat(locale, { maximumFractionDigits: PERIOD_DIGITS });
+  const condition = numberFormat(locale, { maximumFractionDigits: CONDITION_DIGITS });
   const formatVector = (vector: readonly number[]) =>
     `(${vector.map((value) => condition.format(value)).join('; ')})`;
   return (

@@ -9,6 +9,7 @@ import { OrbitPlaybackProvider, OrbitTutor, STAGE_ID } from './orbit-playback';
 import { OrbitPlayer } from './orbit-player';
 import { ScientificDetails } from './scientific-details';
 import styles from './orbit-detail.module.css';
+import { numberFormat } from '@/shared/i18n/number-format';
 
 const TITLE_ID = 'orbit-title';
 const DESCRIPTION_ID = 'orbit-visual';
@@ -24,7 +25,7 @@ function neighbours(orbit: OrbitDefinition) {
 
 function Placard({ orbit }: { orbit: OrbitDefinition }) {
   const t = useTranslations('orbits');
-  const period = new Intl.NumberFormat(useLocale(), { maximumFractionDigits: PERIOD_DIGITS });
+  const period = numberFormat(useLocale(), { maximumFractionDigits: PERIOD_DIGITS });
   const { code, family, discovery } = ORBIT_CATALOG[orbit.slug];
   return (
     <dl className={styles.placard}>

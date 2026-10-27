@@ -1,23 +1,25 @@
 import {
+  CUSTOM_PRESET,
   PERTURBATION,
   simulatorPreset,
   type SimulatorPresetId,
+  type SimulatorPresetSelection,
   type SimulatorSetup,
 } from '@/features/learning/model/simulator-presets';
 import {
   ThreeBodySimulation,
+  isHaltingEvent,
   toCenterOfMassFrame,
   type SimulationDiagnostics,
   type SimulationEvent,
 } from '@/physics/simulation';
+import { MAX_FRAME_DELTA_SECONDS } from '@/shared/constants/animation';
 import { VELOCITY_OFFSET, type Masses } from '@/physics/types';
 
 export const SIMULATOR_SPEEDS = [0.5, 1, 2] as const;
 export const ZOOM_LEVELS = [0.5, 0.75, 1, 1.5, 2, 3] as const;
 const DEFAULT_ZOOM_INDEX = 2;
 const DEFAULT_PRESET: SimulatorPresetId = 'figure-eight';
-// Caps a single frame step so resuming a hidden tab does not jump ahead.
-const MAX_FRAME_DELTA_SECONDS = 0.05;
 
 export interface BodyEdit {
   mass?: number;
@@ -26,7 +28,7 @@ export interface BodyEdit {
 }
 
 export interface SimulatorSnapshot {
-  presetId: SimulatorPresetId | 'custom';
+  presetId: SimulatorPresetSelection;
   setup: SimulatorSetup;
   playing: boolean;
   speed: (typeof SIMULATOR_SPEEDS)[number];
@@ -91,13 +93,13 @@ export class SimulatorController {
     const nextState = [...initialState];
     if (vx !== undefined) nextState[VELOCITY_OFFSET + 2 * body] = vx;
     if (vy !== undefined) nextState[VELOCITY_OFFSET + 2 * body + 1] = vy;
-    this.restart({ masses: nextMasses, initialState: nextState }, 'custom');
+    this.restart({ masses: nextMasses, initialState: nextState }, CUSTOM_PRESET);
   }
 
   perturb() {
     const nextState = [...this.value.setup.initialState];
     nextState[VELOCITY_OFFSET] = nextState[VELOCITY_OFFSET]! * (1 + PERTURBATION);
-    this.restart({ ...this.value.setup, initialState: nextState }, 'custom');
+    this.restart({ ...this.value.setup, initialState: nextState }, CUSTOM_PRESET);
   }
 
   // Called every animation frame; does not notify React.
@@ -105,7 +107,7 @@ export class SimulatorController {
     if (!this.value.playing) return;
     const duration = Math.min(Math.max(0, delta), MAX_FRAME_DELTA_SECONDS) * this.value.speed;
     const event = this.simulation.advance(duration);
-    if (event === 'collision' || event === 'closeEncounter') this.emit({ playing: false, event });
+    if (isHaltingEvent(event)) this.emit({ playing: false, event });
     else if (event) this.emit({ event });
   }
 

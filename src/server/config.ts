@@ -2,8 +2,8 @@ import 'server-only';
 import type { ReasoningEffort } from 'openai/resources/shared';
 import { z } from 'zod';
 
-export const LOG_LEVELS = ['debug', 'info', 'warn', 'error', 'silent'] as const;
-export const REASONING_EFFORTS = [
+const LOG_LEVELS = ['debug', 'info', 'warn', 'error', 'silent'] as const;
+const REASONING_EFFORTS = [
   'none',
   'minimal',
   'low',

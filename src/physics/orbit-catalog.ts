@@ -93,7 +93,7 @@ export const orbits: readonly OrbitDefinition[] = [
 export const ORBIT_FAMILIES = ['analytic', 'I.A', 'I.B', 'II.C'] as const;
 export type OrbitFamily = (typeof ORBIT_FAMILIES)[number];
 
-export interface OrbitCatalogEntry {
+interface OrbitCatalogEntry {
   family: OrbitFamily;
   // Šuvakov–Dmitrašinović catalogue code, when the orbit has one.
   code?: string;

@@ -9,6 +9,9 @@ export const SIMULATOR_PRESETS = [
   'sun-planet-moon',
 ] as const;
 export type SimulatorPresetId = (typeof SIMULATOR_PRESETS)[number];
+// Shown once the learner edits a body, so no starting point matches any more.
+export const CUSTOM_PRESET = 'custom';
+export type SimulatorPresetSelection = SimulatorPresetId | typeof CUSTOM_PRESET;
 
 export interface SimulatorSetup {
   masses: Masses;
