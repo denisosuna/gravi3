@@ -71,12 +71,8 @@
     }
   },
   "orbits": {
-    "title": "El orden dentro del movimiento.",
-    "solutions": "soluciones",
+    "title": "Seis órbitas que vuelven.",
     "description": "Con tres cuerpos, casi cualquier comienzo acaba en un baile caótico o con un cuerpo expulsado. Pero con condiciones iniciales muy precisas, los tres vuelven exactamente a su punto de partida y repiten el ciclo. Estas son seis de esas soluciones periódicas; la mayoría son inestables: un empujón mínimo las rompe.",
-    "periodic": "Órbita periódica",
-    "library": "Biblioteca de órbitas",
-    "libraryNote": "Tres masas iguales · Gravedad newtoniana",
     "note": "No son curvas dibujadas a mano: las trayectorias se generan a partir de condiciones iniciales publicadas y se validan numéricamente.",
     "concept": "Detrás del movimiento",
     "conceptText": "Cada cuerpo atrae a los otros dos. Con unas condiciones iniciales muy concretas, sus posiciones y velocidades vuelven al punto de partida.",
@@ -84,9 +80,9 @@
     "period": "Período",
     "units": "unidades normalizadas",
     "source": "Fuente y condiciones iniciales",
-    "planar": "Órbita plana · La cámara 3D cambia tu perspectiva, no la física.",
+    "planar": "Órbita plana: la cámara 3D cambia tu perspectiva, no la física.",
     "body": "Cuerpo",
-    "equalMasses": "Masas iguales · G = 1",
+    "equalMasses": "Masas iguales, G = 1",
     "validated": "Trayectoria validada",
     "browse": "Explorar las seis órbitas",
     "lagrange": {
@@ -121,7 +117,49 @@
     },
     "initialConditions": "Condiciones iniciales",
     "position": "Posición",
-    "velocity": "Velocidad"
+    "velocity": "Velocidad",
+    "filters": {
+      "label": "Filtrar y ordenar las órbitas",
+      "class": "Clase",
+      "all": "Todas",
+      "analytic": "Analítica",
+      "sort": "Orden",
+      "catalog": "Catálogo",
+      "period": "Período",
+      "year": "Año del hallazgo"
+    },
+    "showing": "{count, plural, one {# órbita visible} other {# órbitas visibles}}",
+    "classHelp": "Las clases siguen a Šuvakov y Dmitrašinović (2013), que agruparon las órbitas según sus simetrías.",
+    "plate": {
+      "class": "Clase {code}",
+      "found": "{authors}, {year}",
+      "period": "Período {value}",
+      "compare": "Comparar {name}",
+      "uncompare": "Dejar de comparar {name}"
+    },
+    "compare": {
+      "title": "Lado a lado",
+      "explain": "Cada órbita se dibuja en la misma fracción de su propio período, así las formas coinciden aunque los períodos sean distintos. Cada dibujo se escala para llenar su marco.",
+      "pickMore": "Elige una o dos órbitas más con «Comparar».",
+      "phase": "Fracción de cada período",
+      "remove": "Quitar {name}"
+    },
+    "detail": {
+      "previous": "Órbita anterior",
+      "next": "Órbita siguiente",
+      "seeing": "Qué estás viendo",
+      "class": "Clase",
+      "found": "Hallada por",
+      "nav": "Más órbitas"
+    },
+    "visual": {
+      "lagrange": "Un triángulo equilátero gira sin deformarse alrededor de su centro. Cada cuerpo recorre un círculo de radio 1 y cada pareja se mantiene a √3 ≈ 1,73 unidades.",
+      "figure-eight": "Los tres cuerpos recorren una misma curva en forma de ocho, de unas 2,1 unidades de ancho y 1,05 de alto, separados un tercio de período. Ninguna pareja se acerca a menos de unas 0,69 unidades.",
+      "butterfly-i": "Una órbita plana de unas 2,1 unidades de ancho y solo 0,35 de alto. En cada período hay ocho acercamientos; en el más estrecho, dos cuerpos pasan a unas 0,011 unidades.",
+      "goggles": "Unas 2,1 unidades de ancho y 1,5 de alto. En cada período hay dieciséis acercamientos; en el más estrecho, dos cuerpos pasan a unas 0,019 unidades.",
+      "moth-i": "Casi tan alta como ancha, unas 2,2 unidades en cada sentido. En cada período hay cuatro acercamientos, todos a unas 0,08 unidades.",
+      "yin-yang-i": "Unas 2,1 unidades de ancho y 1,0 de alto. En cada período hay ocho acercamientos; en el más estrecho, dos cuerpos pasan a unas 0,010 unidades."
+    }
   },
   "player": {
     "play": "Reproducir",
@@ -136,7 +174,6 @@
     "error": "No se pudo cargar la visualización. Puedes consultar la trayectoria y su explicación.",
     "fallback": "La escena 3D no está disponible. Esta miniatura muestra la trayectoria validada.",
     "loading": "Preparando la órbita…",
-    "physicalTime": "tiempo físico",
     "seconds": "s de reproducción"
   },
   "learn": {

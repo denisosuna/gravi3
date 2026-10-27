@@ -2,7 +2,7 @@ import { useTranslations } from 'next-intl';
 import { ArrowRight, MoveUpRight } from 'lucide-react';
 import { ROUTES } from '@/constants/routes';
 import { Link } from '@/i18n/routing';
-import { OrbitTrace } from './orbit-trace';
+import { OrbitTrace } from '@/components/scene/orbit-trace';
 
 export function HomeHero() {
   const t = useTranslations('home');
