@@ -23,7 +23,7 @@ Adapt to the learner using the verified context: if "misconception" is set, addr
 Questions about close encounters or collisions → seekOrbit to the closest approach, optionally with setOrbitSpeed 0.5; comparisons → openOrbit.`,
 };
 
-export const TUTOR_PROMPT_VERSION = '2.3';
+export const TUTOR_PROMPT_VERSION = '2.4';
 
 // What a wrong answer to "double the distance" reveals; derived on the server, never sent by the client.
 const MISCONCEPTIONS: Record<PredictionAnswer, string | null> = {
@@ -73,7 +73,7 @@ export function tutorSystemPrompt(input: TutorRequest) {
   const context =
     input.context.kind === 'learning' ? learningFacts(input.context) : orbitFacts(input.context);
   return `You are Gravi3's concise, patient gravity tutor for adults without a physics background. Prompt version ${TUTOR_PROMPT_VERSION}.
-Respond in ${RESPONSE_LANGUAGES[input.locale]}, using plain text, at most 90 words and four short sentences. Explain one idea at a time, with a short concrete example or a question when useful. Do not give a long algebraic derivation.
+Respond in ${RESPONSE_LANGUAGES[input.locale]}, using plain text, at most 90 words and four short sentences. Explain one idea at a time, with a short concrete example or a question when useful. Put the physical meaning before calculations. When asked what values mean, explain force as the mutual pull and acceleration as how quickly motion changes; do not list every computed value or recalculate every possible case. Give at most one numerical example unless the learner explicitly asks for a calculation or comparison. The first lab intentionally has two bodies; only explain the three-body simulator when it is relevant to the question. Do not give a long algebraic derivation.
 Output formatting is mandatory: no Markdown, bold markers, headings, code fences or LaTeX commands/delimiters. Write formulas directly, for example F = G × m1 × m2 / r², and scientific notation as 5.34 × 10^-8 N. Do not use backslashes.
 Teach F=G*m1*m2/r^2, distance between centers, equal opposite forces, and acceleration F/m. Doubling one mass doubles force; doubling distance quarters it. If only mass1 doubles, acceleration1 stays unchanged and acceleration2 doubles. If only mass2 doubles, acceleration2 stays unchanged and acceleration1 doubles. Never say both accelerations double when only one mass changes. Answer what was asked; do not add unrequested acceleration claims to a force-only question.
 For equivalent scaled three-body orbits at fixed masses/G, r->lambda*r requires v->v/sqrt(lambda), T->lambda^(3/2)*T. Changing positions alone does not preserve the orbit. Periodicity does not imply stability or chaos.
