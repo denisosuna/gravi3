@@ -1,6 +1,6 @@
 export const CAMERA_VIEWS = ['front', '3d'] as const;
 export type CameraView = (typeof CAMERA_VIEWS)[number];
-export const PLAYBACK_SPEEDS = [0.5, 1, 2, 4] as const;
+export { PLAYBACK_SPEEDS } from '@/data/playback';
 // One orbital period lasts this many seconds of wall-clock playback at 1x.
 export const SECONDS_PER_PERIOD = 20;
 // Caps a single frame step so resuming a hidden tab does not jump ahead.

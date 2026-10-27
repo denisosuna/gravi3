@@ -13,11 +13,18 @@
     "back": "Back to gallery",
     "skip": "Skip to content",
     "loading": "Loading…",
-    "retry": "Try again",
-    "brandNote": "THE THREE-BODY PROBLEM"
+    "retry": "Try again"
+  },
+  "errors": {
+    "notFoundTitle": "This page does not exist",
+    "notFoundText": "The address may be mistyped, or the orbit may not be one of the six in the gallery.",
+    "suggestions": "Where to go next",
+    "toOrbits": "See the six orbits",
+    "toLearn": "Start with gravity",
+    "errorTitle": "This page could not load",
+    "errorText": "Something failed while showing it. Your experiment values are kept; try again."
   },
   "home": {
-    "eyebrow": "AN INTERACTIVE COURSE ON GRAVITY",
     "title": "The three-body problem",
     "lead": "Can you predict how three objects pulling on each other through gravity will move? With two it is easy; with three there is no general formula. Here you will understand why by experimenting, step by step, with no physics background.",
     "start": "Start with gravity",
@@ -64,24 +71,18 @@
     }
   },
   "orbits": {
-    "eyebrow": "THE THREE-BODY PROBLEM",
-    "title": "Order in motion.",
-    "solutions": "solutions",
+    "title": "Six orbits that come back.",
     "description": "With three bodies, almost any start ends in a chaotic dance or with one body thrown out. But with very precise starting conditions, all three return exactly to where they began and repeat the cycle. These are six of those periodic solutions; most are unstable: the slightest nudge breaks them.",
-    "periodic": "Periodic orbit",
-    "library": "Orbit library",
-    "libraryNote": "Three equal masses · Newtonian gravity",
     "note": "These are not hand-drawn curves: trajectories are generated from published initial conditions and numerically validated.",
-    "orbit": "ORBIT",
     "concept": "Behind the motion",
     "conceptText": "Each body attracts the other two. With very specific initial conditions, their positions and velocities return to the starting point.",
     "scientific": "Scientific details",
     "period": "Period",
     "units": "normalized units",
     "source": "Source and initial conditions",
-    "planar": "Planar orbit · The 3D camera changes your perspective, not the physics.",
+    "planar": "Planar orbit: the 3D camera changes your perspective, not the physics.",
     "body": "Body",
-    "equalMasses": "Equal masses · G = 1",
+    "equalMasses": "Equal masses, G = 1",
     "validated": "Validated trajectory",
     "browse": "Explore all six orbits",
     "lagrange": {
@@ -116,7 +117,49 @@
     },
     "initialConditions": "Initial conditions",
     "position": "Position",
-    "velocity": "Velocity"
+    "velocity": "Velocity",
+    "filters": {
+      "label": "Filter and sort the orbits",
+      "class": "Class",
+      "all": "All",
+      "analytic": "Analytic",
+      "sort": "Order",
+      "catalog": "Catalogue",
+      "period": "Period",
+      "year": "Year found"
+    },
+    "showing": "{count, plural, one {# orbit shown} other {# orbits shown}}",
+    "classHelp": "Classes follow Šuvakov and Dmitrašinović (2013), who grouped orbits by their symmetries.",
+    "plate": {
+      "class": "Class {code}",
+      "found": "{authors}, {year}",
+      "period": "Period {value}",
+      "compare": "Compare {name}",
+      "uncompare": "Stop comparing {name}"
+    },
+    "compare": {
+      "title": "Side by side",
+      "explain": "Each orbit is drawn at the same fraction of its own period, so shapes line up even though the periods differ. Each drawing is scaled to fit its frame.",
+      "pickMore": "Choose one or two more orbits with “Compare”.",
+      "phase": "Fraction of each period",
+      "remove": "Remove {name}"
+    },
+    "detail": {
+      "previous": "Previous orbit",
+      "next": "Next orbit",
+      "seeing": "What you see",
+      "class": "Class",
+      "found": "Found by",
+      "nav": "More orbits"
+    },
+    "visual": {
+      "lagrange": "An equilateral triangle turns rigidly around its center. Each body moves on a circle of radius 1, and every pair stays √3 ≈ 1.73 units apart.",
+      "figure-eight": "All three bodies follow one figure-eight curve, about 2.1 units wide and 1.05 tall, a third of a period apart. No two bodies come closer than about 0.69 units.",
+      "butterfly-i": "A flat orbit about 2.1 units wide and only 0.35 tall. Each period has eight close approaches; at the closest, two bodies pass about 0.011 units apart.",
+      "goggles": "About 2.1 units wide and 1.5 tall. Each period has sixteen close approaches; at the closest, two bodies pass about 0.019 units apart.",
+      "moth-i": "Roughly as tall as it is wide, about 2.2 units each way. Each period has four close approaches, each at about 0.08 units.",
+      "yin-yang-i": "About 2.1 units wide and 1.0 tall. Each period has eight close approaches; at the closest, two bodies pass about 0.010 units apart."
+    }
   },
   "player": {
     "play": "Play",
@@ -131,11 +174,9 @@
     "error": "The visualization could not load. The trajectory preview and explanation remain available.",
     "fallback": "The 3D scene is unavailable. This preview shows the validated trajectory.",
     "loading": "Preparing the orbit…",
-    "physicalTime": "physical time",
     "seconds": "playback s"
   },
   "learn": {
-    "eyebrow": "LEARN · FROM TWO TO THREE BODIES",
     "title": "Gravity starts with two.",
     "description": "To understand three bodies you first need to understand how two attract each other. Move the masses, change the distance and predict what will happen before you check.",
     "formulaTitle": "One law, three ingredients",
@@ -144,9 +185,27 @@
     "mass1": "Body 1 mass",
     "mass2": "Body 2 mass",
     "distance": "Center-to-center distance",
-    "force": "Attractive force on each body",
-    "equal": "Equal magnitude, opposite directions. Acceleration is F/m: the smaller mass accelerates more.",
-    "scale": "Distance to scale; illustrative radii; force arrows on a logarithmic scale. Values are calculated in SI units.",
+    "force": "Initial attractive force on each body",
+    "equal": "The force has the same size on each body and points in opposite directions. If their masses differ, the lighter one accelerates more.",
+    "whatHappensTitle": "What is happening",
+    "mutualAttraction": "Both bodies attract each other: the force has the same size on each, but points in the opposite direction.",
+    "equalMasses": "Because they have the same mass, that force changes their motion equally.",
+    "body1Lighter": "Body 1 has less mass: the same force changes its motion more.",
+    "body2Lighter": "Body 2 has less mass: the same force changes its motion more.",
+    "distanceEffect": "The farther apart they are, the weaker the pull. If you double the distance, it becomes one quarter as strong.",
+    "twoBodyPurpose": "There are only two bodies on purpose: this isolates their interaction. In the last step we add a third and see what changes.",
+    "accelerationDetails": "See the acceleration values",
+    "accelerationMeaning": "Acceleration tells you how much motion changes. For each body, divide the force by its mass.",
+    "showFall": "See them fall under gravity",
+    "replayFall": "Replay the fall",
+    "resetFall": "Restore starting positions",
+    "animationPlaying": "The arrows grow as the bodies approach. The force shown is the initial one; simulation time is accelerated.",
+    "animationExplanation": "Run a one-dimensional simulation of the bodies falling under gravity from rest. It follows Newton's law, and time is accelerated.",
+    "animationStaticPending": "Calculating the fall for a still view…",
+    "animationStatic": "Still view of the calculated fall after {time} of simulated time. Animation is off because reduced motion is preferred.",
+    "animationDone": "After {time} of simulated time, the bodies are very close. The point-mass model stops before the mathematical collision.",
+    "animationUnavailable": "Animation is unavailable in this view.",
+    "scale": "Distance to scale; illustrative radii; force arrows on a logarithmic scale. Positions follow Newtonian gravity; the model does not describe real-body collisions.",
     "predictionTitle": "Before you try it, what do you predict?",
     "predictionQuestion": "If we double the distance and keep the masses, the force becomes…",
     "half": "One half",
@@ -157,15 +216,29 @@
     "tryDistance": "Double the distance",
     "tryMass": "Double the first mass",
     "reset": "Reset experiment",
-    "step1": "01 · Observe",
-    "step2": "02 · Predict",
     "forceUnits": "newtons (N)",
     "acceleration": "Acceleration",
     "predictionHint": "Choose an answer, then check its effect in the laboratory.",
     "rotateHint": "Drag the scene to rotate it.",
     "fallback3d": "The 3D view is not available on this device. This diagram shows the same experiment.",
     "ratio": "{ratio} × the force of the starting setup",
-    "legend": "Experiment values"
+    "legend": "Experiment values",
+    "steps": {
+      "label": "Lesson steps",
+      "observe": "Observe",
+      "predict": "Predict",
+      "check": "Check",
+      "explain": "Explain",
+      "three-bodies": "Three bodies",
+      "askTutor": "Ask the tutor"
+    },
+    "stepOf": "Step {step} of {total}",
+    "observeTitle": "Move the masses and the distance",
+    "checkTitle": "Check your prediction",
+    "checkIntro": "Double one quantity and compare the new force with the one you started with.",
+    "yourPrediction": "Your prediction: {answer}",
+    "noPrediction": "You have not predicted yet. Choose an answer in the previous step first.",
+    "backToStart": "Back to the starting values"
   },
   "tutor": {
     "title": "AI tutor",
@@ -189,15 +262,23 @@
     "offline": "Forces and orbits remain available without AI.",
     "suggestions": {
       "learning": [
-        "What happens if I double the distance?",
+        "Can you explain gravity with a simple example?",
         "Why does the smaller mass accelerate more?",
         "Why are three bodies unpredictable?"
       ],
       "orbit": [
         "Why does this orbit repeat?",
         "Is this orbit stable?",
-        "How is it different from the figure eight?"
-      ]
+        "What should I watch as it moves?"
+      ],
+      "orbitContext": {
+        "lagrange": "Why do the three bodies keep a triangle?",
+        "figure-eight": "Why do all three follow the same path?",
+        "butterfly-i": "What happens when two bodies pass very close?",
+        "goggles": "How do the loops in this orbit connect?",
+        "moth-i": "What pattern do the bodies follow in this orbit?",
+        "yin-yang-i": "Why does this orbit look like two halves?"
+      }
     },
     "suggestionsLabel": "Suggested questions",
     "actionsLabel": "Suggested experiments",
@@ -205,17 +286,20 @@
       "setExperiment": "Try it: {changes}",
       "loadPreset": "Try it: {preset} in the simulator",
       "perturb": "Try it: perturb by 1% in the simulator",
-      "openOrbit": "See the {name} orbit"
-    }
+      "openOrbit": "See the {name} orbit",
+      "seekOrbit": "Try it: go to {moment} of the period",
+      "setOrbitSpeed": "Try it: play at {speed}×"
+    },
+    "collapse": "Collapse the AI tutor",
+    "expand": "Expand the AI tutor"
   },
   "seo": {
-    "homeTitle": "Gravity and the three-body problem",
+    "homeTitle": "Interactive three-body problem and gravity explorer",
     "learnTitle": "Learn the law of gravity",
     "orbitsTitle": "Six solutions of the three-body problem",
     "description": "Learn gravity through experiments and an AI tutor. Explore six periodic solutions of the three-body problem."
   },
   "simulator": {
-    "step": "03 · Three bodies",
     "title": "Add a third body",
     "intro": "Every pair of bodies attracts with the same law you just tested. With three, each one pulls on the other two at once and the motion no longer has a formula: it must be computed step by step. Pick a starting point and watch.",
     "presets": "Starting points",
@@ -266,6 +350,7 @@
     "vx": "Velocity x",
     "vy": "Velocity y",
     "collision": "Two bodies came so close that the force grows without bound: with point masses this is a collision. The simulation stops here; restart or pick another starting point.",
+    "closeEncounter": "Two bodies passed so close that the simulation could not resolve their path within one frame. It pauses here instead of guessing; restart or pick another starting point.",
     "escape": "One body has moved far away from the other two: it has probably been ejected. That is the most common ending of the three-body problem.",
     "model": "Exact Newtonian physics with point masses and G = 1, without softening the force. Normalized units.",
     "sceneLabel": "Three-body simulation",

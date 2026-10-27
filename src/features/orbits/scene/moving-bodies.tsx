@@ -8,10 +8,10 @@ import {
   Line as ThreeLine,
   LineBasicMaterial,
 } from 'three';
-import type { PlaybackController } from '@/features/orbits/playback';
+import type { PlaybackController } from '../playback';
 import { samplePositions } from '@/physics/interpolation';
 import { BODY_INDICES, type Trajectory } from '@/physics/types';
-import { createBodyLabels } from './body-labels';
+import { createBodyLabels } from '@/components/scene/body-labels';
 
 const TRAIL_SEGMENTS = 128;
 // Each moving trail covers the most recent third of a period.

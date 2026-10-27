@@ -1,5 +1,4 @@
 import { useTranslations } from 'next-intl';
-import { Lightbulb } from 'lucide-react';
 import { CORRECT_PREDICTION, PREDICTIONS, type PredictionAnswer } from '@/data/experiment';
 
 export function Prediction({
@@ -12,12 +11,7 @@ export function Prediction({
   const t = useTranslations('learn');
   const isCorrect = answer === CORRECT_PREDICTION;
   return (
-    <section className="prediction-panel">
-      <div className="eyebrow">{t('step2')}</div>
-      <h2>
-        <Lightbulb size={18} />
-        {t('predictionTitle')}
-      </h2>
+    <div className="prediction-panel">
       <p>{t('predictionQuestion')}</p>
       <div className="prediction-options">
         {PREDICTIONS.map((value) => (
@@ -34,6 +28,6 @@ export function Prediction({
       <p className={`prediction-feedback ${isCorrect ? 'correct' : ''}`} role="status">
         {answer ? t(isCorrect ? 'correct' : 'incorrect') : t('predictionHint')}
       </p>
-    </section>
+    </div>
   );
 }

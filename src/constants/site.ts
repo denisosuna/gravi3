@@ -1,5 +1,5 @@
 export const SITE = {
   name: 'Gravi3',
-  tagline: 'Gravity & the three-body problem',
+  tagline: 'Interactive Three-Body Problem & Gravity Explorer',
   repositoryUrl: 'https://github.com/denisosuna/gravi3',
 } as const;

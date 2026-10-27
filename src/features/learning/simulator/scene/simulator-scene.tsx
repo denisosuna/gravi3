@@ -1,12 +1,9 @@
 import { useEffect } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { useTheme } from 'next-themes';
-import {
-  ZOOM_LEVELS,
-  type SimulatorController,
-} from '@/features/learning/simulator/simulator-controller';
-import { useSimulatorState } from '@/features/learning/simulator/use-simulator-state';
-import { scenePalette } from './scene-palette';
+import { ZOOM_LEVELS, type SimulatorController } from '../simulator-controller';
+import { useSimulatorState } from '../use-simulator-state';
+import { scenePalette } from '@/components/scene/scene-palette';
 import { SimulatorBodies } from './simulator-bodies';
 
 const BASE_CAMERA_DISTANCE = 9;

@@ -29,7 +29,6 @@ export function Header() {
       <Link href={ROUTES.home} className="brand" aria-label={t('home')}>
         <Orbit aria-hidden="true" />
         <span>{SITE.name}</span>
-        <span className="brand-note">{t('brandNote')}</span>
       </Link>
       <nav aria-label={t('navigation')} className="main-nav">
         {NAV_ITEMS.map(({ href, label }) => (

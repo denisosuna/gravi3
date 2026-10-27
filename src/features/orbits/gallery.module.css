@@ -1,0 +1,216 @@
+/* Museum wall: plates hang on a quiet grid; the frame and the placard carry the identity. */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 32px;
+  padding-block: 16px;
+  border-block: 1px solid var(--line);
+  margin-block: 8px 24px;
+}
+
+.controlGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+
+.controlLabel {
+  font-weight: 700;
+  font-size: var(--text-sm);
+  margin-right: 6px;
+}
+
+.controlGroup a {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.controlGroup a:hover {
+  color: var(--text);
+  border-color: var(--line);
+}
+
+.controlGroup a[aria-current] {
+  color: var(--accent-contrast);
+  background: var(--accent);
+}
+
+.controlHelp {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.count {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.plates {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 40px 28px;
+}
+
+.plate {
+  position: relative;
+  display: grid;
+  gap: 10px;
+}
+
+.plateImage {
+  aspect-ratio: 8 / 5;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  transition: border-color 0.2s;
+}
+
+.plateImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.plate:hover .plateImage,
+.plate:has(.plateLink:focus-visible) .plateImage {
+  border-color: var(--accent);
+}
+
+.plateTitle {
+  margin: 4px 0 0;
+  font-size: var(--text-xl);
+}
+
+/* The title link covers the whole plate, so the image is clickable without nesting links. */
+.plateLink::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.plateLink:focus-visible {
+  outline: none;
+}
+
+.plate:has(.plateLink:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: 6px;
+}
+
+.placard {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 2px 12px;
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.placard dt {
+  color: var(--muted);
+}
+
+.placard dd {
+  margin: 0;
+}
+
+.number {
+  font-family: var(--font-number);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+}
+
+.compareToggle {
+  position: relative;
+  z-index: 1;
+  justify-self: start;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  color: var(--accent);
+}
+
+.compareToggle:hover {
+  border-color: var(--accent);
+}
+
+.compareToggle[data-active] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.compare {
+  margin-bottom: 40px;
+  padding: 20px;
+  border: 1px solid var(--accent);
+  background: var(--surface);
+  display: grid;
+  gap: 14px;
+}
+
+.compare h2 {
+  margin: 0;
+  font-size: var(--text-xl);
+}
+
+.compareExplain {
+  margin: 0;
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+.compareGrid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 20px;
+}
+
+.compareItem {
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+
+.compareItem p {
+  margin: 0;
+}
+
+.compareItem a {
+  color: var(--accent);
+  font-size: var(--text-sm);
+  justify-self: start;
+  text-decoration: underline;
+}
+
+.compareControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.compareControls input {
+  flex: 1 1 200px;
+}

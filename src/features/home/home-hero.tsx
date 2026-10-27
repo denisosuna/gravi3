@@ -1,18 +1,14 @@
-import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { ArrowRight, MoveUpRight } from 'lucide-react';
-import { ASSETS, ROUTES } from '@/constants/routes';
+import { ROUTES } from '@/constants/routes';
 import { Link } from '@/i18n/routing';
+import { OrbitTrace } from '@/components/scene/orbit-trace';
 
 export function HomeHero() {
   const t = useTranslations('home');
   return (
     <section className="home-hero" aria-labelledby="home-title">
       <div className="home-hero-copy">
-        <div className="eyebrow">
-          <span className="status-dot" />
-          {t('eyebrow')}
-        </div>
         <h1 id="home-title">{t('title')}</h1>
         <p className="hero-copy">{t('lead')}</p>
         <div className="hero-actions">
@@ -27,7 +23,7 @@ export function HomeHero() {
         </div>
       </div>
       <figure className="home-visual">
-        <Image src={ASSETS.orbitPreview('figure-eight')} alt="" width={560} height={330} priority />
+        <OrbitTrace slug="figure-eight" width={560} height={330} />
         <figcaption>{t('visualCaption')}</figcaption>
       </figure>
     </section>

@@ -34,7 +34,9 @@ test('a provider limit is visible and the experiment remains usable', async ({ p
     ),
   );
   await page.goto('/en/learn');
-  await page.getByRole('button', { name: 'What happens if I double the distance?' }).click();
+  await page
+    .getByRole('button', { name: 'Can you explain gravity with a simple example?' })
+    .click();
   await expect(page.getByText(/^The usage limit has been reached/)).toBeVisible();
   await page.getByRole('button', { name: 'Double the distance', exact: true }).click();
   await expect(page.getByRole('slider', { name: 'Center-to-center distance' })).toHaveValue('10');
@@ -80,4 +82,54 @@ test('the tutor proposes experiments that run with one click', async ({ page }) 
     'true',
   );
   await expect(simulator.getByRole('button', { name: 'Pause' })).toBeVisible();
+});
+
+test('on an orbit page the tutor can move the player to the closest approach', async ({ page }) => {
+  await page.route('**/api/tutor', (route) =>
+    route.fulfill(
+      route.request().method() === 'GET'
+        ? { json: { enabled: true } }
+        : {
+            json: {
+              reply: 'Press Try it to jump to the closest approach and slow down.',
+              actions: [
+                { type: 'seekOrbit', fraction: 0.5 },
+                { type: 'setOrbitSpeed', speed: 0.5 },
+              ],
+            },
+          },
+    ),
+  );
+  await page.goto('/en/orbits/butterfly-i');
+  const timeline = page.getByRole('slider', { name: 'Orbit timeline' });
+  await expect(timeline).toHaveValue('0');
+  await page.getByRole('button', { name: 'Is this orbit stable?' }).click();
+  const experiments = page.getByRole('list', { name: 'Suggested experiments' });
+  await expect(experiments.getByRole('button')).toHaveCount(2);
+  await expect(timeline).toHaveValue('0');
+  await experiments.getByRole('button', { name: 'Try it: go to 50% of the period' }).click();
+  expect(Number(await timeline.inputValue())).toBeCloseTo(6.2346748391 / 2, 3);
+  await experiments.getByRole('button', { name: 'Try it: play at 0.5×' }).click();
+  await expect(page.getByRole('combobox', { name: 'Speed' })).toHaveValue('0.5');
+});
+
+test('orbit suggestions are specific to the orbit being viewed', async ({ page }) => {
+  await page.route('**/api/tutor', (route) => route.fulfill({ json: { enabled: true } }));
+  const contextualQuestions = [
+    { slug: 'lagrange', question: '¿Por qué los tres mantienen un triángulo?' },
+    { slug: 'figure-eight', question: '¿Por qué los tres recorren la misma curva?' },
+    { slug: 'butterfly-i', question: '¿Qué ocurre cuando dos cuerpos pasan muy cerca?' },
+    { slug: 'goggles', question: '¿Cómo se conectan los lazos de esta órbita?' },
+    { slug: 'moth-i', question: '¿Qué patrón siguen los cuerpos en esta órbita?' },
+    { slug: 'yin-yang-i', question: '¿Por qué esta órbita parece tener dos mitades?' },
+  ];
+  for (const { slug, question } of contextualQuestions) {
+    await page.goto(`/es/orbits/${slug}`);
+    const suggestions = page.getByRole('list', { name: 'Preguntas sugeridas' });
+    await expect(suggestions.getByRole('button')).toHaveCount(3);
+    await expect(suggestions.getByRole('button').nth(2)).toHaveText(question);
+    await expect(
+      suggestions.getByRole('button', { name: '¿En qué se diferencia de la figura de ocho?' }),
+    ).toHaveCount(0);
+  }
 });

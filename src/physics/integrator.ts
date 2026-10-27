@@ -27,6 +27,22 @@ interface IntegrationOptions {
   maxSteps?: number;
   maxStep?: number;
   gravitationalConstant?: number;
+  // A step size proposed by a previous call, so consecutive calls do not restart small.
+  initialStep?: number;
+}
+
+export interface AdaptiveIntegration {
+  samples: Sample[];
+  // The step size the controller would try next; pass it back as `initialStep`.
+  nextStep: number;
+  attempts: number;
+}
+
+// Thrown when a very close encounter needs more steps than allowed; not a collision by itself.
+export class StepBudgetError extends RangeError {
+  constructor() {
+    super('Integration step budget exceeded.');
+  }
 }
 
 function dormandPrinceStep(
@@ -59,7 +75,20 @@ function nextStepScale(error: number): number {
   return Math.min(MAX_STEP_SCALE, Math.max(MIN_STEP_SCALE, proposed));
 }
 
-export function integrate(
+function assertPositive(values: readonly number[]) {
+  if (!values.every((value) => Number.isFinite(value) && value > 0)) {
+    throw new RangeError('Integration duration, tolerance and limits must be positive and finite.');
+  }
+}
+
+// A step shortened only to land on the end time says nothing new about the right size.
+function nextProposal(step: number, proposal: number, error: number, maxStep: number): number {
+  const scaled = step * nextStepScale(error);
+  const shortenedButAccepted = error <= 1 && step < proposal;
+  return Math.min(maxStep, shortenedButAccepted ? Math.max(proposal, scaled) : scaled);
+}
+
+export function integrateAdaptive(
   initialState: State,
   masses: Masses,
   duration: number,
@@ -68,22 +97,20 @@ export function integrate(
     maxSteps = 200_000,
     maxStep = duration / 128,
     gravitationalConstant = 1,
+    initialStep = INITIAL_STEP,
   }: IntegrationOptions = {},
-): Sample[] {
+): AdaptiveIntegration {
   validateSystem(initialState, masses, gravitationalConstant);
-  if (
-    ![duration, tolerance, maxStep, maxSteps].every((value) => Number.isFinite(value) && value > 0)
-  ) {
-    throw new RangeError('Integration duration, tolerance and limits must be positive and finite.');
-  }
+  assertPositive([duration, tolerance, maxStep, maxSteps, initialStep]);
   const slopeAt = (stage: number[]) => derivatives(stage, masses, gravitationalConstant);
   let state = [...initialState];
   let time = 0;
-  let step = Math.min(maxStep, INITIAL_STEP);
+  let proposal = Math.min(maxStep, initialStep);
   const samples: Sample[] = [{ time, state }];
-  for (let attempt = 0; time < duration; attempt++) {
-    if (attempt >= maxSteps) throw new RangeError('Integration step budget exceeded.');
-    step = Math.min(step, maxStep, duration - time);
+  let attempt = 0;
+  for (; time < duration; attempt++) {
+    if (attempt >= maxSteps) throw new StepBudgetError();
+    const step = Math.min(proposal, duration - time);
     if (time + step === time) throw new RangeError('Integration step underflow.');
     const { next, lower } = dormandPrinceStep(state, step, slopeAt);
     const error = scaledError(next, lower, state, tolerance);
@@ -93,7 +120,16 @@ export function integrate(
       state = next;
       samples.push({ time, state });
     }
-    step *= nextStepScale(error);
+    proposal = nextProposal(step, proposal, error, maxStep);
   }
-  return samples;
+  return { samples, nextStep: proposal, attempts: attempt };
+}
+
+export function integrate(
+  initialState: State,
+  masses: Masses,
+  duration: number,
+  options: IntegrationOptions = {},
+): Sample[] {
+  return integrateAdaptive(initialState, masses, duration, options).samples;
 }

@@ -28,5 +28,5 @@ export function parseTrajectory(
     throw new Error(`Trajectory must cover exactly one period: ${orbit.slug}`);
   if (samples.some((sample, index) => index > 0 && sample.time <= samples[index - 1]!.time))
     throw new Error(`Trajectory sample times must increase: ${orbit.slug}`);
-  return trajectory as Trajectory;
+  return trajectory;
 }

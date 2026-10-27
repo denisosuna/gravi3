@@ -39,7 +39,7 @@ describe('simulator controller', () => {
     expect(controller.snapshot().presetId).toBe('custom');
   });
 
-  it('only advances while playing and pauses on a collision', () => {
+  it('only advances while playing and pauses on an unresolved close encounter', () => {
     const controller = new SimulatorController();
     controller.step(1);
     expect(controller.simulation.time).toBe(0);
@@ -49,6 +49,6 @@ describe('simulator controller', () => {
     controller.update({ playing: true, speed: 2 });
     for (let frame = 0; frame < 600 && controller.snapshot().playing; frame++)
       controller.step(1 / 60);
-    expect(controller.snapshot()).toMatchObject({ playing: false, event: 'collision' });
+    expect(controller.snapshot()).toMatchObject({ playing: false, event: 'closeEncounter' });
   });
 });

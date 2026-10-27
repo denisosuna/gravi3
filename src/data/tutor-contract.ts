@@ -28,10 +28,11 @@ const learningContext = z
     mass2: z.number().min(massRange.min).max(massRange.max),
     distance: z.number().min(distanceRange.min).max(distanceRange.max),
     prediction: z.enum(PREDICTIONS).nullable(),
+    checked: z.boolean().optional(),
     simulator: z
       .object({
         preset: z.enum([...SIMULATOR_PRESETS, 'custom']),
-        event: z.enum(['collision', 'escape']).nullable(),
+        event: z.enum(['collision', 'closeEncounter', 'escape']).nullable(),
       })
       .strict()
       .optional(),

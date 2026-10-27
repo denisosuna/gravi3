@@ -8,6 +8,7 @@ const experiment = (mass1: number, mass2: number, distance: number): Experiment 
   mass2,
   distance,
   prediction: null,
+  checked: false,
 });
 
 function layoutOf(value: Experiment) {
