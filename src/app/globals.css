@@ -1372,6 +1372,7 @@ button.control-button:hover {
   border-radius: 13px;
   padding: 24px;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   min-width: 0;
 }

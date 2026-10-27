@@ -153,7 +153,7 @@ Free services [sleep after inactivity and have shared usage quotas](https://rend
 
 ## Limits, attribution and AI use
 
-Numerical checks establish finite-precision agreement over a period, not a proof of stability or indefinite integration accuracy. There is no free three-body editor or new-orbit search. There are no accounts, database, persistent conversation, paid fallback, browsing tools or model-driven app controls. A mounted tutor conversation is cleared when its panel unmounts or the page reloads.
+Numerical checks establish finite-precision agreement over a period, not a proof of stability or indefinite integration accuracy. The live simulator lets you edit masses and velocities, but there is no search for new periodic orbits. The tutor can only propose allowlisted, range-checked experiments that run when you press their button; it has no browsing or code tools. There are no accounts, database, persistent conversation or paid fallback. A mounted tutor conversation is cleared when its panel unmounts or the page reloads.
 
 Automated mobile Chromium emulation does not replace a physical iPhone/Safari test. Accessibility scans and manual checks are basic verification, not certification. Frame rate and provider availability depend on device, account and network. The tutor can make mistakes; deterministic calculations remain available to check it.
 

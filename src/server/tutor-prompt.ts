@@ -12,13 +12,13 @@ const TRY_LABELS: Record<Locale, string> = { es: 'Probar', en: 'Try it' };
 
 const ACTION_GUIDE: Record<TutorContextKind, string> = {
   learning: `- {"type":"setExperiment","mass1"?:number,"mass2"?:number,"distance"?:number}: masses ${massRange.min}–${massRange.max} kg, distance ${distanceRange.min}–${distanceRange.max} m. Use it so the learner can test a claim, e.g. doubling the distance.
-- {"type":"loadPreset","preset":"figure-eight"|"lagrange"|"pythagorean"|"sun-planet-moon"}: loads the three-body simulator (periodic, periodic, chaotic with an ejection, hierarchical and nearly regular).
+- {"type":"loadPreset","preset":"figure-eight"|"lagrange"|"pythagorean"|"sun-planet-moon"}: loads the three-body simulator (periodic and stable; periodic but unstable with equal masses, so it breaks apart after about seven turns; chaotic with an ejection; hierarchical and nearly regular).
 - {"type":"perturb"}: changes body 1's velocity in the simulator by 1% to reveal sensitivity to initial conditions.
-Propose an action whenever the learner could see the answer: mass or distance questions → setExperiment; chaos, unpredictability or sensitivity → loadPreset "pythagorean" or perturb; periodic or stable motion → loadPreset "figure-eight" or "lagrange". Name the place where the effect appears: the laboratory for setExperiment, the simulator for the others.`,
+Propose an action whenever the learner could see the answer: mass or distance questions → setExperiment; chaos, unpredictability or sensitivity → loadPreset "pythagorean" or perturb; periodic or stable motion → loadPreset "figure-eight"; periodic but unstable motion → loadPreset "lagrange". Name the place where the effect appears: the laboratory for setExperiment, the simulator for the others.`,
   orbit: `- {"type":"openOrbit","slug":${orbitSlugs.map((slug) => `"${slug}"`).join('|')}}: opens another periodic orbit to compare.`,
 };
 
-export const TUTOR_PROMPT_VERSION = '2.1';
+export const TUTOR_PROMPT_VERSION = '2.2';
 
 export function learningFacts(context: Extract<TutorContext, { kind: 'learning' }>) {
   const force = gravitationalForce(context.mass1, context.mass2, context.distance);
