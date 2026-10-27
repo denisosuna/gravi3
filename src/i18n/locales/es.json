@@ -324,6 +324,7 @@
     "vx": "Velocidad x",
     "vy": "Velocidad y",
     "collision": "Dos cuerpos se han acercado tanto que la fuerza crece sin límite: con masas puntuales sería una colisión. La simulación se detiene aquí; reinicia o elige otro punto de partida.",
+    "closeEncounter": "Dos cuerpos han pasado tan cerca que seguirlos exigiría más pasos de los que caben en un fotograma. La simulación se detiene aquí en vez de adivinar; reinicia o elige otro punto de partida.",
     "escape": "Un cuerpo se ha alejado mucho de los otros dos: probablemente ha sido expulsado. Es el final más habitual del problema de los tres cuerpos.",
     "model": "Física exacta de Newton con masas puntuales y G = 1, sin suavizar la fuerza. Unidades normalizadas.",
     "sceneLabel": "Simulación de tres cuerpos",

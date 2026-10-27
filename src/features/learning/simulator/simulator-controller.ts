@@ -105,7 +105,7 @@ export class SimulatorController {
     if (!this.value.playing) return;
     const duration = Math.min(Math.max(0, delta), MAX_FRAME_DELTA_SECONDS) * this.value.speed;
     const event = this.simulation.advance(duration);
-    if (event === 'collision') this.emit({ playing: false, event });
+    if (event === 'collision' || event === 'closeEncounter') this.emit({ playing: false, event });
     else if (event) this.emit({ event });
   }
 

@@ -37,7 +37,10 @@ export function SimulatorControls({
   const playing = useSimulatorState(controller, (state) => state.playing);
   const speed = useSimulatorState(controller, (state) => state.speed);
   const zoomIndex = useSimulatorState(controller, (state) => state.zoomIndex);
-  const halted = useSimulatorState(controller, (state) => state.event === 'collision');
+  const halted = useSimulatorState(
+    controller,
+    (state) => state.event === 'collision' || state.event === 'closeEncounter',
+  );
   const zoomTo = (index: number) =>
     controller.update({ zoomIndex: Math.min(ZOOM_LEVELS.length - 1, Math.max(0, index)) });
   return (

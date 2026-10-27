@@ -1,8 +1,10 @@
 import { invariants, validateSystem } from './gravity';
-import { integrate } from './integrator';
+import { integrateAdaptive, StepBudgetError } from './integrator';
 import { BODY_INDICES, bodyPosition, VELOCITY_OFFSET, type Masses, type State } from './types';
 
-export type SimulationEvent = 'collision' | 'escape';
+// A close encounter is one too tight to resolve within the per-frame step budget.
+export type SimulationEvent = 'collision' | 'closeEncounter' | 'escape';
+export type HaltingEvent = Exclude<SimulationEvent, 'escape'>;
 
 // Point masses closer than this are treated as a collision: the force grows without bound.
 export const COLLISION_DISTANCE = 1e-3;
@@ -41,7 +43,9 @@ export function toCenterOfMassFrame(masses: Masses, state: State): State {
 export class ThreeBodySimulation {
   private current: number[];
   private elapsed = 0;
-  private stopped = false;
+  private haltedBy: HaltingEvent | undefined;
+  // Last step size the integrator proposed, reused by the next frame.
+  private step: number | undefined;
   private escapeReported = false;
   private readonly initialEnergy: number;
 
@@ -63,24 +67,28 @@ export class ThreeBodySimulation {
   }
 
   get halted(): boolean {
-    return this.stopped;
+    return this.haltedBy !== undefined;
   }
 
   advance(duration: number): SimulationEvent | undefined {
-    if (this.stopped) return 'collision';
+    if (this.haltedBy) return this.haltedBy;
     if (duration <= 0) return undefined;
     try {
-      const samples = integrate(this.current, this.masses, duration, {
+      const { samples, nextStep } = integrateAdaptive(this.current, this.masses, duration, {
         tolerance: TOLERANCE,
         maxSteps: MAX_STEPS_PER_ADVANCE,
         maxStep: duration,
+        initialStep: this.step,
       });
       const next = samples.at(-1)!.state;
-      if (invariants(next, this.masses).minimumDistance < COLLISION_DISTANCE) return this.halt();
+      if (invariants(next, this.masses).minimumDistance < COLLISION_DISTANCE)
+        return this.halt('collision');
       this.current = [...next];
       this.elapsed += duration;
+      this.step = nextStep;
     } catch (error) {
-      if (error instanceof RangeError) return this.halt();
+      if (error instanceof StepBudgetError) return this.halt('closeEncounter');
+      if (error instanceof RangeError) return this.halt('collision');
       throw error;
     }
     return this.checkEscape();
@@ -96,9 +104,9 @@ export class ThreeBodySimulation {
     };
   }
 
-  private halt(): SimulationEvent {
-    this.stopped = true;
-    return 'collision';
+  private halt(event: HaltingEvent): HaltingEvent {
+    this.haltedBy = event;
+    return event;
   }
 
   private checkEscape(): SimulationEvent | undefined {
