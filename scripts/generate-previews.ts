@@ -1,6 +1,6 @@
 import { readFile, writeFile } from 'node:fs/promises';
-import { ASSETS } from '../src/constants/routes';
-import { orbits } from '../src/data/orbits';
+import { ASSETS } from '../src/shared/constants/routes';
+import { orbits } from '../src/physics/orbit-catalog';
 import { parseTrajectory } from '../src/physics/trajectory-schema';
 import { previewSvg, publicAssetPath } from './orbit-tools';
 

@@ -1,9 +1,9 @@
 import { getTranslations } from 'next-intl/server';
-import { ROUTES } from '@/constants/routes';
+import { ROUTES } from '@/shared/constants/routes';
 import { pageMetadata } from '@/server/metadata';
 import { notFound } from 'next/navigation';
-import { findOrbit } from '@/data/orbits';
-import { OrbitDetail } from '@/features/orbits/orbit-detail';
+import { findOrbit } from '@/physics/orbit-catalog';
+import { OrbitDetail } from '@/features/orbits/components/orbit-detail';
 
 export async function generateMetadata({
   params,

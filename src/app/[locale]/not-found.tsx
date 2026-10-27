@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { ROUTES } from '@/constants/routes';
+import { ROUTES } from '@/shared/constants/routes';
 import { Link } from '@/i18n/routing';
 
 // Shown for unknown orbit slugs and unmatched localized paths, in the visitor's language.

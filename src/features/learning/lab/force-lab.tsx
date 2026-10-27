@@ -2,10 +2,11 @@ import { Play, RotateCcw } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useLocale, useTranslations } from 'next-intl';
-import { SceneBoundary } from '@/components/scene/scene-boundary';
-import { UNITS, type Experiment } from '@/data/experiment';
+import { SceneBoundary } from '@/shared/three/scene-boundary';
+import { UNITS, type Experiment } from '@/features/learning/model/experiment';
 import { ForceDiagram } from './force-diagram';
-import styles from '../learning.module.css';
+import styles from '../components/learning.module.css';
+import { numberFormat } from '@/shared/i18n/number-format';
 
 const ForceLabScene = dynamic(() => import('./force-lab-scene'), {
   ssr: false,
@@ -38,14 +39,14 @@ function animationStatusKey(
 function formatSimulationTime(seconds: number, locale: string) {
   const days = seconds / 86_400;
   if (days >= 1) {
-    return new Intl.NumberFormat(locale, {
+    return numberFormat(locale, {
       style: 'unit',
       unit: 'day',
       unitDisplay: 'long',
       maximumFractionDigits: 0,
     }).format(days);
   }
-  return new Intl.NumberFormat(locale, {
+  return numberFormat(locale, {
     style: 'unit',
     unit: 'hour',
     unitDisplay: 'long',
@@ -58,7 +59,7 @@ export function ForceLab({ experiment, force }: { experiment: Experiment; force:
   const t = useTranslations('learn');
   const common = useTranslations('common');
   const locale = useLocale();
-  const number = new Intl.NumberFormat(locale);
+  const number = numberFormat(locale);
   const [lost, setLost] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const [animationRun, setAnimationRun] = useState(0);

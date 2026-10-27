@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { localizedPath, ROUTES } from '@/constants/routes';
+import { localizedPath, ROUTES } from '@/shared/constants/routes';
 import { DEFAULT_LOCALE } from '@/i18n/config';
 
 export default function Home() {

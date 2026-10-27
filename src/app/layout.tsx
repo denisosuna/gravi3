@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getLocale } from 'next-intl/server';
-import { Providers } from '@/components/providers';
-import { SITE } from '@/constants/site';
+import { Providers } from '@/shared/ui/providers';
+import { SITE } from '@/shared/constants/site';
 import { getConfig } from '@/server/config';
 import { FONT_VARIABLES } from './fonts';
 import './globals.css';

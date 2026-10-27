@@ -3,13 +3,18 @@ import { integrateAdaptive, StepBudgetError } from './integrator';
 import { BODY_INDICES, bodyPosition, VELOCITY_OFFSET, type Masses, type State } from './types';
 
 // A close encounter is one too tight to resolve within the per-frame step budget.
-export type SimulationEvent = 'collision' | 'closeEncounter' | 'escape';
-export type HaltingEvent = Exclude<SimulationEvent, 'escape'>;
+export const SIMULATION_EVENTS = ['collision', 'closeEncounter', 'escape'] as const;
+export type SimulationEvent = (typeof SIMULATION_EVENTS)[number];
+type HaltingEvent = Exclude<SimulationEvent, 'escape'>;
+
+export function isHaltingEvent(event: SimulationEvent | undefined): event is HaltingEvent {
+  return event === 'collision' || event === 'closeEncounter';
+}
 
 // Point masses closer than this are treated as a collision: the force grows without bound.
 export const COLLISION_DISTANCE = 1e-3;
 // A body this far from the center of mass has left the interaction region.
-export const ESCAPE_DISTANCE = 12;
+const ESCAPE_DISTANCE = 12;
 const TOLERANCE = 1e-10;
 // Bounds the work per frame so a very close encounter cannot freeze the page.
 const MAX_STEPS_PER_ADVANCE = 4000;

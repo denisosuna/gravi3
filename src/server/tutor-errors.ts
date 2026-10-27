@@ -1,6 +1,6 @@
 import { APIError, APIConnectionTimeoutError } from 'openai';
-import { HTTP_STATUS } from '@/constants/http';
-import { TUTOR_ERROR_CODES } from '@/data/tutor-contract';
+import { HTTP_STATUS } from '@/shared/constants/http';
+import { TUTOR_ERROR_CODES } from '@/features/tutor/model/tutor-contract';
 import { LimitError } from './rate-limiter';
 import { RequestError } from './request-body';
 
