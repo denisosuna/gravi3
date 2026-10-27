@@ -39,7 +39,7 @@ export function pageMetadata(
       locale: OPEN_GRAPH_LOCALES[isLocale(locale) ? locale : DEFAULT_LOCALE],
       type: 'website',
       images: [
-        { url: ASSETS.openGraphImage, ...OPEN_GRAPH_IMAGE, alt: `${SITE.name} · ${SITE.tagline}` },
+        { url: ASSETS.openGraphImage, ...OPEN_GRAPH_IMAGE, alt: `${SITE.name} — ${SITE.tagline}` },
       ],
     },
     twitter: {

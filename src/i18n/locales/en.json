@@ -16,6 +16,15 @@
     "retry": "Try again",
     "brandNote": "THE THREE-BODY PROBLEM"
   },
+  "errors": {
+    "notFoundTitle": "This page does not exist",
+    "notFoundText": "The address may be mistyped, or the orbit may not be one of the six in the gallery.",
+    "suggestions": "Where to go next",
+    "toOrbits": "See the six orbits",
+    "toLearn": "Start with gravity",
+    "errorTitle": "This page could not load",
+    "errorText": "Something failed while showing it. Your experiment values are kept; try again."
+  },
   "home": {
     "eyebrow": "AN INTERACTIVE COURSE ON GRAVITY",
     "title": "The three-body problem",
@@ -206,10 +215,12 @@
       "loadPreset": "Try it: {preset} in the simulator",
       "perturb": "Try it: perturb by 1% in the simulator",
       "openOrbit": "See the {name} orbit"
-    }
+    },
+    "collapse": "Collapse the AI tutor",
+    "expand": "Expand the AI tutor"
   },
   "seo": {
-    "homeTitle": "Gravity and the three-body problem",
+    "homeTitle": "Interactive three-body problem and gravity explorer",
     "learnTitle": "Learn the law of gravity",
     "orbitsTitle": "Six solutions of the three-body problem",
     "description": "Learn gravity through experiments and an AI tutor. Explore six periodic solutions of the three-body problem."

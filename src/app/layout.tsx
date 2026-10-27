@@ -7,7 +7,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(getConfig().appUrl),
-  title: `${SITE.name} · ${SITE.tagline}`,
+  title: `${SITE.name} — ${SITE.tagline}`,
   description: 'Learn gravity through experiments and explore six periodic three-body orbits.',
 };
 

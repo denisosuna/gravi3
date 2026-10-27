@@ -1,5 +1,8 @@
 import { useTranslations } from 'next-intl';
+import { z } from 'zod';
 import type { TutorContextKind } from '@/data/tutor-actions';
+
+const questionsSchema = z.array(z.string().min(1));
 
 export function TutorSuggestions({
   kind,
@@ -11,7 +14,7 @@ export function TutorSuggestions({
   onAsk: (question: string) => void;
 }) {
   const t = useTranslations('tutor');
-  const questions = t.raw(`suggestions.${kind}`) as string[];
+  const questions = questionsSchema.parse(t.raw(`suggestions.${kind}`));
   return (
     <ul className="tutor-suggestions" aria-label={t('suggestionsLabel')}>
       {questions.map((question) => (

@@ -5,6 +5,8 @@ import { tutorResponseSchema, type TutorAction } from '@/data/tutor-actions';
 import { TUTOR_LIMITS, type TutorContext, type TutorMessage } from '@/data/tutor-contract';
 
 export interface DisplayedMessage extends TutorMessage {
+  // Stable React key: the list is trimmed from the front, so indexes shift.
+  id: number;
   actions?: TutorAction[];
 }
 
@@ -57,6 +59,7 @@ export function useTutor(locale: string, context: TutorContext) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<TutorErrorKey | null>(null);
   const active = useRef<AbortController | null>(null);
+  const nextId = useRef(0);
   useEffect(() => {
     const abort = new AbortController();
     fetch(API_ROUTES.tutor, { signal: abort.signal })
@@ -82,12 +85,17 @@ export function useTutor(locale: string, context: TutorContext) {
     setPending(true);
     setError(null);
     const priorMessages = withoutRetriedQuestion(messages, text);
-    setMessages(keepLatest([...priorMessages, { role: 'user', content: text }]));
+    setMessages(
+      keepLatest([...priorMessages, { id: nextId.current++, role: 'user', content: text }]),
+    );
     try {
       const payload = { locale, message: text, history: toHistory(priorMessages), context };
       const { reply, actions } = await requestReply(payload, abort.signal);
       setMessages((current) =>
-        keepLatest([...current, { role: 'assistant', content: reply, actions }]),
+        keepLatest([
+          ...current,
+          { id: nextId.current++, role: 'assistant', content: reply, actions },
+        ]),
       );
     } catch (failure) {
       if (!abort.signal.aborted)

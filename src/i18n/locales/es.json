@@ -16,6 +16,15 @@
     "retry": "Reintentar",
     "brandNote": "EL PROBLEMA DE LOS TRES CUERPOS"
   },
+  "errors": {
+    "notFoundTitle": "Esta página no existe",
+    "notFoundText": "Puede que la dirección esté mal escrita o que la órbita no sea una de las seis de la galería.",
+    "suggestions": "Por dónde seguir",
+    "toOrbits": "Ver las seis órbitas",
+    "toLearn": "Empezar por la gravedad",
+    "errorTitle": "No se ha podido cargar esta página",
+    "errorText": "Algo ha fallado al mostrarla. Los valores de tu experimento se conservan; vuelve a intentarlo."
+  },
   "home": {
     "eyebrow": "UN CURSO INTERACTIVO DE GRAVITACIÓN",
     "title": "El problema de los tres cuerpos",
@@ -206,10 +215,12 @@
       "loadPreset": "Probar: {preset} en el simulador",
       "perturb": "Probar: perturbar un 1 % en el simulador",
       "openOrbit": "Ver la órbita {name}"
-    }
+    },
+    "collapse": "Plegar el tutor IA",
+    "expand": "Desplegar el tutor IA"
   },
   "seo": {
-    "homeTitle": "Gravedad y problema de los tres cuerpos",
+    "homeTitle": "Explorador interactivo de la gravedad y el problema de los tres cuerpos",
     "learnTitle": "Aprende la ley de gravitación",
     "orbitsTitle": "Seis soluciones del problema de los tres cuerpos",
     "description": "Aprende gravitación con experimentos y un tutor IA. Explora seis soluciones periódicas del problema de los tres cuerpos."
