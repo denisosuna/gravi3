@@ -1,9 +1,10 @@
 import type { Experiment } from '@/data/experiment';
 import type { TutorAction } from '@/data/tutor-actions';
 import type { SimulatorController } from './simulator/simulator-controller';
+import type { LearnStep } from './learn-steps';
 
-export const LABORATORY_ID = 'laboratory';
-export const SIMULATOR_ID = 'simulator';
+export const LABORATORY_ID: LearnStep = 'observe';
+export const SIMULATOR_ID: LearnStep = 'three-bodies';
 
 function reveal(id: string) {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

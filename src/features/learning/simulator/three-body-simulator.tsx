@@ -8,7 +8,6 @@ import { ROUTES } from '@/constants/routes';
 import { Link } from '@/i18n/routing';
 import { BodyEditor } from './body-editor';
 import { SimulationReadouts } from './simulation-readouts';
-import { SIMULATOR_ID } from '../apply-tutor-action';
 import type { SimulatorController } from './simulator-controller';
 import { SimulatorControls, SimulatorPresets } from './simulator-controls';
 import { useSimulatorState } from './use-simulator-state';
@@ -30,9 +29,7 @@ export function ThreeBodySimulator({ controller }: { controller: SimulatorContro
   }, [controller, playing]);
 
   return (
-    <section className="simulator-panel" id={SIMULATOR_ID} aria-labelledby="simulator-title">
-      <div className="eyebrow">{t('step')}</div>
-      <h2 id="simulator-title">{t('title')}</h2>
+    <div className="simulator-panel">
       <p className="simulator-intro">{t('intro')}</p>
       <SimulatorPresets controller={controller} />
       <div className="simulator-stage" role="group" aria-label={t('sceneLabel')}>
@@ -60,6 +57,6 @@ export function ThreeBodySimulator({ controller }: { controller: SimulatorContro
           <ArrowRight size={16} aria-hidden="true" />
         </Link>
       </div>
-    </section>
+    </div>
   );
 }

@@ -198,15 +198,29 @@
     "tryDistance": "Double the distance",
     "tryMass": "Double the first mass",
     "reset": "Reset experiment",
-    "step1": "Step 1 of 3: observe",
-    "step2": "Step 2 of 3: predict",
     "forceUnits": "newtons (N)",
     "acceleration": "Acceleration",
     "predictionHint": "Choose an answer, then check its effect in the laboratory.",
     "rotateHint": "Drag the scene to rotate it.",
     "fallback3d": "The 3D view is not available on this device. This diagram shows the same experiment.",
     "ratio": "{ratio} × the force of the starting setup",
-    "legend": "Experiment values"
+    "legend": "Experiment values",
+    "steps": {
+      "label": "Lesson steps",
+      "observe": "Observe",
+      "predict": "Predict",
+      "check": "Check",
+      "explain": "Explain",
+      "three-bodies": "Three bodies",
+      "askTutor": "Ask the tutor"
+    },
+    "stepOf": "Step {step} of {total}",
+    "observeTitle": "Move the masses and the distance",
+    "checkTitle": "Check your prediction",
+    "checkIntro": "Double one quantity and compare the new force with the one you started with.",
+    "yourPrediction": "Your prediction: {answer}",
+    "noPrediction": "You have not predicted yet. Choose an answer in the previous step first.",
+    "backToStart": "Back to the starting values"
   },
   "tutor": {
     "title": "AI tutor",
@@ -258,7 +272,6 @@
     "description": "Learn gravity through experiments and an AI tutor. Explore six periodic solutions of the three-body problem."
   },
   "simulator": {
-    "step": "Step 3 of 3: three bodies",
     "title": "Add a third body",
     "intro": "Every pair of bodies attracts with the same law you just tested. With three, each one pulls on the other two at once and the motion no longer has a formula: it must be computed step by step. Pick a starting point and watch.",
     "presets": "Starting points",
