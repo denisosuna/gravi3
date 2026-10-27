@@ -13,7 +13,6 @@ export default async function OrbitsPage({ params }: { params: Promise<{ locale:
   const t = await getTranslations({ locale, namespace: 'orbits' });
   return (
     <main id="main" className="gallery-page">
-      <div className="eyebrow">{t('eyebrow')}</div>
       <div className="page-heading">
         <h1>{t('title')}</h1>
         <span className="count-pill">

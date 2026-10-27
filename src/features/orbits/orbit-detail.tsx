@@ -22,7 +22,6 @@ export function OrbitDetail({ orbit }: { orbit: OrbitDefinition }) {
               <ArrowLeft size={14} />
               {common('back')}
             </Link>
-            <div className="eyebrow">{t('orbit')}</div>
             <h1>{t(`${orbit.slug}.name`)}</h1>
             <p>{t(`${orbit.slug}.description`)}</p>
           </div>
