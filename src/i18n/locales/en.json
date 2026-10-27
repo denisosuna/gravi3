@@ -222,11 +222,11 @@
     "preset": {
       "figure-eight": {
         "name": "Figure eight",
-        "hint": "Periodic: repeats exactly."
+        "hint": "Periodic and stable: small errors stay small."
       },
       "lagrange": {
         "name": "Lagrange",
-        "hint": "Periodic: a rotating triangle."
+        "hint": "Periodic but unstable: after a few turns, rounding errors break the triangle."
       },
       "pythagorean": {
         "name": "Pythagorean",

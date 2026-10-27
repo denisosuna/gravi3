@@ -20,7 +20,7 @@ export function ForceLab({ experiment, force }: { experiment: Experiment; force:
   const onContextLost = useCallback(() => setLost(true), []);
   const fallback = (
     <div className="lab-fallback">
-      <ForceDiagram experiment={experiment} />
+      <ForceDiagram experiment={experiment} force={force} />
       <p>{t('fallback3d')}</p>
       <button
         className="button"
