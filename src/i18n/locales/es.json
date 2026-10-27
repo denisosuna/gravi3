@@ -199,6 +199,7 @@
     "showFall": "Ver cómo caen por gravedad",
     "replayFall": "Repetir la caída",
     "resetFall": "Volver a la posición inicial",
+    "animationInProgress": "Simulación en curso…",
     "animationPlaying": "Las flechas crecen al acercarse. La fuerza indicada es la inicial; el tiempo de simulación está acelerado.",
     "animationExplanation": "Pulsa para simular en una dimensión la caída gravitatoria desde el reposo. Sigue la ley de Newton y el tiempo está acelerado.",
     "animationStaticPending": "Calculando la caída en una vista estática…",
