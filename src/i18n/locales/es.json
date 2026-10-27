@@ -198,15 +198,29 @@
     "tryDistance": "Duplicar la distancia",
     "tryMass": "Duplicar la primera masa",
     "reset": "Restablecer experimento",
-    "step1": "Paso 1 de 3: observa",
-    "step2": "Paso 2 de 3: predice",
     "forceUnits": "newtons (N)",
     "acceleration": "Aceleración",
     "predictionHint": "Elige una respuesta y después comprueba el efecto en el laboratorio.",
     "rotateHint": "Arrastra la escena para girarla.",
     "fallback3d": "La vista 3D no está disponible en este dispositivo. Este diagrama muestra el mismo experimento.",
     "ratio": "{ratio} × la fuerza de la configuración inicial",
-    "legend": "Valores del experimento"
+    "legend": "Valores del experimento",
+    "steps": {
+      "label": "Pasos de la lección",
+      "observe": "Observa",
+      "predict": "Predice",
+      "check": "Comprueba",
+      "explain": "Explica",
+      "three-bodies": "Tres cuerpos",
+      "askTutor": "Pregunta al tutor"
+    },
+    "stepOf": "Paso {step} de {total}",
+    "observeTitle": "Mueve las masas y la distancia",
+    "checkTitle": "Comprueba tu predicción",
+    "checkIntro": "Duplica una magnitud y compara la nueva fuerza con la del principio.",
+    "yourPrediction": "Tu predicción: {answer}",
+    "noPrediction": "Aún no has predicho nada. Elige primero una respuesta en el paso anterior.",
+    "backToStart": "Volver a los valores iniciales"
   },
   "tutor": {
     "title": "Tutor IA",
@@ -258,7 +272,6 @@
     "description": "Aprende gravitación con experimentos y un tutor IA. Explora seis soluciones periódicas del problema de los tres cuerpos."
   },
   "simulator": {
-    "step": "Paso 3 de 3: tres cuerpos",
     "title": "Añade un tercer cuerpo",
     "intro": "Cada par de cuerpos se atrae con la misma ley que acabas de probar. Con tres, cada uno tira de los otros dos a la vez y el movimiento ya no tiene fórmula: hay que calcularlo paso a paso. Elige un punto de partida y obsérvalo.",
     "presets": "Puntos de partida",

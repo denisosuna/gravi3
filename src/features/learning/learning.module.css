@@ -1,0 +1,178 @@
+/* Lab notebook: a step rail, the worksheet, and the tutor's notes in the margin. */
+.layout {
+  display: grid;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.rail ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.rail a {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px 0 6px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.rail a[aria-current='step'] {
+  color: var(--text);
+  font-weight: 700;
+  background: var(--accent-soft);
+}
+
+.railNumber {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: grid;
+  place-items: center;
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.rail a[aria-current='step'] .railNumber {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.rail .railTutor {
+  margin-top: 6px;
+  padding-left: 12px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.steps {
+  min-width: 0;
+  display: grid;
+  gap: 24px;
+}
+
+.step {
+  min-width: 0;
+  scroll-margin-top: 16px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.stepHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stepHeader h2 {
+  margin: 0;
+  font-size: var(--text-xl);
+}
+
+.kicker {
+  margin: 0 0 4px;
+  color: var(--accent);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.stepIntro {
+  margin: 0 0 12px;
+  max-width: 68ch;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.prediction mark {
+  background: var(--highlight);
+  color: var(--highlight-ink);
+  padding: 2px 6px;
+}
+
+.checkResult {
+  margin-top: 20px;
+  display: grid;
+  gap: 12px;
+  align-items: center;
+}
+
+.checkResult svg {
+  width: 100%;
+  max-height: 280px;
+}
+
+.checkForce {
+  margin: 0;
+  font-family: var(--font-number);
+  font-size: var(--text-lg);
+  font-variant-numeric: tabular-nums;
+}
+
+.formula {
+  margin: 4px 0 16px;
+  font-family: var(--font-title);
+  font-size: var(--text-2xl);
+  color: var(--accent);
+}
+
+.constant {
+  margin: 0;
+  font-family: var(--font-number);
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.margin {
+  min-width: 0;
+  scroll-margin-top: 16px;
+}
+
+/* Graph paper only on the experiment bench. */
+.steps :global(.lab-scene) {
+  background-color: var(--surface-raised);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+@media (min-width: 720px) {
+  .step {
+    padding: 28px;
+  }
+}
+
+@media (min-width: 1180px) {
+  .layout {
+    grid-template-columns: 180px minmax(0, 1fr) 320px;
+    align-items: start;
+  }
+
+  .rail,
+  .margin {
+    position: sticky;
+    top: 16px;
+  }
+
+  .rail ol {
+    flex-direction: column;
+  }
+
+  .margin {
+    max-height: calc(100svh - 32px);
+    overflow-y: auto;
+  }
+}
