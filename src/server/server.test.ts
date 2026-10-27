@@ -113,6 +113,9 @@ describe('configuration and deterministic context', () => {
     expect(prompt).toContain('prediction');
     expect(prompt).toContain('Put the physical meaning before calculations');
     expect(prompt).toContain('Give at most one numerical example');
+    expect(prompt).toContain('as if explaining to a curious 10-year-old');
+    expect(prompt).toContain('three skaters each gently pulled toward the other two');
+    expect(prompt).toContain('Do not say it is impossible to solve');
     expect(prompt).toContain('untrusted');
     expect(prompt).toContain('"type":"setExperiment"');
     expect(prompt).not.toContain('"type":"openOrbit"');
