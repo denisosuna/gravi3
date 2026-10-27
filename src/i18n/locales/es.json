@@ -246,7 +246,7 @@
   "tutor": {
     "title": "Tutor IA",
     "label": "TU COMPAÑERO DE EXPLORACIÓN",
-    "placeholder": "¿Por qué cambia la fuerza?",
+    "placeholder": "Escribe aquí tu pregunta",
     "send": "Preguntar",
     "cancel": "Cancelar",
     "thinking": "Preparando una explicación…",

@@ -16,7 +16,7 @@ import {
 import { MAX_FRAME_DELTA_SECONDS } from '@/shared/constants/animation';
 import { VELOCITY_OFFSET, type Masses } from '@/physics/types';
 
-export const SIMULATOR_SPEEDS = [0.5, 1, 2] as const;
+export const SIMULATOR_SPEEDS = [0.5, 1, 2, 4] as const;
 export const ZOOM_LEVELS = [0.5, 0.75, 1, 1.5, 2, 3] as const;
 const DEFAULT_ZOOM_INDEX = 2;
 const DEFAULT_PRESET: SimulatorPresetId = 'figure-eight';

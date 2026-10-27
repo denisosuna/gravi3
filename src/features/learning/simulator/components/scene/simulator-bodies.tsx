@@ -15,7 +15,7 @@ import { BODY_INDICES, bodyPosition, bodyVelocity } from '@/physics/types';
 const TRAIL_POINTS = 900;
 const TRAIL_OPACITY = 0.8;
 // Body radius grows with the cube root of mass, clamped so tiny moons stay visible.
-const RADIUS = { perCubeRoot: 0.07, min: 0.035, max: 0.16 } as const;
+const RADIUS = { perCubeRoot: 0.1, min: 0.05, max: 0.22 } as const;
 // Velocity arrows: world length per unit of speed, capped for very fast bodies.
 const VELOCITY_ARROW = { scale: 0.35, max: 1.2, min: 0.001 } as const;
 

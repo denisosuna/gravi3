@@ -246,7 +246,7 @@
   "tutor": {
     "title": "AI tutor",
     "label": "YOUR EXPLORATION COMPANION",
-    "placeholder": "Why does the force change?",
+    "placeholder": "Write your question here",
     "send": "Ask",
     "cancel": "Cancel",
     "thinking": "Preparing an explanation…",
