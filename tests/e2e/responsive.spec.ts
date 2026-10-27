@@ -6,7 +6,7 @@ test('no page scrolls horizontally at the narrowest supported width', async ({ p
   await page.setViewportSize({ width: NARROWEST_SUPPORTED_WIDTH, height: 800 });
   for (const route of ['/en', '/en/learn', '/en/orbits', '/en/orbits/butterfly-i']) {
     await page.goto(route);
-    await page.locator('canvas, .gallery-grid, .home-hero').first().waitFor();
+    await page.locator('main h1').waitFor();
     const { scrollWidth, clientWidth } = await page.evaluate(() => ({
       scrollWidth: document.documentElement.scrollWidth,
       clientWidth: document.documentElement.clientWidth,

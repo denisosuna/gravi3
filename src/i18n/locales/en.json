@@ -71,12 +71,8 @@
     }
   },
   "orbits": {
-    "title": "Order in motion.",
-    "solutions": "solutions",
+    "title": "Six orbits that come back.",
     "description": "With three bodies, almost any start ends in a chaotic dance or with one body thrown out. But with very precise starting conditions, all three return exactly to where they began and repeat the cycle. These are six of those periodic solutions; most are unstable: the slightest nudge breaks them.",
-    "periodic": "Periodic orbit",
-    "library": "Orbit library",
-    "libraryNote": "Three equal masses · Newtonian gravity",
     "note": "These are not hand-drawn curves: trajectories are generated from published initial conditions and numerically validated.",
     "concept": "Behind the motion",
     "conceptText": "Each body attracts the other two. With very specific initial conditions, their positions and velocities return to the starting point.",
@@ -84,9 +80,9 @@
     "period": "Period",
     "units": "normalized units",
     "source": "Source and initial conditions",
-    "planar": "Planar orbit · The 3D camera changes your perspective, not the physics.",
+    "planar": "Planar orbit: the 3D camera changes your perspective, not the physics.",
     "body": "Body",
-    "equalMasses": "Equal masses · G = 1",
+    "equalMasses": "Equal masses, G = 1",
     "validated": "Validated trajectory",
     "browse": "Explore all six orbits",
     "lagrange": {
@@ -121,7 +117,49 @@
     },
     "initialConditions": "Initial conditions",
     "position": "Position",
-    "velocity": "Velocity"
+    "velocity": "Velocity",
+    "filters": {
+      "label": "Filter and sort the orbits",
+      "class": "Class",
+      "all": "All",
+      "analytic": "Analytic",
+      "sort": "Order",
+      "catalog": "Catalogue",
+      "period": "Period",
+      "year": "Year found"
+    },
+    "showing": "{count, plural, one {# orbit shown} other {# orbits shown}}",
+    "classHelp": "Classes follow Šuvakov and Dmitrašinović (2013), who grouped orbits by their symmetries.",
+    "plate": {
+      "class": "Class {code}",
+      "found": "{authors}, {year}",
+      "period": "Period {value}",
+      "compare": "Compare {name}",
+      "uncompare": "Stop comparing {name}"
+    },
+    "compare": {
+      "title": "Side by side",
+      "explain": "Each orbit is drawn at the same fraction of its own period, so shapes line up even though the periods differ. Each drawing is scaled to fit its frame.",
+      "pickMore": "Choose one or two more orbits with “Compare”.",
+      "phase": "Fraction of each period",
+      "remove": "Remove {name}"
+    },
+    "detail": {
+      "previous": "Previous orbit",
+      "next": "Next orbit",
+      "seeing": "What you see",
+      "class": "Class",
+      "found": "Found by",
+      "nav": "More orbits"
+    },
+    "visual": {
+      "lagrange": "An equilateral triangle turns rigidly around its center. Each body moves on a circle of radius 1, and every pair stays √3 ≈ 1.73 units apart.",
+      "figure-eight": "All three bodies follow one figure-eight curve, about 2.1 units wide and 1.05 tall, a third of a period apart. No two bodies come closer than about 0.69 units.",
+      "butterfly-i": "A flat orbit about 2.1 units wide and only 0.35 tall. Each period has eight close approaches; at the closest, two bodies pass about 0.011 units apart.",
+      "goggles": "About 2.1 units wide and 1.5 tall. Each period has sixteen close approaches; at the closest, two bodies pass about 0.019 units apart.",
+      "moth-i": "Roughly as tall as it is wide, about 2.2 units each way. Each period has four close approaches, each at about 0.08 units.",
+      "yin-yang-i": "About 2.1 units wide and 1.0 tall. Each period has eight close approaches; at the closest, two bodies pass about 0.010 units apart."
+    }
   },
   "player": {
     "play": "Play",
@@ -136,7 +174,6 @@
     "error": "The visualization could not load. The trajectory preview and explanation remain available.",
     "fallback": "The 3D scene is unavailable. This preview shows the validated trajectory.",
     "loading": "Preparing the orbit…",
-    "physicalTime": "physical time",
     "seconds": "playback s"
   },
   "learn": {

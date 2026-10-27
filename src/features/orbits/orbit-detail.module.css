@@ -1,0 +1,146 @@
+/* Exhibit: the moving orbit stays in view while its placard and story scroll beside it. */
+.exhibit {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 16px 16px 64px;
+}
+
+.exhibitNav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+  font-size: var(--text-sm);
+}
+
+.back,
+.sibling {
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+}
+
+.back {
+  margin-right: auto;
+  font-weight: 700;
+}
+
+.siblingLabel {
+  color: var(--muted);
+}
+
+/* On phones the arrows and names are enough; the label stays for screen readers. */
+@media (max-width: 639px) {
+  .siblingLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .back {
+    flex-basis: 100%;
+  }
+}
+
+.layout {
+  display: grid;
+  gap: 32px;
+}
+
+.stage {
+  min-width: 0;
+}
+
+.stage :global(.scene-container) {
+  height: clamp(280px, 72vw, 460px);
+  min-height: 0;
+  flex: none;
+}
+
+.text {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 28px;
+}
+
+.text h2 {
+  margin: 0 0 8px;
+}
+
+.text p {
+  margin: 0;
+  max-width: 68ch;
+  line-height: 1.7;
+}
+
+.header h1 {
+  margin: 0 0 12px;
+}
+
+.lede {
+  font-size: var(--text-lg);
+  color: var(--muted);
+}
+
+.placard {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 16px;
+  margin: 20px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: var(--text-sm);
+}
+
+.placard dt {
+  color: var(--muted);
+}
+
+.placard dd {
+  margin: 0;
+}
+
+.number {
+  font-family: var(--font-number);
+  font-variant-numeric: tabular-nums;
+}
+
+.note {
+  margin-top: 10px !important;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+@media (min-width: 640px) {
+  .exhibit {
+    padding-inline: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 1fr);
+    align-items: start;
+    gap: 40px;
+  }
+
+  /* Header 80px, exhibit nav and padding: the canvas and its controls fit in one screen. */
+  .stage {
+    position: sticky;
+    top: 16px;
+  }
+
+  .stage :global(.scene-container) {
+    height: min(calc(100svh - 360px), 620px);
+    min-height: 300px;
+  }
+}

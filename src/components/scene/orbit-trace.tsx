@@ -27,7 +27,12 @@ interface Frame {
   scale: number;
 }
 
-function prepareFrame(canvas: HTMLCanvasElement, extent: number): Frame | undefined {
+interface Extent {
+  x: number;
+  y: number;
+}
+
+function prepareFrame(canvas: HTMLCanvasElement, extent: Extent): Frame | undefined {
   const ratio = window.devicePixelRatio || 1;
   const width = canvas.clientWidth;
   const height = canvas.clientHeight;
@@ -41,7 +46,7 @@ function prepareFrame(canvas: HTMLCanvasElement, extent: number): Frame | undefi
     context,
     width,
     height,
-    scale: (Math.min(width, height * 2) * VIEWPORT_FILL) / 2 / extent,
+    scale: (Math.min(width / extent.x, height / extent.y) * VIEWPORT_FILL) / 2,
   };
 }
 
@@ -107,31 +112,36 @@ function useTrajectory(slug: OrbitSlug): Trajectory | undefined {
   return trajectory;
 }
 
+// Fraction of the period to draw at a frame timestamp, in [0, 1); lets traces share one clock.
+export type PhaseSource = (now: number) => number;
+
 // The real, validated trajectory in motion; the static preview is shown until it loads.
 export function OrbitTrace({
   slug,
   width,
   height,
+  phase,
 }: {
   slug: OrbitSlug;
   width: number;
   height: number;
+  // Without a source the trace runs on its own clock, or stays still under reduced motion.
+  phase?: PhaseSource;
 }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const trajectory = useTrajectory(slug);
   const visible = useDocumentVisible();
   const { resolvedTheme } = useTheme();
-  const extent = useMemo(
-    () =>
-      trajectory
-        ? Math.max(
-            ...trajectory.samples.flatMap((sample) =>
-              BODY_INDICES.flatMap((body) => bodyPosition(sample.state, body).map(Math.abs)),
-            ),
-          )
-        : 1,
-    [trajectory],
-  );
+  // Largest distance from the center along each axis, so tall and flat orbits both fit.
+  const extent = useMemo<Extent>(() => {
+    const positions = (trajectory?.samples ?? []).flatMap((sample) =>
+      BODY_INDICES.map((body) => bodyPosition(sample.state, body)),
+    );
+    return {
+      x: Math.max(1e-9, ...positions.map(([x]) => Math.abs(x))),
+      y: Math.max(1e-9, ...positions.map(([, y]) => Math.abs(y))),
+    };
+  }, [trajectory]);
 
   useEffect(() => {
     const element = canvas.current;
@@ -144,18 +154,19 @@ export function OrbitTrace({
       const frame = prepareFrame(element, extent);
       if (frame) drawOrbit(frame, trajectory, time, colors);
     };
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!phase && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       render(trajectory.period * STILL_PERIOD_FRACTION);
       return;
     }
+    const fractionAt = phase ?? ((now: number) => (now / 1000 / SECONDS_PER_PERIOD) % 1);
     let request = 0;
     const loop = (now: number) => {
-      render(((now / 1000 / SECONDS_PER_PERIOD) * trajectory.period) % trajectory.period);
+      render(fractionAt(now) * trajectory.period);
       request = requestAnimationFrame(loop);
     };
     request = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(request);
-  }, [trajectory, visible, extent, resolvedTheme]);
+  }, [trajectory, visible, extent, resolvedTheme, phase]);
 
   return (
     <div className="orbit-trace" data-ready={trajectory ? 'true' : undefined}>

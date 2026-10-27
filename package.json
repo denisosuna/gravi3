@@ -17,6 +17,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "orbits:generate": "tsx scripts/generate-orbits.ts",
+    "orbits:previews": "tsx scripts/generate-previews.ts",
     "orbits:validate": "tsx scripts/validate-orbits.ts"
   },
   "dependencies": {

@@ -124,6 +124,7 @@ pnpm test:e2e
 PLAYWRIGHT_BASE_URL=http://localhost:3100 pnpm test:e2e
 pnpm orbits:generate
 pnpm orbits:validate
+pnpm orbits:previews   # redraw gallery previews from the committed trajectories
 ```
 
 CI runs formatting, linting, strict type checking, unit/server tests, committed-trajectory validation, production build and desktop/mobile Chromium browser tests, including accessibility scans in both themes. It uses no real AI credentials. Docker is also validated before handoff.
@@ -136,10 +137,10 @@ See [physics and provenance](docs/physics.md), [per-orbit measurements](docs/orb
 
 - `/es` and `/en`: introduction.
 - `/{locale}/learn`: experiment, prediction and contextual tutor.
-- `/{locale}/orbits`: six-solution gallery.
+- `/{locale}/orbits`: six-solution gallery. `?family=I.A|I.B|II.C|analytic`, `?sort=catalog|period|year` and `?compare=slug,slug` (up to three, drawn side by side at the same fraction of their periods) are kept in the URL.
 - `/{locale}/orbits/{slug}`: direct, shareable animated detail. Slugs are `lagrange`, `figure-eight`, `butterfly-i`, `goggles`, `moth-i`, `yin-yang-i`.
 
-Orbits start paused. Use Play, Restart, speed, timeline, front/3D, trails and camera reset. The physical solution remains planar while the camera changes perspective. A period corresponds to 20 playback seconds at 1×; scientific periods use normalized units. Theme/locale changes retain experiment and orbit context. Returning to the gallery restores its prior scroll/selection/focus during navigation; reloading resets transient state.
+Orbits start paused. Use Play, Restart, speed, timeline, front/3D, trails and camera reset. The physical solution remains planar while the camera changes perspective. A period corresponds to 20 playback seconds at 1×; scientific periods use normalized units. Theme/locale changes retain experiment and orbit context. Returning to the gallery, with its link or the browser Back button, restores its filters, order and comparison (from the URL) and its scroll position and focused orbit (from session memory); a reload keeps the URL state and resets the rest.
 
 ## Deploy on Render
 

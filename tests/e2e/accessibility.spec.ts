@@ -4,7 +4,13 @@ import { expect, test } from '@playwright/test';
 test('home, learning, gallery and orbit pages have no detected serious accessibility violations in either theme', async ({
   page,
 }) => {
-  for (const route of ['/en', '/en/learn', '/en/orbits', '/en/orbits/figure-eight']) {
+  for (const route of [
+    '/en',
+    '/en/learn',
+    '/en/orbits',
+    '/en/orbits?family=I.B&compare=goggles,moth-i',
+    '/en/orbits/figure-eight',
+  ]) {
     await page.goto(route);
     for (const theme of ['light', 'dark']) {
       await page.getByLabel('Theme', { exact: true }).selectOption(theme);

@@ -16,14 +16,22 @@ import { PlayerControls, ViewControls } from './player-controls';
 const ORBIT_SESSIONS = createSessionKey('orbit-sessions', () => new Map<OrbitSlug, OrbitSession>());
 
 const OrbitScene = dynamic(() => import('./scene/orbit-scene'), { ssr: false });
+interface SceneLabels {
+  label: string;
+  // Id of the text that describes what the animation shows, for screen readers.
+  descriptionId: string;
+}
+
 function Viewport({
   trajectory,
   controller,
   slug,
+  labels,
 }: {
   trajectory: Trajectory;
   controller: PlaybackController;
   slug: OrbitSlug;
+  labels: SceneLabels;
 }) {
   const t = useTranslations('player');
   const common = useTranslations('common');
@@ -50,7 +58,8 @@ function Viewport({
     <div
       className="scene-container"
       role="group"
-      aria-label={t('physicalTime')}
+      aria-label={labels.label}
+      aria-describedby={labels.descriptionId}
       data-testid="orbit-scene"
     >
       {lost ? (
@@ -74,7 +83,7 @@ function Viewport({
   );
 }
 
-export function OrbitPlayer({ orbit }: { orbit: OrbitDefinition }) {
+export function OrbitPlayer({ orbit, labels }: { orbit: OrbitDefinition; labels: SceneLabels }) {
   const { slug, period } = orbit;
   const sessions = useSessionMemory().get(ORBIT_SESSIONS);
   const [controller] = useState(() => new PlaybackController(period, sessions.get(slug)));
@@ -104,7 +113,7 @@ export function OrbitPlayer({ orbit }: { orbit: OrbitDefinition }) {
     <div className="orbit-visualization">
       <ViewControls controller={controller} />
       {resource.data ? (
-        <Viewport trajectory={resource.data} controller={controller} slug={slug} />
+        <Viewport trajectory={resource.data} controller={controller} slug={slug} labels={labels} />
       ) : (
         <div className="scene-fallback" role="status">
           <Image src={ASSETS.orbitPreview(slug)} width={640} height={400} alt="" />

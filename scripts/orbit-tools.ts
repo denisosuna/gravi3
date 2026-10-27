@@ -113,29 +113,35 @@ export function diagnose(definition: OrbitDefinition, trajectory: Trajectory) {
   return metrics;
 }
 
+// Light-theme Okabe-Ito colors keep at least 3:1 contrast on both the light and dark pages.
+const PREVIEW_COLORS = ['#0072b2', '#d55e00', '#009e73'];
+const PREVIEW_SIZE = { width: 160, height: 100, margin: 8 } as const;
+const PREVIEW_SAMPLES = 480;
+const PREVIEW_HEAD = 40;
+const PREVIEW_TRAIL = 160;
+
+// Each orbit is framed on its own extent so flat orbits fill the width instead of shrinking.
 export function previewSvg(trajectory: Trajectory): string {
-  const positions = Array.from({ length: 481 }, (_, i) =>
-    samplePositions(trajectory, (i / 480) * trajectory.period, []),
+  const positions = Array.from({ length: PREVIEW_SAMPLES + 1 }, (_, i) =>
+    samplePositions(trajectory, (i / PREVIEW_SAMPLES) * trajectory.period, []),
   );
-  const extent = Math.max(...positions.flat().map(Math.abs)) * 1.15;
-  const scale = 48 / extent;
-  const colors = ['#377dff', '#f5a742', '#a45bff'];
-  const paths = colors
-    .map((color, body) => {
-      const points = positions
-        .map(
-          (position) =>
-            `${(64 + position[2 * body]! * scale).toFixed(2)},${(56 - position[2 * body + 1]! * scale).toFixed(2)}`,
-        )
-        .join(' ');
-      const head = positions[40]!;
-      const trail = Array.from({ length: 161 }, (_, i) => {
-        const time = (((40 - 160 + i + 480) % 480) / 480) * trajectory.period;
-        const position = samplePositions(trajectory, time, []);
-        return `${(64 + position[2 * body]! * scale).toFixed(2)},${(56 - position[2 * body + 1]! * scale).toFixed(2)}`;
-      }).join(' ');
-      return `<polyline points="${points}" fill="none" stroke="${color}" stroke-width=".6" opacity=".15"/><polyline points="${trail}" fill="none" stroke="${color}" stroke-width="1.1" opacity=".9"/><circle cx="${64 + head[2 * body]! * scale}" cy="${56 - head[2 * body + 1]! * scale}" r="3" fill="${color}"/>`;
-    })
-    .join('');
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 112">${paths}</svg>`;
+  const coordinates = (axis: 0 | 1) =>
+    positions.flatMap((position) => [0, 1, 2].map((body) => Math.abs(position[2 * body + axis]!)));
+  const { width, height, margin } = PREVIEW_SIZE;
+  const scale = Math.min(
+    (width / 2 - margin) / Math.max(...coordinates(0)),
+    (height / 2 - margin) / Math.max(...coordinates(1)),
+  );
+  const point = (position: number[], body: number) =>
+    `${(width / 2 + position[2 * body]! * scale).toFixed(2)},${(height / 2 - position[2 * body + 1]! * scale).toFixed(2)}`;
+  const paths = PREVIEW_COLORS.map((color, body) => {
+    const orbit = positions.map((position) => point(position, body)).join(' ');
+    const trail = Array.from({ length: PREVIEW_TRAIL + 1 }, (_, i) => {
+      const index = (PREVIEW_HEAD - PREVIEW_TRAIL + i + PREVIEW_SAMPLES) % PREVIEW_SAMPLES;
+      return point(positions[index]!, body);
+    }).join(' ');
+    const [x, y] = point(positions[PREVIEW_HEAD]!, body).split(',');
+    return `<polyline points="${orbit}" fill="none" stroke="${color}" stroke-width=".5" opacity=".3"/><polyline points="${trail}" fill="none" stroke="${color}" stroke-width="1.2" stroke-linecap="round"/><circle cx="${x}" cy="${y}" r="2.4" fill="${color}"/>`;
+  }).join('');
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">${paths}</svg>`;
 }
