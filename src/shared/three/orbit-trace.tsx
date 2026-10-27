@@ -136,6 +136,7 @@ export function OrbitTrace({
   const t = useTranslations('common');
   const [paused, setPaused] = useState(false);
   const canvas = useRef<HTMLCanvasElement>(null);
+  const clock = useRef({ lastFrame: null as number | null, skipped: 0 });
   const trajectory = useTrajectory(slug);
   const visible = useDocumentVisible();
   const { resolvedTheme } = useTheme();
@@ -165,9 +166,18 @@ export function OrbitTrace({
       render(trajectory.period * STILL_PERIOD_FRACTION);
       return;
     }
-    const fractionAt = phase ?? ((now: number) => (now / 1000 / SECONDS_PER_PERIOD) % 1);
+    // Time between the last frame and a restart is skipped, so playback resumes where it stopped.
+    const timing = clock.current;
+    let resumedFrom = timing.lastFrame;
+    const fractionAt =
+      phase ?? ((now: number) => ((now - timing.skipped) / 1000 / SECONDS_PER_PERIOD) % 1);
     let request = 0;
     const loop = (now: number) => {
+      if (resumedFrom !== null) {
+        timing.skipped += now - resumedFrom;
+        resumedFrom = null;
+      }
+      timing.lastFrame = now;
       render(fractionAt(now) * trajectory.period);
       request = requestAnimationFrame(loop);
     };
