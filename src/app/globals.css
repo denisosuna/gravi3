@@ -749,6 +749,7 @@ button.control-button:hover {
   height: 20px;
 }
 .timeline output {
+  flex-shrink: 0;
   white-space: nowrap;
   color: var(--muted);
   font-size: var(--text-xs);
