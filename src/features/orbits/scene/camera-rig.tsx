@@ -1,8 +1,8 @@
 import { type ComponentRef, useEffect, useLayoutEffect, useRef } from 'react';
 import { useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import type { CameraView, PlaybackController } from '@/features/orbits/playback';
-import { usePlaybackState } from '@/features/orbits/use-playback-state';
+import type { CameraView, PlaybackController } from '../playback';
+import { usePlaybackState } from '../use-playback-state';
 
 type Vector3 = [number, number, number];
 

@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useLocale, useTranslations } from 'next-intl';
-import { SceneBoundary } from '@/components/scene-boundary';
+import { SceneBoundary } from '@/components/scene/scene-boundary';
 import { UNITS, type Experiment } from '@/data/experiment';
 import { ForceDiagram } from './force-diagram';
 
-const ForceLabScene = dynamic(() => import('@/visualization/force-lab-scene'), {
+const ForceLabScene = dynamic(() => import('./force-lab-scene'), {
   ssr: false,
   loading: () => null,
 });

@@ -16,20 +16,20 @@ flowchart LR
 
 ## Responsibilities
 
-| Directory               | Responsibility                                              | Boundary                                          |
-| ----------------------- | ----------------------------------------------------------- | ------------------------------------------------- |
-| `src/app`               | Routing, server composition, metadata and thin API handlers | No numerical integration in pages                 |
-| `src/physics`           | Newtonian equations, integrator, invariants, interpolation  | No React, Three.js, Next.js or server imports     |
-| `src/constants`         | Routes, asset paths, HTTP statuses and site identity        | Plain values; no framework imports                |
-| `src/data`              | Catalog, experiment ranges and shared request contract      | No credentials or provider client                 |
-| `src/i18n`              | Locale config, routing and `locales/{es,en}.json` catalogs  | Locale list defined once in `config.ts`           |
-| `src/features/learning` | Manipulable SVG laboratory and predictions                  | Force results come from pure physics              |
-| `src/features/orbits`   | Library, playback controller and transport UI               | Physical time independent of render frames        |
-| `src/visualization`     | Camera, bodies, trails and WebGL lifecycle                  | Consumes samples; cannot alter the physics        |
-| `src/components/tutor`  | Bounded client conversation and request lifecycle           | No provider key, model selection or system prompt |
-| `src/server`            | Env validation, LLM client, limits, prompts and safe logs   | Sensitive modules use `server-only`               |
+| Directory               | Responsibility                                                                | Boundary                                                              |
+| ----------------------- | ----------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| `src/app`               | Routing, server composition, metadata and thin API handlers                   | No numerical integration in pages                                     |
+| `src/physics`           | Newtonian equations, integrator, invariants, interpolation                    | No React, Three.js, Next.js or server imports                         |
+| `src/constants`         | Routes, asset paths, HTTP statuses and site identity                          | Plain values; no framework imports                                    |
+| `src/data`              | Catalog, experiment ranges and shared request contract                        | No credentials or provider client                                     |
+| `src/i18n`              | Locale config, routing and `locales/{es,en}.json` catalogs                    | Locale list defined once in `config.ts`                               |
+| `src/features/learning` | Force lab (`lab/`), prediction and live simulator, each with its own 3D scene | Force results come from pure physics; scenes cannot alter the physics |
+| `src/features/orbits`   | Gallery, playback controller, transport UI and orbit scene (`scene/`)         | Physical time independent of render frames                            |
+| `src/components/scene`  | Shared scene palette, body labels, WebGL error boundary, tab visibility       | Imports no feature                                                    |
+| `src/components/tutor`  | Bounded client conversation and request lifecycle                             | No provider key, model selection or system prompt                     |
+| `src/server`            | Env validation, LLM client, limits, prompts and safe logs                     | Sensitive modules use `server-only`                                   |
 
-Features do not import each other's internals; ESLint `no-restricted-imports` enforces these boundaries. Components are separated where there is a distinct responsibility, not to satisfy arbitrary file-length limits. The physics formula and server evaluation share one implementation.
+Features do not import each other's internals, and shared `components` import no feature; ESLint `no-restricted-imports` enforces these boundaries. Each 3D scene lives in the feature that drives it, so a scene and its controller change together. Components are separated where there is a distinct responsibility, not to satisfy arbitrary file-length limits. The physics formula and server evaluation share one implementation.
 
 ## Live simulator
 
@@ -37,7 +37,7 @@ The Learn page also integrates three bodies live in the browser (`src/physics/si
 
 ## State and rendering
 
-Root providers live above the locale segment. Their bounded, in-memory session store retains gallery scroll/focus, experiment values and per-orbit playback/camera snapshots during client navigation. Only locale and theme persist after reload, through next-intl and next-themes. A conversation currently belongs to the mounted tutor panel and is discarded when it unmounts or the page reloads; it is never saved to a database or browser storage.
+Root providers live above the locale segment. Their in-memory session store retains gallery scroll/focus, experiment values and per-orbit playback/camera snapshots during client navigation. Each feature declares its own typed key (`createSessionKey`), so the provider knows nothing about features. Only locale and theme persist after reload, through next-intl and next-themes. A conversation currently belongs to the mounted tutor panel and is discarded when it unmounts or the page reloads; it is never saved to a database or browser storage.
 
 Playback updates a controller independently of React. Positions and trail buffers update through R3F frame callbacks. Controls publish a time snapshot every 150 ms only while playing. Paused canvases render on demand; camera interaction and seeking invalidate the scene. Hidden documents do not advance physical time, and unusually large deltas are bounded on resume. All orbits start paused, including for reduced-motion users.
 

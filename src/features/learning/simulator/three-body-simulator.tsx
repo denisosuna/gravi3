@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import { ArrowRight } from 'lucide-react';
-import { SceneBoundary } from '@/components/scene-boundary';
-import { useDocumentVisible } from '@/components/use-document-visible';
+import { SceneBoundary } from '@/components/scene/scene-boundary';
+import { useDocumentVisible } from '@/components/scene/use-document-visible';
 import { ROUTES } from '@/constants/routes';
 import { Link } from '@/i18n/routing';
 import { BodyEditor } from './body-editor';
@@ -13,7 +13,7 @@ import type { SimulatorController } from './simulator-controller';
 import { SimulatorControls, SimulatorPresets } from './simulator-controls';
 import { useSimulatorState } from './use-simulator-state';
 
-const SimulatorScene = dynamic(() => import('@/visualization/simulator-scene'), { ssr: false });
+const SimulatorScene = dynamic(() => import('./scene/simulator-scene'), { ssr: false });
 const READOUT_INTERVAL_MS = 200;
 
 export function ThreeBodySimulator({ controller }: { controller: SimulatorController }) {

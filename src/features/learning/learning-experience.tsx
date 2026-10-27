@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { RotateCcw } from 'lucide-react';
-import { useExperienceMemory } from '@/components/providers';
+import { createSessionKey, useSessionMemory } from '@/components/providers';
 import {
   distanceRange,
   initialExperiment,
@@ -12,13 +12,17 @@ import {
   type Experiment,
 } from '@/data/experiment';
 import { gravitationalForce } from '@/physics/gravity';
-import { ForceLab } from './force-lab';
+import { ForceLab } from './lab/force-lab';
 import { applyTutorAction, LABORATORY_ID } from './apply-tutor-action';
 import { SimulatorController } from './simulator/simulator-controller';
 import { ThreeBodySimulator } from './simulator/three-body-simulator';
 import { useSimulatorState } from './simulator/use-simulator-state';
 import { Prediction } from './prediction';
 import { TutorPanel } from '@/components/tutor/tutor-panel';
+
+const EXPERIMENT_SESSION = createSessionKey<Experiment>('experiment', () => ({
+  ...initialExperiment,
+}));
 
 const INITIAL_FORCE = gravitationalForce(
   initialExperiment.mass1,
@@ -29,14 +33,14 @@ const INITIAL_FORCE = gravitationalForce(
 export function LearningExperience() {
   const t = useTranslations('learn');
   const locale = useLocale();
-  const memory = useExperienceMemory();
-  const [experiment, setExperiment] = useState(() => memory.getExperiment());
+  const memory = useSessionMemory();
+  const [experiment, setExperiment] = useState(() => memory.get(EXPERIMENT_SESSION));
   const [simulator] = useState(() => new SimulatorController());
   const simulatorPreset = useSimulatorState(simulator, (state) => state.presetId);
   const simulatorEvent = useSimulatorState(simulator, (state) => state.event ?? null);
   function update(patch: Partial<Experiment>) {
     const next = { ...experiment, ...patch };
-    memory.saveExperiment(next);
+    memory.set(EXPERIMENT_SESSION, next);
     setExperiment(next);
   }
   const force = gravitationalForce(experiment.mass1, experiment.mass2, experiment.distance);

@@ -7,19 +7,31 @@ import { ArrowUpRight } from 'lucide-react';
 import { ASSETS, ROUTES } from '@/constants/routes';
 import { orbits } from '@/data/orbits';
 import { Link } from '@/i18n/routing';
-import { useExperienceMemory } from '@/components/providers';
+import type { OrbitSlug } from '@/physics/types';
+import { createSessionKey, useSessionMemory } from '@/components/providers';
 
 const cardId = (slug: string) => `orbit-${slug}`;
 
+interface GallerySession {
+  scroll: number;
+  selected?: OrbitSlug;
+  restoreFocus: boolean;
+}
+
+const GALLERY_SESSION = createSessionKey<GallerySession>('gallery', () => ({
+  scroll: 0,
+  restoreFocus: false,
+}));
+
 export function Gallery() {
   const t = useTranslations('orbits');
-  const memory = useExperienceMemory();
-  const gallery = memory.gallery;
+  const memory = useSessionMemory();
+  const gallery = memory.get(GALLERY_SESSION);
   useLayoutEffect(() => {
     window.scrollTo(0, gallery.scroll);
     if (gallery.restoreFocus && gallery.selected) {
       document.getElementById(cardId(gallery.selected))?.focus({ preventScroll: true });
-      memory.updateGallery({ restoreFocus: false });
+      memory.set(GALLERY_SESSION, { ...gallery, restoreFocus: false });
     }
   }, [gallery, memory]);
   return (
@@ -31,7 +43,7 @@ export function Gallery() {
           id={cardId(orbit.slug)}
           className={`gallery-card ${gallery.selected === orbit.slug ? 'was-selected' : ''}`}
           onClick={() => {
-            memory.updateGallery({
+            memory.set(GALLERY_SESSION, {
               scroll: window.scrollY,
               selected: orbit.slug,
               restoreFocus: true,

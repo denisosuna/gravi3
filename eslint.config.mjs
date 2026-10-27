@@ -27,20 +27,23 @@ export default defineConfig([
   {
     files: ['src/physics/**', 'src/data/**', 'src/constants/**'],
     rules: restrictImports(
-      [...UI_PACKAGES, '@/server/*', '@/features/*', '@/components/*', '@/visualization/*'],
+      [...UI_PACKAGES, '@/server/*', '@/features/*', '@/components/*'],
       'Domain modules must stay framework-free.',
     ),
   },
   {
     files: ['src/server/**'],
     rules: restrictImports(
-      ['react', '@/features/*', '@/components/*', '@/visualization/*'],
+      ['react', '@/features/*', '@/components/*'],
       'Server modules must not depend on UI code.',
     ),
   },
   {
-    files: ['src/features/**', 'src/components/**', 'src/visualization/**'],
-    rules: restrictImports(['@/server/*'], 'UI code must call the server through API routes.'),
+    files: ['src/components/**'],
+    rules: restrictImports(
+      ['@/server/*', '@/features/*'],
+      'Shared components must not depend on server code or on a feature.',
+    ),
   },
   // A later block replaces the rule for matching files, so each feature repeats the server ban.
   {
