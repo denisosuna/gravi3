@@ -65,7 +65,7 @@ export function TutorPanel({
           </p>
         ) : null}
         {messages.length === 0 ? (
-          <TutorSuggestions kind={context.kind} disabled={!enabled || pending} onAsk={submit} />
+          <TutorSuggestions context={context} disabled={!enabled || pending} onAsk={submit} />
         ) : null}
         <div
           ref={conversation}
