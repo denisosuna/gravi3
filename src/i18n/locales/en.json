@@ -199,6 +199,7 @@
     "showFall": "See them fall under gravity",
     "replayFall": "Replay the fall",
     "resetFall": "Restore starting positions",
+    "animationInProgress": "Simulation in progress…",
     "animationPlaying": "The arrows grow as the bodies approach. The force shown is the initial one; simulation time is accelerated.",
     "animationExplanation": "Run a one-dimensional simulation of the bodies falling under gravity from rest. It follows Newton's law, and time is accelerated.",
     "animationStaticPending": "Calculating the fall for a still view…",

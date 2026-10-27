@@ -19,7 +19,7 @@ function animationButtonKey(
   hasCompletedCurrentSetup: boolean,
 ) {
   if (reducedMotion) return staticPull ? 'resetFall' : 'showFall';
-  if (animating) return 'animationPlaying';
+  if (animating) return 'animationInProgress';
   return hasCompletedCurrentSetup ? 'replayFall' : 'showFall';
 }
 

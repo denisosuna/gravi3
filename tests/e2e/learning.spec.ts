@@ -53,11 +53,13 @@ test('the gravitational fall follows Newtonian motion and leaves setup measureme
   const force = page.getByTestId('force-value');
   const originalForce = Number(await force.getAttribute('data-force'));
   await page.getByRole('button', { name: 'Ver cómo caen por gravedad' }).click();
+  await expect(page.getByRole('button', { name: 'Simulación en curso…' })).toBeDisabled();
   await expect(
-    page.getByRole('button', {
-      name: 'Las flechas crecen al acercarse. La fuerza indicada es la inicial; el tiempo de simulación está acelerado.',
-    }),
-  ).toBeDisabled();
+    page.getByText(
+      'Las flechas crecen al acercarse. La fuerza indicada es la inicial; el tiempo de simulación está acelerado.',
+      { exact: true },
+    ),
+  ).toHaveCount(1);
   await expect(
     page.getByText(/Tras .+ de tiempo simulado, los cuerpos se acercan mucho/),
   ).toBeVisible({ timeout: 10000 });
