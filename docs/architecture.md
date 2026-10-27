@@ -65,7 +65,7 @@ Health checks do not call the LLM provider, consume tutor quotas or emit applica
 
 ## Deliberate limits
 
-- No live three-body editing, new-orbit search, conversation storage or user accounts.
+- No new-orbit search, conversation storage or user accounts. Live editing is limited to masses and velocities in the Learn simulator.
 - Numerical evidence is finite-precision validation of one period, not a proof of stability.
 - A free-provider outage or exhausted quota makes the tutor unavailable, without blocking experiments or orbits.
 - Automated mobile emulation and accessibility checks do not establish physical-device performance or an accessibility certification.
