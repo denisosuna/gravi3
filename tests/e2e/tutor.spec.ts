@@ -34,7 +34,9 @@ test('a provider limit is visible and the experiment remains usable', async ({ p
     ),
   );
   await page.goto('/en/learn');
-  await page.getByRole('button', { name: 'What happens if I double the distance?' }).click();
+  await page
+    .getByRole('button', { name: 'Can you explain gravity with a simple example?' })
+    .click();
   await expect(page.getByText(/^The usage limit has been reached/)).toBeVisible();
   await page.getByRole('button', { name: 'Double the distance', exact: true }).click();
   await expect(page.getByRole('slider', { name: 'Center-to-center distance' })).toHaveValue('10');
