@@ -112,9 +112,11 @@ describe('configuration and deterministic context', () => {
     expect(prompt).toContain('forceAfterDoublingDistance');
     expect(prompt).toContain('prediction');
     expect(prompt).toContain('Put the physical meaning before calculations');
-    expect(prompt).toContain('Give at most one numerical example');
+    expect(prompt).toContain('include a number only if it makes the idea clearer');
     expect(prompt).toContain('as if explaining to a curious 10-year-old');
     expect(prompt).toContain('three skaters each gently pulled toward the other two');
+    expect(prompt).toContain('Use relevant numbers when they answer the question');
+    expect(prompt).toContain('Never recalculate a verified result or invent a number');
     expect(prompt).toContain('Do not say it is impossible to solve');
     expect(prompt).toContain('untrusted');
     expect(prompt).toContain('"type":"setExperiment"');
@@ -141,6 +143,17 @@ describe('configuration and deterministic context', () => {
       }).success,
     ).toBe(false);
   });
+  it('provides force values from verified context for numerical questions', () => {
+    const input = tutorRequestSchema.parse(payload);
+    if (input.context.kind !== 'learning') throw new Error('Expected learning fixture.');
+    const facts = learningFacts(input.context);
+    const prompt = tutorSystemPrompt(input);
+
+    expect(facts.forceNewtons).toBeCloseTo(5.33944e-8, 15);
+    expect(prompt).toContain('Use relevant numbers when they answer the question');
+    expect(prompt).toContain('with its unit');
+    expect(prompt).toContain('what that value means');
+  });
   it('gives orbit pages the measured closest approach and the player actions', () => {
     const prompt = tutorSystemPrompt(
       tutorRequestSchema.parse({ ...payload, context: { kind: 'orbit', slug: 'butterfly-i' } }),
@@ -149,6 +162,18 @@ describe('configuration and deterministic context', () => {
     expect(prompt).toContain('"type":"seekOrbit"');
     expect(prompt).toContain('"type":"setOrbitSpeed"');
     expect(prompt).not.toContain('"type":"setExperiment"');
+  });
+  it('does not silently choose a comparison orbit when the current orbit is named', () => {
+    const prompt = tutorSystemPrompt(
+      tutorRequestSchema.parse({
+        ...payload,
+        message: '¿En qué se diferencia de la figura de ocho?',
+        context: { kind: 'orbit', slug: 'figure-eight' },
+      }),
+    );
+    expect(prompt).toContain('"slug":"figure-eight"');
+    expect(prompt).toContain('do not silently choose a comparison orbit');
+    expect(prompt).toContain('name both explicitly');
   });
 });
 

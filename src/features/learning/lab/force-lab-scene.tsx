@@ -1,110 +1,173 @@
-import { useLayoutEffect, useMemo } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
-import { Line, OrbitControls } from '@react-three/drei';
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
 import { useTheme } from 'next-themes';
-import { Vector3 } from 'three';
+import type { ArrowHelper, Group } from 'three';
 import type { Experiment } from '@/data/experiment';
 import { forceLabLayout, VISIBLE_HALF_WIDTH } from './force-lab-layout';
 import { scenePalette } from '@/components/scene/scene-palette';
+import { GRAVITATIONAL_CONSTANT, gravitationalForce } from '@/physics/gravity';
+import { TwoBodySimulation } from '@/physics/two-body-simulation';
+import { CameraFit, DistanceRuler, ForceArrow, LEFT, RIGHT } from './force-lab-scene-parts';
 
 const CAMERA_POSITION: [number, number, number] = [0, 0.7, 4];
-const MIN_CAMERA_DISTANCE = 3.2;
 const FIELD_OF_VIEW_DEGREES = 40;
 const MAX_DEVICE_PIXEL_RATIO = 1.5;
+const NORMALIZED_TIME_PER_SECOND = 0.35;
 // Arrows sit above and below the bodies so they stay readable even when the bodies are close.
 const ARROW_OFFSET_Y = 0.55;
 const RULER_OFFSET_Y = -0.75;
-const RULER_TICK = 0.08;
 // Camera may swing sideways and tilt a little, never below the floor or upside down.
 const POLAR_RANGE = { min: Math.PI / 2 - 0.6, max: Math.PI / 2 + 0.15 } as const;
-const RIGHT = new Vector3(1, 0, 0);
-const LEFT = new Vector3(-1, 0, 0);
 
-function ForceArrow({
-  x,
-  y,
-  direction,
-  length,
-  color,
-}: {
-  x: number;
-  y: number;
-  direction: Vector3;
-  length: number;
-  color: string;
-}) {
-  const origin = useMemo(() => new Vector3(x, y, 0), [x, y]);
-  return <arrowHelper args={[direction, origin, length, color, length * 0.28, length * 0.16]} />;
-}
-
-// Moves the camera back on narrow screens so the largest distance always fits horizontally.
-function CameraFit() {
-  const { camera, size, invalidate } = useThree();
-  useLayoutEffect(() => {
-    const halfFov = (FIELD_OF_VIEW_DEGREES / 2) * (Math.PI / 180);
-    const aspect = size.width / size.height;
-    const distance = Math.max(
-      MIN_CAMERA_DISTANCE,
-      VISIBLE_HALF_WIDTH / (Math.tan(halfFov) * aspect),
-    );
-    camera.position.setLength(distance);
-    invalidate();
-  }, [camera, size, invalidate]);
-  return null;
-}
-
-function DistanceRuler({ left, right, color }: { left: number; right: number; color: string }) {
-  const y = RULER_OFFSET_Y;
-  return (
-    <group>
-      <Line
-        points={[
-          [left, y, 0],
-          [right, y, 0],
-        ]}
-        color={color}
-        lineWidth={1}
-      />
-      {[left, right].map((x) => (
-        <Line
-          key={x}
-          points={[
-            [x, y - RULER_TICK, 0],
-            [x, y + RULER_TICK, 0],
-          ]}
-          color={color}
-          lineWidth={1}
-        />
-      ))}
-    </group>
-  );
-}
-
-export default function ForceLabScene({
-  experiment,
-  force,
-  onContextLost,
-}: {
+type ForceLabSceneProps = {
   experiment: Experiment;
   force: number;
+  animationRun: number;
+  animating: boolean;
+  staticPull: boolean;
+  onAnimationComplete: (simulatedSeconds: number) => void;
   onContextLost: () => void;
+};
+
+function ForceLabContents({
+  experiment,
+  force,
+  animationRun,
+  animating,
+  staticPull,
+  onAnimationComplete,
+  palette,
+}: ForceLabSceneProps & {
+  palette: ReturnType<typeof scenePalette>;
 }) {
-  const { resolvedTheme } = useTheme();
-  const palette = scenePalette(resolvedTheme === 'dark');
+  const { invalidate } = useThree();
   const { positions, radii, arrowLength } = forceLabLayout(experiment, force);
+  const body1 = useRef<Group>(null);
+  const body2 = useRef<Group>(null);
+  const arrow1 = useRef<ArrowHelper>(null);
+  const arrow2 = useRef<ArrowHelper>(null);
+  const ruler = useRef<Group>(null);
+  const simulation = useRef<TwoBodySimulation | null>(null);
+  const active = useRef(false);
+  const illustrativeContactDistance = (radii[0] + radii[1]) / (positions[1] - positions[0]);
+  const totalMass = experiment.mass1 + experiment.mass2;
+  const centerOfMass =
+    (experiment.mass1 * positions[0] + experiment.mass2 * positions[1]) / totalMass;
+  const worldUnitsPerMeter = (positions[1] - positions[0]) / experiment.distance;
+  const characteristicTime = Math.sqrt(
+    experiment.distance ** 3 / (GRAVITATIONAL_CONSTANT * totalMass),
+  );
+
+  const applySimulationState = useCallback(
+    (currentSimulation: TwoBodySimulation) => {
+      const state = currentSimulation.state;
+      const current = [
+        centerOfMass + state.position1 * experiment.distance * worldUnitsPerMeter,
+        centerOfMass + state.position2 * experiment.distance * worldUnitsPerMeter,
+      ] as const;
+      if (body1.current) body1.current.position.x = current[0];
+      if (body2.current) body2.current.position.x = current[1];
+      if (arrow1.current) arrow1.current.position.x = current[0];
+      if (arrow2.current) arrow2.current.position.x = current[1];
+      if (ruler.current) {
+        ruler.current.position.x = (current[0] + current[1]) / 2;
+        ruler.current.scale.x = state.distance;
+      }
+      const currentDistance = state.distance * experiment.distance;
+      const currentForce = gravitationalForce(experiment.mass1, experiment.mass2, currentDistance);
+      const currentArrowLength = forceLabLayout(
+        { ...experiment, distance: currentDistance },
+        currentForce,
+      ).arrowLength;
+      arrow1.current?.setLength(
+        currentArrowLength,
+        currentArrowLength * 0.28,
+        currentArrowLength * 0.16,
+      );
+      arrow2.current?.setLength(
+        currentArrowLength,
+        currentArrowLength * 0.28,
+        currentArrowLength * 0.16,
+      );
+    },
+    [centerOfMass, experiment, worldUnitsPerMeter],
+  );
+
+  useLayoutEffect(() => {
+    if (staticPull) {
+      const stillSimulation = new TwoBodySimulation(
+        [experiment.mass1, experiment.mass2],
+        illustrativeContactDistance,
+      );
+      for (let frame = 0; frame < 300 && !stillSimulation.halted; frame++) {
+        stillSimulation.advance(0.01);
+      }
+      simulation.current = stillSimulation;
+      applySimulationState(stillSimulation);
+      onAnimationComplete(stillSimulation.state.time * characteristicTime);
+    } else if (!active.current) {
+      const initialSimulation = new TwoBodySimulation(
+        [experiment.mass1, experiment.mass2],
+        illustrativeContactDistance,
+      );
+      simulation.current = initialSimulation;
+      applySimulationState(initialSimulation);
+    }
+    invalidate();
+  }, [
+    applySimulationState,
+    characteristicTime,
+    experiment.mass1,
+    experiment.mass2,
+    illustrativeContactDistance,
+    invalidate,
+    onAnimationComplete,
+    staticPull,
+  ]);
+
+  useEffect(() => {
+    if (!animating || animationRun === 0 || staticPull) {
+      active.current = false;
+      return;
+    }
+    const nextSimulation = new TwoBodySimulation(
+      [experiment.mass1, experiment.mass2],
+      illustrativeContactDistance,
+    );
+    simulation.current = nextSimulation;
+    active.current = true;
+    applySimulationState(nextSimulation);
+    invalidate();
+  }, [
+    animationRun,
+    animating,
+    applySimulationState,
+    experiment.mass1,
+    experiment.mass2,
+    illustrativeContactDistance,
+    invalidate,
+    staticPull,
+  ]);
+
+  useEffect(() => {
+    if (staticPull) active.current = false;
+  }, [staticPull]);
+
+  useFrame((_, delta) => {
+    if (!active.current || !simulation.current) return;
+    const currentSimulation = simulation.current;
+    currentSimulation.advance(Math.min(delta, 0.05) * NORMALIZED_TIME_PER_SECOND);
+    applySimulationState(currentSimulation);
+    if (currentSimulation.halted) {
+      active.current = false;
+      onAnimationComplete(currentSimulation.state.time * characteristicTime);
+    }
+    invalidate();
+  });
+
   return (
-    <Canvas
-      camera={{ position: CAMERA_POSITION, fov: FIELD_OF_VIEW_DEGREES }}
-      dpr={[1, MAX_DEVICE_PIXEL_RATIO]}
-      frameloop="demand"
-      gl={{ antialias: true, alpha: true }}
-      onCreated={({ gl }) => {
-        gl.domElement.addEventListener('webglcontextlost', (event) => {
-          event.preventDefault();
-          onContextLost();
-        });
-      }}
-    >
+    <>
       <ambientLight intensity={1.4} />
       <directionalLight position={[-3, 4, 6]} intensity={2.2} />
       <gridHelper
@@ -112,7 +175,7 @@ export default function ForceLabScene({
         position={[0, RULER_OFFSET_Y - 0.4, 0]}
       />
       {positions.map((x, body) => (
-        <group key={body} position={[x, 0, 0]}>
+        <group key={body} ref={body === 0 ? body1 : body2} position={[x, 0, 0]}>
           <mesh>
             <sphereGeometry args={[radii[body]!, 32, 24]} />
             <meshStandardMaterial
@@ -125,6 +188,7 @@ export default function ForceLabScene({
         </group>
       ))}
       <ForceArrow
+        arrowRef={arrow1}
         x={positions[0]}
         y={ARROW_OFFSET_Y}
         direction={RIGHT}
@@ -132,14 +196,22 @@ export default function ForceLabScene({
         color={palette.bodies[0]}
       />
       <ForceArrow
+        arrowRef={arrow2}
         x={positions[1]}
         y={-ARROW_OFFSET_Y}
         direction={LEFT}
         length={arrowLength}
         color={palette.bodies[1]}
       />
-      <DistanceRuler left={positions[0]} right={positions[1]} color={palette.ruler} />
-      <CameraFit />
+      <group ref={ruler}>
+        <DistanceRuler
+          left={positions[0]}
+          right={positions[1]}
+          color={palette.ruler}
+          y={RULER_OFFSET_Y}
+        />
+      </group>
+      <CameraFit visibleHalfWidth={VISIBLE_HALF_WIDTH} fieldOfViewDegrees={FIELD_OF_VIEW_DEGREES} />
       <OrbitControls
         enablePan={false}
         enableZoom={false}
@@ -147,6 +219,27 @@ export default function ForceLabScene({
         minPolarAngle={POLAR_RANGE.min}
         maxPolarAngle={POLAR_RANGE.max}
       />
+    </>
+  );
+}
+
+export default function ForceLabScene(props: ForceLabSceneProps) {
+  const { resolvedTheme } = useTheme();
+  const palette = scenePalette(resolvedTheme === 'dark');
+  return (
+    <Canvas
+      camera={{ position: CAMERA_POSITION, fov: FIELD_OF_VIEW_DEGREES }}
+      dpr={[1, MAX_DEVICE_PIXEL_RATIO]}
+      frameloop="demand"
+      gl={{ antialias: true, alpha: true }}
+      onCreated={({ gl }) => {
+        gl.domElement.addEventListener('webglcontextlost', (event) => {
+          event.preventDefault();
+          props.onContextLost();
+        });
+      }}
+    >
+      <ForceLabContents {...props} palette={palette} />
     </Canvas>
   );
 }
