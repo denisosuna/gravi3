@@ -32,7 +32,7 @@ const learningContext = z
     simulator: z
       .object({
         preset: z.enum([...SIMULATOR_PRESETS, 'custom']),
-        event: z.enum(['collision', 'escape']).nullable(),
+        event: z.enum(['collision', 'closeEncounter', 'escape']).nullable(),
       })
       .strict()
       .optional(),
