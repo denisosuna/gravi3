@@ -12,7 +12,7 @@ export type Masses = readonly [number, number, number];
 
 // State layout: x1,y1,x2,y2,x3,y3,vx1,vy1,vx2,vy2,vx3,vy3.
 export type State = readonly number[];
-export type Vec2 = readonly [number, number];
+type Vec2 = readonly [number, number];
 
 export const BODY_INDICES = [0, 1, 2] as const;
 export const VELOCITY_OFFSET = 2 * BODY_INDICES.length;

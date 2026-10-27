@@ -6,10 +6,11 @@ import {
   massRange,
   UNITS,
   type Experiment,
-} from '@/data/experiment';
+} from '@/features/learning/model/experiment';
 import { ForceLab } from '../lab/force-lab';
-import { LessonStep } from '../lesson-step';
-import styles from '../learning.module.css';
+import { LessonStep } from '../components/lesson-step';
+import styles from '../components/learning.module.css';
+import { numberFormat } from '@/shared/i18n/number-format';
 
 const SLIDERS = ['mass1', 'mass2', 'distance'] as const;
 
@@ -24,11 +25,11 @@ export function ObserveStep({
 }) {
   const t = useTranslations('learn');
   const locale = useLocale();
-  const scientific = new Intl.NumberFormat(locale, {
+  const scientific = numberFormat(locale, {
     notation: 'scientific',
     maximumSignificantDigits: 4,
   });
-  const number = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 });
+  const number = numberFormat(locale, { maximumFractionDigits: 1 });
   return (
     <LessonStep
       step="observe"

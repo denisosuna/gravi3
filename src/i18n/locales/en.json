@@ -1,6 +1,8 @@
 {
   "common": {
     "home": "Gravi3 home",
+    "pauseAnimation": "Pause animation",
+    "playAnimation": "Play animation",
     "navigation": "Main navigation",
     "learn": "Learn",
     "orbits": "Orbits",

@@ -2,14 +2,14 @@ import 'server-only';
 import { createHash, randomUUID } from 'node:crypto';
 import { isIP } from 'node:net';
 import type { Logger } from 'pino';
-import { HTTP_STATUS, NO_STORE_HEADERS } from '@/constants/http';
+import { HTTP_STATUS, NO_STORE_HEADERS } from '@/shared/constants/http';
 import {
   TUTOR_ERROR_CODES,
   TUTOR_LIMITS,
   tutorRequestSchema,
   type TutorRequest,
-} from '@/data/tutor-contract';
-import { parseTutorOutput } from '@/data/tutor-actions';
+} from '@/features/tutor/model/tutor-contract';
+import { parseTutorOutput } from '@/features/tutor/model/tutor-actions';
 import type { ServerConfig } from './config';
 import { LOG_EVENTS } from './log-events';
 import type { RateLimiter } from './rate-limiter';

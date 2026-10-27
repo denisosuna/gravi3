@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname } from 'node:path';
-import { ASSETS } from '../src/constants/routes';
-import { orbits } from '../src/data/orbits';
+import { ASSETS } from '../src/shared/constants/routes';
+import { orbits } from '../src/physics/orbit-catalog';
 import { integrate } from '../src/physics/integrator';
 import { TRAJECTORY_VERSION } from '../src/physics/trajectory-schema';
 import type { Trajectory } from '../src/physics/types';

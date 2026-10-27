@@ -8,8 +8,6 @@ test-results/
 .env*
 !.env.example
 .DS_Store
-/*.local.md
-/*.pdf
 /*.png
 next-env.d.ts
 .claude

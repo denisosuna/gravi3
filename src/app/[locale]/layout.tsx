@@ -1,7 +1,7 @@
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { Header } from '@/components/header';
+import { Header } from '@/shared/ui/header';
 import { routing } from '@/i18n/routing';
 
 export default async function LocaleLayout({

@@ -1,4 +1,4 @@
-import { distanceRange, massRange, type Experiment } from '@/data/experiment';
+import { distanceRange, massRange, type Experiment } from '@/features/learning/model/experiment';
 import { gravitationalForce } from '@/physics/gravity';
 
 // Distance is drawn to scale: the largest distance spans this many world units from the center.
@@ -12,7 +12,7 @@ export const ARROW_LENGTH = { min: 0.25, max: 1.6 } as const;
 const WEAKEST_FORCE = gravitationalForce(massRange.min, massRange.min, distanceRange.max);
 const STRONGEST_FORCE = gravitationalForce(massRange.max, massRange.max, distanceRange.min);
 
-export interface ForceLabLayout {
+interface ForceLabLayout {
   positions: readonly [number, number];
   radii: readonly [number, number];
   arrowLength: number;

@@ -4,6 +4,19 @@ import nextTypescript from 'eslint-config-next/typescript';
 
 const UI_PACKAGES = ['react', 'react-dom', 'three', '@react-three/*', 'next', 'next/*', 'next-*'];
 
+const FEATURES = ['home', 'learning', 'orbits', 'tutor'];
+// The tutor panel is embedded by other features, so only the rest are off limits.
+const ISOLATED_FEATURES = ['home', 'learning', 'orbits'];
+
+// Only the pure `model` folder of a feature is shared with the server and other features.
+function otherFeatures(current) {
+  return ISOLATED_FEATURES.filter((feature) => feature !== current).flatMap((feature) => [
+    `@/features/${feature}/*`,
+    `!@/features/${feature}/model`,
+    `!@/features/${feature}/model/*`,
+  ]);
+}
+
 function restrictImports(patterns, message) {
   return { 'no-restricted-imports': ['error', { patterns: [{ group: patterns, message }] }] };
 }
@@ -25,48 +38,34 @@ export default defineConfig([
     rules: { 'max-lines': 'off' },
   },
   {
-    files: ['src/physics/**', 'src/data/**', 'src/constants/**'],
+    files: ['src/physics/**', 'src/features/*/model/**', 'src/shared/constants/**'],
     rules: restrictImports(
-      [...UI_PACKAGES, '@/server/*', '@/features/*', '@/components/*'],
+      [...UI_PACKAGES, '@/server/*', '@/shared/ui/*', '@/shared/three/*', ...otherFeatures()],
       'Domain modules must stay framework-free.',
     ),
   },
   {
     files: ['src/server/**'],
     rules: restrictImports(
-      ['react', '@/features/*', '@/components/*'],
+      ['react', '@/shared/ui/*', '@/shared/three/*', ...otherFeatures()],
       'Server modules must not depend on UI code.',
     ),
   },
   {
-    files: ['src/components/**'],
+    files: ['src/shared/ui/**', 'src/shared/three/**'],
     rules: restrictImports(
       ['@/server/*', '@/features/*'],
       'Shared components must not depend on server code or on a feature.',
     ),
   },
   // A later block replaces the rule for matching files, so each feature repeats the server ban.
-  {
-    files: ['src/features/learning/**'],
+  ...FEATURES.map((feature) => ({
+    files: [`src/features/${feature}/**`],
     rules: restrictImports(
-      ['@/server/*', '@/features/orbits/*', '@/features/home/*'],
-      'Features must not import server code or each other.',
+      ['@/server/*', ...otherFeatures(feature)],
+      'Features must not import server code or the UI of another feature.',
     ),
-  },
-  {
-    files: ['src/features/home/**'],
-    rules: restrictImports(
-      ['@/server/*', '@/features/learning/*', '@/features/orbits/*'],
-      'Features must not import server code or each other.',
-    ),
-  },
-  {
-    files: ['src/features/orbits/**'],
-    rules: restrictImports(
-      ['@/server/*', '@/features/learning/*', '@/features/home/*'],
-      'Features must not import server code or each other.',
-    ),
-  },
+  })),
   globalIgnores([
     '.next/**',
     'next-env.d.ts',

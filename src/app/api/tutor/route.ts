@@ -1,4 +1,4 @@
-import { NO_STORE_HEADERS } from '@/constants/http';
+import { NO_STORE_HEADERS } from '@/shared/constants/http';
 import { getConfig } from '@/server/config';
 import { createChatCompletion } from '@/server/llm-client';
 import { getLogger } from '@/server/logger';

@@ -1,7 +1,7 @@
-import { ROUTES } from '@/constants/routes';
+import { ROUTES } from '@/shared/constants/routes';
 import { sectionMetadata } from '@/server/metadata';
 import { getTranslations } from 'next-intl/server';
-import { LearningExperience } from '@/features/learning/learning-experience';
+import { LearningExperience } from '@/features/learning/components/learning-experience';
 
 export function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   return sectionMetadata(params, ROUTES.learn, 'learnTitle');

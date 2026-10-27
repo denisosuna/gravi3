@@ -31,7 +31,7 @@ interface IntegrationOptions {
   initialStep?: number;
 }
 
-export interface AdaptiveIntegration {
+interface AdaptiveIntegration {
   samples: Sample[];
   // The step size the controller would try next; pass it back as `initialStep`.
   nextStep: number;

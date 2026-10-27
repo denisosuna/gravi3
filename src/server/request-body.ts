@@ -1,4 +1,4 @@
-import { HTTP_STATUS } from '@/constants/http';
+import { HTTP_STATUS } from '@/shared/constants/http';
 
 const JSON_CONTENT_TYPE = 'application/json';
 const MAX_BODY_BYTES = 16 * 1024;
