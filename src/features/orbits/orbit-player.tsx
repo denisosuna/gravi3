@@ -7,21 +7,29 @@ import { useTranslations } from 'next-intl';
 import { ASSETS } from '@/constants/routes';
 import { parseTrajectory } from '@/physics/trajectory-schema';
 import type { OrbitDefinition, OrbitSlug, Trajectory } from '@/physics/types';
-import { useExperienceMemory } from '@/components/providers';
-import { SceneBoundary } from '@/components/scene-boundary';
-import { useDocumentVisible } from '@/components/use-document-visible';
-import { PlaybackController } from './playback';
+import { SceneBoundary } from '@/components/scene/scene-boundary';
+import { useDocumentVisible } from '@/components/scene/use-document-visible';
+import { usePlaybackController } from './orbit-playback';
+import type { PlaybackController } from './playback';
 import { PlayerControls, ViewControls } from './player-controls';
 
-const OrbitScene = dynamic(() => import('@/visualization/orbit-scene'), { ssr: false });
+const OrbitScene = dynamic(() => import('./scene/orbit-scene'), { ssr: false });
+interface SceneLabels {
+  label: string;
+  // Id of the text that describes what the animation shows, for screen readers.
+  descriptionId: string;
+}
+
 function Viewport({
   trajectory,
   controller,
   slug,
+  labels,
 }: {
   trajectory: Trajectory;
   controller: PlaybackController;
   slug: OrbitSlug;
+  labels: SceneLabels;
 }) {
   const t = useTranslations('player');
   const common = useTranslations('common');
@@ -48,7 +56,8 @@ function Viewport({
     <div
       className="scene-container"
       role="group"
-      aria-label={t('physicalTime')}
+      aria-label={labels.label}
+      aria-describedby={labels.descriptionId}
       data-testid="orbit-scene"
     >
       {lost ? (
@@ -72,17 +81,11 @@ function Viewport({
   );
 }
 
-export function OrbitPlayer({ orbit }: { orbit: OrbitDefinition }) {
+export function OrbitPlayer({ orbit, labels }: { orbit: OrbitDefinition; labels: SceneLabels }) {
   const { slug, period } = orbit;
-  const memory = useExperienceMemory();
-  const [controller] = useState(() => new PlaybackController(period, memory.getOrbit(slug)));
+  const controller = usePlaybackController();
   const [resource, setResource] = useState<{ data?: Trajectory; error?: boolean }>({});
   const t = useTranslations('player');
-  useEffect(() => {
-    const persist = () => memory.saveOrbit(slug, controller.export());
-    persist();
-    return controller.subscribe(persist);
-  }, [memory, slug, controller]);
   useEffect(() => {
     const abort = new AbortController();
     fetch(ASSETS.orbitTrajectory(slug), { signal: abort.signal })
@@ -93,16 +96,13 @@ export function OrbitPlayer({ orbit }: { orbit: OrbitDefinition }) {
       .catch(() => {
         if (!abort.signal.aborted) setResource({ error: true });
       });
-    return () => {
-      abort.abort();
-      memory.saveOrbit(slug, controller.export());
-    };
-  }, [slug, period, memory, controller]);
+    return () => abort.abort();
+  }, [slug, period]);
   return (
     <div className="orbit-visualization">
       <ViewControls controller={controller} />
       {resource.data ? (
-        <Viewport trajectory={resource.data} controller={controller} slug={slug} />
+        <Viewport trajectory={resource.data} controller={controller} slug={slug} labels={labels} />
       ) : (
         <div className="scene-fallback" role="status">
           <Image src={ASSETS.orbitPreview(slug)} width={640} height={400} alt="" />

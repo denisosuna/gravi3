@@ -12,7 +12,6 @@ export default async function LearnPage({ params }: { params: Promise<{ locale: 
   const t = await getTranslations({ locale, namespace: 'learn' });
   return (
     <main id="main" className="learning-page">
-      <div className="eyebrow">{t('eyebrow')}</div>
       <h1>{t('title')}</h1>
       <p className="page-description">{t('description')}</p>
       <LearningExperience />

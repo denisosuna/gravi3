@@ -7,19 +7,19 @@ export type ScenePalette = {
 };
 
 const DARK: ScenePalette = {
-  bodies: ['#6abaff', '#ffbf67', '#c58bff'],
-  gridCenter: '#263e5a',
-  grid: '#16283e',
+  bodies: ['#56b4e9', '#e69f00', '#2fbf8f'],
+  gridCenter: '#2b3a55',
+  grid: '#1b2538',
   pathOpacity: 0.18,
-  ruler: '#8da3c7',
+  ruler: '#a7b1c5',
 };
 
 const LIGHT: ScenePalette = {
-  bodies: ['#286bdb', '#b36c09', '#8b42df'],
-  gridCenter: '#bbd0ed',
-  grid: '#dae5f5',
+  bodies: ['#0072b2', '#d55e00', '#009e73'],
+  gridCenter: '#c3d2e6',
+  grid: '#e2e9f3',
   pathOpacity: 0.35,
-  ruler: '#586886',
+  ruler: '#4f5a72',
 };
 
 export function scenePalette(dark: boolean): ScenePalette {

@@ -11,7 +11,7 @@ The Sun–Earth–Moon system, spacecraft trajectories and the James Webb telesc
 ## What the app does
 
 1. **Learn** (`/{locale}/learn`): understand the law of gravity with two bodies. Change masses and distance, predict what happens to the force, and check it in a 3D laboratory backed by deterministic SI calculations. Then add a third body in a live simulator: four starting points (figure eight, Lagrange, the chaotic Pythagorean problem, Sun–planet–moon), energy and center-of-mass readouts, velocity vectors, a 1% perturbation to reveal chaos, and editable masses and velocities.
-2. **Ask the tutor:** an LLM tutor (any OpenAI-compatible provider) answers with the current experiment values and proposes one-click experiments ("Try it: r = 10 m", "Try it: Pythagorean in the simulator", "See the Lagrange orbit"). The server only accepts actions allowed on the current page and within the experiment's ranges. The tutor is optional; every calculation works without it.
+2. **Ask the tutor:** an LLM tutor (any OpenAI-compatible provider) answers with the current experiment values and proposes one-click experiments ("Try it: r = 10 m", "Try it: Pythagorean in the simulator", "See the Lagrange orbit", "Try it: go to 20% of the period", "Try it: play at 0.5×"). It adapts to what the learner shows: a wrong prediction is mapped on the server to the misconception behind it, and the tutor addresses that first. The server only accepts actions allowed on the current page and within their ranges. The tutor is optional; every calculation works without it.
 3. **Orbits** (`/{locale}/orbits`): six periodic three-body solutions (Lagrange, figure eight, Butterfly I, Goggles, Moth I, Yin-Yang I), each with a shareable URL, 3D playback controls and scientific details. Trajectories are generated offline from published initial conditions and validated numerically.
 
 Spanish/English, light/dark/system themes, keyboard controls, mobile layout and an explicit reduced mode without AI credentials.
@@ -89,14 +89,13 @@ src/
     [locale]/          One route tree per language: /es/..., /en/...
       orbits/[slug]/   One page renders every orbit: /en/orbits/figure-eight
     api/               /api/tutor and /api/health
-  components/          App-wide client pieces: header, providers, tutor panel
+  components/          Shared client pieces: header, session providers, tutor panel, scene helpers
   constants/           Routes, asset paths, HTTP statuses and site identity
   data/                Orbit catalog, experiment ranges and the tutor request contract
-  features/            learning/ and orbits/ UI; features never import each other
+  features/            home/, learning/ and orbits/, each with its own 3D scene; never import each other
   i18n/                Locale config, next-intl routing and locales/{es,en}.json catalogs
   physics/             Framework-free equations, integrator and interpolation
   server/              Env config, OpenAI-compatible LLM client, rate limiting, prompts, logging
-  visualization/       React Three Fiber scene, camera and bodies
 scripts/               Offline orbit generation and validation (TypeScript)
 tests/e2e/             Playwright browser tests
 docs/                  Architecture, physics provenance and verification evidence
@@ -104,10 +103,11 @@ docs/                  Architecture, physics provenance and verification evidenc
 
 Conventions worth knowing before changing code:
 
-- **Bracketed folders** are Next.js dynamic segments. `[locale]` puts the language in the URL so links are shareable and indexable per language; `[slug]` serves all six orbits from one page, validated against the catalog (unknown slugs return 404).
-- **`'use client'`** marks the boundary where a Server Component hands over to browser code that needs state, effects or browser APIs. It appears only on boundary files (`header`, `providers`, `gallery`, `learning-experience`, `orbit-player`, `tutor-panel`); modules they import are client code automatically. Everything else renders on the server.
+- **Bracketed folders** are Next.js dynamic segments. `[locale]` puts the language in the URL so links are shareable and indexable per language; `[slug]` serves all six orbits from one page, validated against the catalog (unknown slugs return 404). `[...rest]` catches any other path under a locale so it gets the translated `not-found` page; `error.tsx` is the translated error boundary for each page.
+- **`'use client'`** marks the boundary where a Server Component hands over to browser code that needs state, effects or browser APIs. It appears only on boundary files (`header`, `providers`, `gallery`, `learning-experience`, `orbit-player`, `tutor-panel`, and `error`, which Next.js requires to be a client component); modules they import are client code automatically. Everything else renders on the server.
 - **No magic strings:** paths come from `src/constants/routes.ts`, limits and error codes from `src/data/tutor-contract.ts`, log event names from `src/server/logger.ts`.
-- **Lint-enforced boundaries:** `physics`, `data` and `constants` cannot import React, Next.js, Three.js or server code; UI cannot import `src/server`; features cannot import each other. Complexity, nesting depth, parameter count and file length are capped.
+- **Lint-enforced boundaries:** `physics`, `data` and `constants` cannot import React, Next.js, Three.js or server code; UI cannot import `src/server`; features cannot import each other and shared components cannot import a feature. Complexity, nesting depth, parameter count and file length are capped.
+- **Design tokens and fonts:** colors, type scale and font roles are CSS custom properties at the top of `src/app/globals.css`; no text is smaller than 12 px. Fonts come from `next/font/google` (`src/app/fonts.ts`), which downloads them at build time and serves them from the app, so pages make no runtime request to Google.
 - **Logging:** Pino JSON on the server only, with named events and redaction; prompts, messages, keys and raw IPs are never logged.
 
 ## Tests and scientific data
@@ -124,6 +124,7 @@ pnpm test:e2e
 PLAYWRIGHT_BASE_URL=http://localhost:3100 pnpm test:e2e
 pnpm orbits:generate
 pnpm orbits:validate
+pnpm orbits:previews   # redraw gallery previews from the committed trajectories
 ```
 
 CI runs formatting, linting, strict type checking, unit/server tests, committed-trajectory validation, production build and desktop/mobile Chromium browser tests, including accessibility scans in both themes. It uses no real AI credentials. Docker is also validated before handoff.
@@ -136,10 +137,10 @@ See [physics and provenance](docs/physics.md), [per-orbit measurements](docs/orb
 
 - `/es` and `/en`: introduction.
 - `/{locale}/learn`: experiment, prediction and contextual tutor.
-- `/{locale}/orbits`: six-solution gallery.
+- `/{locale}/orbits`: six-solution gallery. `?family=I.A|I.B|II.C|analytic`, `?sort=catalog|period|year` and `?compare=slug,slug` (up to three, drawn side by side at the same fraction of their periods) are kept in the URL.
 - `/{locale}/orbits/{slug}`: direct, shareable animated detail. Slugs are `lagrange`, `figure-eight`, `butterfly-i`, `goggles`, `moth-i`, `yin-yang-i`.
 
-Orbits start paused. Use Play, Restart, speed, timeline, front/3D, trails and camera reset. The physical solution remains planar while the camera changes perspective. A period corresponds to 20 playback seconds at 1×; scientific periods use normalized units. Theme/locale changes retain experiment and orbit context. Returning to the gallery restores its prior scroll/selection/focus during navigation; reloading resets transient state.
+Orbits start paused. Use Play, Restart, speed, timeline, front/3D, trails and camera reset. The physical solution remains planar while the camera changes perspective. A period corresponds to 20 playback seconds at 1×; scientific periods use normalized units. Theme/locale changes retain experiment and orbit context. Returning to the gallery, with its link or the browser Back button, restores its filters, order and comparison (from the URL) and its scroll position and focused orbit (from session memory); a reload keeps the URL state and resets the rest.
 
 ## Deploy on Render
 

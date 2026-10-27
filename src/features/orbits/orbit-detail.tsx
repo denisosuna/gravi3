@@ -1,54 +1,89 @@
-import Image from 'next/image';
-import { useTranslations } from 'next-intl';
-import { ArrowLeft, Sparkles } from 'lucide-react';
-import { ASSETS, ROUTES } from '@/constants/routes';
+import { useLocale, useTranslations } from 'next-intl';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ROUTES } from '@/constants/routes';
+import { ORBIT_CATALOG, orbits } from '@/data/orbits';
 import { Link } from '@/i18n/routing';
-import { OrbitLibrary } from './orbit-library';
+import type { OrbitDefinition } from '@/physics/types';
+import { BackToGallery } from './back-to-gallery';
+import { OrbitPlaybackProvider, OrbitTutor, STAGE_ID } from './orbit-playback';
 import { OrbitPlayer } from './orbit-player';
-import { TutorPanel } from '@/components/tutor/tutor-panel';
 import { ScientificDetails } from './scientific-details';
-import { BODY_INDICES, type OrbitDefinition } from '@/physics/types';
+import styles from './orbit-detail.module.css';
+
+const TITLE_ID = 'orbit-title';
+const DESCRIPTION_ID = 'orbit-visual';
+const PERIOD_DIGITS = 4;
+
+function neighbours(orbit: OrbitDefinition) {
+  const index = orbits.indexOf(orbit);
+  return {
+    previous: orbits[(index - 1 + orbits.length) % orbits.length]!,
+    next: orbits[(index + 1) % orbits.length]!,
+  };
+}
+
+function Placard({ orbit }: { orbit: OrbitDefinition }) {
+  const t = useTranslations('orbits');
+  const period = new Intl.NumberFormat(useLocale(), { maximumFractionDigits: PERIOD_DIGITS });
+  const { code, family, discovery } = ORBIT_CATALOG[orbit.slug];
+  return (
+    <dl className={styles.placard}>
+      <dt>{t('detail.class')}</dt>
+      <dd>{family === 'analytic' ? t('filters.analytic') : (code ?? family)}</dd>
+      <dt>{t('detail.found')}</dt>
+      <dd>{t('plate.found', { authors: discovery.authors, year: String(discovery.year) })}</dd>
+      <dt>{t('period')}</dt>
+      <dd>
+        <span className={styles.number}>T = {period.format(orbit.period)}</span> {t('units')}
+      </dd>
+    </dl>
+  );
+}
 
 export function OrbitDetail({ orbit }: { orbit: OrbitDefinition }) {
   const t = useTranslations('orbits');
-  const common = useTranslations('common');
+  const name = t(`${orbit.slug}.name`);
+  const { previous, next } = neighbours(orbit);
   return (
-    <main id="main" className="orbit-layout">
-      <OrbitLibrary selected={orbit.slug} />
-      <div className="detail-workspace">
-        <section className="orbit-stage" aria-label={t(`${orbit.slug}.name`)}>
-          <div className="stage-heading">
-            <Link className="back-link" href={ROUTES.orbits} scroll={false}>
-              <ArrowLeft size={14} />
-              {common('back')}
-            </Link>
-            <div className="eyebrow">{t('orbit')}</div>
-            <h1>{t(`${orbit.slug}.name`)}</h1>
-            <p>{t(`${orbit.slug}.description`)}</p>
-          </div>
-          <OrbitPlayer key={orbit.slug} orbit={orbit} />
-          <div className="stage-caption">
-            <span className="status-dot" />
-            {t('validated')}
-            <span>{BODY_INDICES.map((body) => `${t('body')} ${body + 1}`).join(' · ')}</span>
-          </div>
-        </section>
-        <aside className="context-column">
-          <TutorPanel context={{ kind: 'orbit', slug: orbit.slug }} />
-          <section className="concept-panel">
-            <div className="panel-heading">
-              <Sparkles size={22} />
-              <h2>{t('concept')}</h2>
-            </div>
-            <p>{t('conceptText')}</p>
-            <div className="concept-preview">
-              <Image src={ASSETS.orbitPreview(orbit.slug)} alt="" width={256} height={128} />
-            </div>
-            <p className="small-copy">{t('planar')}</p>
+    <main id="main" className={styles.exhibit}>
+      <nav className={styles.exhibitNav} aria-label={t('detail.nav')}>
+        <BackToGallery className={styles.back} />
+        <Link href={ROUTES.orbit(previous.slug)} className={styles.sibling} rel="prev">
+          <ArrowLeft size={16} aria-hidden="true" />
+          <span className={styles.siblingLabel}>{t('detail.previous')}:</span>
+          {t(`${previous.slug}.name`)}
+        </Link>
+        <Link href={ROUTES.orbit(next.slug)} className={styles.sibling} rel="next">
+          <span className={styles.siblingLabel}>{t('detail.next')}:</span>
+          {t(`${next.slug}.name`)}
+          <ArrowRight size={16} aria-hidden="true" />
+        </Link>
+      </nav>
+      <OrbitPlaybackProvider key={orbit.slug} orbit={orbit}>
+        <div className={styles.layout}>
+          <section id={STAGE_ID} className={styles.stage} aria-labelledby={TITLE_ID}>
+            <OrbitPlayer orbit={orbit} labels={{ label: name, descriptionId: DESCRIPTION_ID }} />
           </section>
-          <ScientificDetails orbit={orbit} />
-        </aside>
-      </div>
+          <article className={styles.text}>
+            <header className={styles.header}>
+              <h1 id={TITLE_ID}>{name}</h1>
+              <p className={styles.lede}>{t(`${orbit.slug}.description`)}</p>
+              <Placard orbit={orbit} />
+            </header>
+            <section>
+              <h2>{t('detail.seeing')}</h2>
+              <p id={DESCRIPTION_ID}>{t(`visual.${orbit.slug}`)}</p>
+              <p className={styles.note}>{t('planar')}</p>
+            </section>
+            <section>
+              <h2>{t('concept')}</h2>
+              <p>{t('conceptText')}</p>
+            </section>
+            <ScientificDetails orbit={orbit} />
+            <OrbitTutor slug={orbit.slug} />
+          </article>
+        </div>
+      </OrbitPlaybackProvider>
     </main>
   );
 }

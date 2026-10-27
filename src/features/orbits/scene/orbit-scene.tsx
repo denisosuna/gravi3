@@ -2,12 +2,12 @@ import { memo, useMemo } from 'react';
 import { Canvas, useThree } from '@react-three/fiber';
 import { Line } from '@react-three/drei';
 import { useTheme } from 'next-themes';
-import type { PlaybackController } from '@/features/orbits/playback';
-import { usePlaybackState } from '@/features/orbits/use-playback-state';
+import type { PlaybackController } from '../playback';
+import { usePlaybackState } from '../use-playback-state';
 import { BODY_INDICES, bodyPosition, type Trajectory } from '@/physics/types';
 import { CameraRig, INITIAL_CAMERA_POSITION } from './camera-rig';
 import { MovingBodies } from './moving-bodies';
-import { scenePalette } from './scene-palette';
+import { scenePalette } from '@/components/scene/scene-palette';
 
 const FIELD_OF_VIEW_DEGREES = 42;
 // Leaves a margin so the full trajectory fits inside the initial front view.

@@ -2,18 +2,17 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
 import { ArrowRight } from 'lucide-react';
-import { SceneBoundary } from '@/components/scene-boundary';
-import { useDocumentVisible } from '@/components/use-document-visible';
+import { SceneBoundary } from '@/components/scene/scene-boundary';
+import { useDocumentVisible } from '@/components/scene/use-document-visible';
 import { ROUTES } from '@/constants/routes';
 import { Link } from '@/i18n/routing';
 import { BodyEditor } from './body-editor';
 import { SimulationReadouts } from './simulation-readouts';
-import { SIMULATOR_ID } from '../apply-tutor-action';
 import type { SimulatorController } from './simulator-controller';
 import { SimulatorControls, SimulatorPresets } from './simulator-controls';
 import { useSimulatorState } from './use-simulator-state';
 
-const SimulatorScene = dynamic(() => import('@/visualization/simulator-scene'), { ssr: false });
+const SimulatorScene = dynamic(() => import('./scene/simulator-scene'), { ssr: false });
 const READOUT_INTERVAL_MS = 200;
 
 export function ThreeBodySimulator({ controller }: { controller: SimulatorController }) {
@@ -30,9 +29,7 @@ export function ThreeBodySimulator({ controller }: { controller: SimulatorContro
   }, [controller, playing]);
 
   return (
-    <section className="simulator-panel" id={SIMULATOR_ID} aria-labelledby="simulator-title">
-      <div className="eyebrow">{t('step')}</div>
-      <h2 id="simulator-title">{t('title')}</h2>
+    <div className="simulator-panel">
       <p className="simulator-intro">{t('intro')}</p>
       <SimulatorPresets controller={controller} />
       <div className="simulator-stage" role="group" aria-label={t('sceneLabel')}>
@@ -60,6 +57,6 @@ export function ThreeBodySimulator({ controller }: { controller: SimulatorContro
           <ArrowRight size={16} aria-hidden="true" />
         </Link>
       </div>
-    </section>
+    </div>
   );
 }

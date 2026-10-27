@@ -58,7 +58,7 @@ test('returning to the gallery restores the originating card and keyboard focus'
   await card.scrollIntoViewIfNeeded();
   await card.click();
   await expect(page).toHaveURL(/\/en\/orbits\/yin-yang-i$/);
-  await expect(page.locator('h1')).toBeInViewport();
+  await expect(page.getByRole('link', { name: 'Back to gallery' })).toBeInViewport();
   await page.getByRole('link', { name: 'Back to gallery' }).click();
   await expect(card).toBeFocused();
   await card.click();
@@ -101,9 +101,16 @@ test('a rotated camera survives locale navigation without scene lifecycle errors
   await page.mouse.down();
   await page.mouse.move(box.x + box.width / 2 + 60, box.y + box.height / 2 + 30, { steps: 10 });
   await page.mouse.up();
+  const canvasSize = async () => {
+    const { width, height } = (await page.locator('canvas').boundingBox())!;
+    return [Math.round(width), Math.round(height)];
+  };
+  const sizeBefore = await canvasSize();
   const before = await page.locator('canvas').screenshot();
   await page.getByLabel('Language', { exact: true }).selectOption('es');
   await page.getByRole('button', { name: 'Reproducir', exact: true }).waitFor();
+  // The canvas may still be settling its layout right after the locale switch.
+  await expect.poll(canvasSize).toEqual(sizeBefore);
   const after = await page.locator('canvas').screenshot();
   const fractionChanged = await page.evaluate(
     async (images) => {
@@ -128,4 +135,56 @@ test('a rotated camera survives locale navigation without scene lifecycle errors
   );
   expect(fractionChanged).toBeLessThan(0.005);
   expect(errors).toEqual([]);
+});
+
+test('gallery filters, order and comparison live in the URL and survive a visit to a detail', async ({
+  page,
+}) => {
+  await page.goto('/en/orbits');
+  const filters = page.getByRole('navigation', { name: 'Filter and sort the orbits' });
+  await filters.getByRole('link', { name: 'I.B', exact: true }).click();
+  await expect(page).toHaveURL(/family=I\.B/);
+  await expect(page.getByRole('status').filter({ hasText: 'orbits shown' })).toHaveText(
+    '2 orbits shown',
+  );
+  await filters.getByRole('link', { name: 'Period', exact: true }).click();
+  await page.getByRole('link', { name: 'Compare Goggles' }).click();
+  await page.getByRole('link', { name: 'Compare Moth I' }).click();
+  await expect(page).toHaveURL(/compare=goggles%2Cmoth-i/);
+  await expect(page.getByRole('heading', { name: 'Side by side' })).toBeVisible();
+
+  await page.locator('#orbit-moth-i').click();
+  await expect(page).toHaveURL(/\/en\/orbits\/moth-i$/);
+  await page.getByRole('link', { name: 'Back to gallery' }).click();
+  await expect(page).toHaveURL(/family=I\.B&sort=period&compare=goggles%2Cmoth-i/);
+  await expect(page.locator('#orbit-moth-i')).toBeFocused();
+  await expect(filters.getByRole('link', { name: 'I.B', exact: true })).toHaveAttribute(
+    'aria-current',
+    'true',
+  );
+
+  await page.locator('#orbit-goggles').click();
+  await expect(page).toHaveURL(/\/en\/orbits\/goggles$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/family=I\.B&sort=period/);
+  await expect(page.getByRole('heading', { name: 'Side by side' })).toBeVisible();
+
+  await page.goto('/en/orbits?family=nope&sort=colour');
+  await expect(page.getByRole('status').filter({ hasText: 'orbits shown' })).toHaveText(
+    '6 orbits shown',
+  );
+});
+
+test('playback controls are on screen without scrolling on a short desktop', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto('/en/orbits/goggles');
+  await expect(page.getByRole('button', { name: 'Play', exact: true })).toBeInViewport({
+    ratio: 1,
+  });
+  await expect(page.getByRole('slider', { name: 'Orbit timeline' })).toBeInViewport({ ratio: 1 });
+  await expect(page.getByRole('group', { name: 'Goggles' })).toHaveAccessibleDescription(
+    /sixteen close approaches/,
+  );
+  await page.getByRole('link', { name: /Next orbit/ }).click();
+  await expect(page).toHaveURL(/\/en\/orbits\/moth-i$/);
 });

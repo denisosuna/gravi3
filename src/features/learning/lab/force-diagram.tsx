@@ -1,7 +1,7 @@
 import { useId } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { UNITS, type Experiment } from '@/data/experiment';
-import { forceLabLayout } from '@/visualization/force-lab-layout';
+import { forceLabLayout } from './force-lab-layout';
 
 // Same logarithmic arrow scale as the 3D laboratory, converted from world units to SVG pixels.
 const ARROW_PIXELS_PER_UNIT = 60;
@@ -19,23 +19,15 @@ export function ForceDiagram({ experiment, force }: { experiment: Experiment; fo
   return (
     <svg viewBox="0 0 640 265" role="img" aria-label={t('equal')}>
       <defs>
-        <radialGradient id={`${id}-blue`} cx="30%" cy="25%">
-          <stop stopColor="#bae3ff" />
-          <stop offset="1" stopColor="#347bda" />
-        </radialGradient>
-        <radialGradient id={`${id}-amber`} cx="30%" cy="25%">
-          <stop stopColor="#ffdfad" />
-          <stop offset="1" stopColor="#c27a20" />
-        </radialGradient>
         <marker id={`${id}-arrow`} markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
           <path d="M0,0 L8,4 L0,8" fill="currentColor" />
         </marker>
       </defs>
       <line x1="60" y1="131" x2="580" y2="131" stroke="var(--line)" strokeDasharray="3 7" />
-      <circle cx={left} cy="130" r={radius1 + 14} fill="var(--blue)" opacity=".045" />
-      <circle cx={right} cy="130" r={radius2 + 14} fill="var(--amber)" opacity=".045" />
-      <circle cx={left} cy="130" r={radius1} fill={`url(#${id}-blue)`} />
-      <circle cx={right} cy="130" r={radius2} fill={`url(#${id}-amber)`} />
+      <circle cx={left} cy="130" r={radius1 + 14} fill="var(--body-1)" opacity=".08" />
+      <circle cx={right} cy="130" r={radius2 + 14} fill="var(--body-2)" opacity=".08" />
+      <circle cx={left} cy="130" r={radius1} fill="var(--body-1)" />
+      <circle cx={right} cy="130" r={radius2} fill="var(--body-2)" />
       <g color="var(--muted)">
         <line
           x1={left}

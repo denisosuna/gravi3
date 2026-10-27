@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { derivatives, gravitationalForce, invariants } from './gravity';
-import { integrate } from './integrator';
+import { derivatives, gravitationalForce, invariants, UnresolvedEncounterError } from './gravity';
+import { integrate, integrateAdaptive, StepBudgetError } from './integrator';
 import { samplePositions } from './interpolation';
 
 export function lagrangeInitialState() {
@@ -43,7 +43,7 @@ describe('Newtonian gravity', () => {
     expect(d[6]).not.toBe(d[8]);
   });
   it('does not conceal a collision with softening', () => {
-    expect(() => derivatives(Array(12).fill(0), [1, 1, 1])).toThrow('Collision');
+    expect(() => derivatives(Array(12).fill(0), [1, 1, 1])).toThrow(UnresolvedEncounterError);
   });
 });
 
@@ -80,7 +80,35 @@ describe('adaptive integration and playback', () => {
   it('fails explicitly when a step budget or input is invalid', () => {
     const { state } = lagrangeInitialState();
     expect(() => integrate(state, [1, 1, 1], 1, { maxSteps: 1 })).toThrow('budget');
+    expect(() => integrate(state, [1, 1, 1], 1, { maxSteps: 1 })).toThrow(StepBudgetError);
     expect(() => integrate(state, [1, 1, 1], NaN)).toThrow(RangeError);
     expect(() => integrate([NaN], [1, 1, 1], 1)).toThrow(RangeError);
+  });
+
+  it('resumes from the last proposed step, reaching the same state with fewer attempts', () => {
+    // Burrau's Pythagorean problem: close encounters make the step size swing widely.
+    const masses = [3, 4, 5] as const;
+    const start = [1, 3, -2, -1, 1, -1, 0, 0, 0, 0, 0, 0];
+    const frame = 1 / 60;
+    const run = (carry: boolean) => {
+      let state = start;
+      let step: number | undefined;
+      let attempts = 0;
+      for (let i = 0; i < 600; i++) {
+        const result = integrateAdaptive(state, masses, frame, {
+          tolerance: 1e-10,
+          maxStep: frame,
+          initialStep: carry ? step : undefined,
+        });
+        state = result.samples.at(-1)!.state as number[];
+        step = result.nextStep;
+        attempts += result.attempts;
+      }
+      return { state, attempts };
+    };
+    const fresh = run(false);
+    const carried = run(true);
+    carried.state.forEach((value, index) => expect(value).toBeCloseTo(fresh.state[index]!, 6));
+    expect(carried.attempts).toBeLessThan(fresh.attempts);
   });
 });

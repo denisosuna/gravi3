@@ -1,7 +1,8 @@
-import type { OrbitDefinition } from '../physics/types';
+import { SITE } from '@/constants/site';
+import type { OrbitDefinition, OrbitSlug } from '../physics/types';
 
 const LI_LIAO_CATALOG_URL = 'https://numericaltank.sjtu.edu.cn/three-body/three-body-movies.htm';
-const SUVAKOV_DMITRASINOVIC_URL = 'https://arxiv.org/html/1303.0181v1';
+const LAGRANGE_DERIVATION_URL = `${SITE.repositoryUrl}/blob/main/docs/physics.md#lagranges-analytic-solution`;
 // All catalog orbits use equal unit masses and G = 1 (normalized units).
 const NORMALIZED_UNITS = { masses: [1, 1, 1], gravitationalConstant: 1 } as const;
 
@@ -51,8 +52,9 @@ export const orbits: readonly OrbitDefinition[] = [
       height * omega,
       -omega / 2,
     ],
-    source: SUVAKOV_DMITRASINOVIC_URL,
-    variant: 'Analytic circular equilateral solution; unit circumradius, omega=3^(-1/4).',
+    source: LAGRANGE_DERIVATION_URL,
+    variant:
+      'Lagrange (1772) analytic circular equilateral solution; unit circumradius, omega=3^(-1/4).',
   },
   collinear({
     slug: 'figure-eight',
@@ -86,6 +88,63 @@ export const orbits: readonly OrbitDefinition[] = [
   }),
 ];
 
+// Classes from Šuvakov and Dmitrašinović (2013), which group orbits by their symmetries;
+// Li and Liao (2017) place the figure eight in class I.A. Lagrange's solution predates them.
+export const ORBIT_FAMILIES = ['analytic', 'I.A', 'I.B', 'II.C'] as const;
+export type OrbitFamily = (typeof ORBIT_FAMILIES)[number];
+
+export interface OrbitCatalogEntry {
+  family: OrbitFamily;
+  // Šuvakov–Dmitrašinović catalogue code, when the orbit has one.
+  code?: string;
+  discovery: { year: number; authors: string };
+  // First moment, as a fraction of the period, when two bodies come closest, and that distance.
+  // Measured on the validated trajectory; Lagrange's separations never change.
+  closestApproach?: { fraction: number; distance: number };
+}
+
+const SUVAKOV_DMITRASINOVIC = { year: 2013, authors: 'Šuvakov & Dmitrašinović' } as const;
+
+export const ORBIT_CATALOG: Readonly<Record<OrbitSlug, OrbitCatalogEntry>> = {
+  lagrange: { family: 'analytic', discovery: { year: 1772, authors: 'Lagrange' } },
+  'figure-eight': {
+    family: 'I.A',
+    discovery: { year: 1993, authors: 'Moore' },
+    closestApproach: { fraction: 0.0833, distance: 0.6905 },
+  },
+  'butterfly-i': {
+    family: 'I.A',
+    code: 'I.A.1',
+    discovery: SUVAKOV_DMITRASINOVIC,
+    closestApproach: { fraction: 0.2024, distance: 0.011 },
+  },
+  goggles: {
+    family: 'I.B',
+    code: 'I.B.5',
+    discovery: SUVAKOV_DMITRASINOVIC,
+    closestApproach: { fraction: 0.1016, distance: 0.0185 },
+  },
+  'moth-i': {
+    family: 'I.B',
+    code: 'I.B.1',
+    discovery: SUVAKOV_DMITRASINOVIC,
+    closestApproach: { fraction: 0.1523, distance: 0.0795 },
+  },
+  'yin-yang-i': {
+    family: 'II.C',
+    code: 'II.C.2b',
+    discovery: SUVAKOV_DMITRASINOVIC,
+    closestApproach: { fraction: 0.384, distance: 0.0098 },
+  },
+};
+
 export function findOrbit(slug: string) {
   return orbits.find((orbit) => orbit.slug === slug);
+}
+
+// For slugs already checked by the type system or the router.
+export function orbitFor(slug: OrbitSlug): OrbitDefinition {
+  const orbit = findOrbit(slug);
+  if (!orbit) throw new RangeError(`Unknown orbit: ${slug}`);
+  return orbit;
 }

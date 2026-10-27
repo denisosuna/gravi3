@@ -38,6 +38,20 @@ describe('tutor output parsing', () => {
     ]);
   });
 
+  it('accepts player actions only on orbit pages and only within their ranges', () => {
+    const actions = [
+      { type: 'seekOrbit', fraction: 0.2 },
+      { type: 'seekOrbit', fraction: 1.5 },
+      { type: 'setOrbitSpeed', speed: 3 },
+      { type: 'setOrbitSpeed', speed: 0.5 },
+    ];
+    expect(parseTutorOutput(json({ reply: 'Hi', actions }), 'orbit').actions).toEqual([
+      { type: 'seekOrbit', fraction: 0.2 },
+      { type: 'setOrbitSpeed', speed: 0.5 },
+    ]);
+    expect(parseTutorOutput(json({ reply: 'Hi', actions }), 'learning').actions).toEqual([]);
+  });
+
   it('limits and de-duplicates suggested actions', () => {
     const actions = [
       { type: 'perturb' },

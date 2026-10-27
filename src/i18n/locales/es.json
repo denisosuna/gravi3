@@ -13,11 +13,18 @@
     "back": "Volver a la galería",
     "skip": "Saltar al contenido",
     "loading": "Cargando…",
-    "retry": "Reintentar",
-    "brandNote": "EL PROBLEMA DE LOS TRES CUERPOS"
+    "retry": "Reintentar"
+  },
+  "errors": {
+    "notFoundTitle": "Esta página no existe",
+    "notFoundText": "Puede que la dirección esté mal escrita o que la órbita no sea una de las seis de la galería.",
+    "suggestions": "Por dónde seguir",
+    "toOrbits": "Ver las seis órbitas",
+    "toLearn": "Empezar por la gravedad",
+    "errorTitle": "No se ha podido cargar esta página",
+    "errorText": "Algo ha fallado al mostrarla. Los valores de tu experimento se conservan; vuelve a intentarlo."
   },
   "home": {
-    "eyebrow": "UN CURSO INTERACTIVO DE GRAVITACIÓN",
     "title": "El problema de los tres cuerpos",
     "lead": "¿Puedes predecir cómo se moverán tres objetos que se atraen por la gravedad? Con dos es fácil; con tres no existe una fórmula general. Aquí lo entenderás experimentando, paso a paso y sin conocimientos previos de física.",
     "start": "Empieza por la gravedad",
@@ -64,24 +71,18 @@
     }
   },
   "orbits": {
-    "eyebrow": "EL PROBLEMA DE LOS TRES CUERPOS",
-    "title": "El orden dentro del movimiento.",
-    "solutions": "soluciones",
+    "title": "Seis órbitas que vuelven.",
     "description": "Con tres cuerpos, casi cualquier comienzo acaba en un baile caótico o con un cuerpo expulsado. Pero con condiciones iniciales muy precisas, los tres vuelven exactamente a su punto de partida y repiten el ciclo. Estas son seis de esas soluciones periódicas; la mayoría son inestables: un empujón mínimo las rompe.",
-    "periodic": "Órbita periódica",
-    "library": "Biblioteca de órbitas",
-    "libraryNote": "Tres masas iguales · Gravedad newtoniana",
     "note": "No son curvas dibujadas a mano: las trayectorias se generan a partir de condiciones iniciales publicadas y se validan numéricamente.",
-    "orbit": "ÓRBITA",
     "concept": "Detrás del movimiento",
     "conceptText": "Cada cuerpo atrae a los otros dos. Con unas condiciones iniciales muy concretas, sus posiciones y velocidades vuelven al punto de partida.",
     "scientific": "Ficha científica",
     "period": "Período",
     "units": "unidades normalizadas",
     "source": "Fuente y condiciones iniciales",
-    "planar": "Órbita plana · La cámara 3D cambia tu perspectiva, no la física.",
+    "planar": "Órbita plana: la cámara 3D cambia tu perspectiva, no la física.",
     "body": "Cuerpo",
-    "equalMasses": "Masas iguales · G = 1",
+    "equalMasses": "Masas iguales, G = 1",
     "validated": "Trayectoria validada",
     "browse": "Explorar las seis órbitas",
     "lagrange": {
@@ -116,7 +117,49 @@
     },
     "initialConditions": "Condiciones iniciales",
     "position": "Posición",
-    "velocity": "Velocidad"
+    "velocity": "Velocidad",
+    "filters": {
+      "label": "Filtrar y ordenar las órbitas",
+      "class": "Clase",
+      "all": "Todas",
+      "analytic": "Analítica",
+      "sort": "Orden",
+      "catalog": "Catálogo",
+      "period": "Período",
+      "year": "Año del hallazgo"
+    },
+    "showing": "{count, plural, one {# órbita visible} other {# órbitas visibles}}",
+    "classHelp": "Las clases siguen a Šuvakov y Dmitrašinović (2013), que agruparon las órbitas según sus simetrías.",
+    "plate": {
+      "class": "Clase {code}",
+      "found": "{authors}, {year}",
+      "period": "Período {value}",
+      "compare": "Comparar {name}",
+      "uncompare": "Dejar de comparar {name}"
+    },
+    "compare": {
+      "title": "Lado a lado",
+      "explain": "Cada órbita se dibuja en la misma fracción de su propio período, así las formas coinciden aunque los períodos sean distintos. Cada dibujo se escala para llenar su marco.",
+      "pickMore": "Elige una o dos órbitas más con «Comparar».",
+      "phase": "Fracción de cada período",
+      "remove": "Quitar {name}"
+    },
+    "detail": {
+      "previous": "Órbita anterior",
+      "next": "Órbita siguiente",
+      "seeing": "Qué estás viendo",
+      "class": "Clase",
+      "found": "Hallada por",
+      "nav": "Más órbitas"
+    },
+    "visual": {
+      "lagrange": "Un triángulo equilátero gira sin deformarse alrededor de su centro. Cada cuerpo recorre un círculo de radio 1 y cada pareja se mantiene a √3 ≈ 1,73 unidades.",
+      "figure-eight": "Los tres cuerpos recorren una misma curva en forma de ocho, de unas 2,1 unidades de ancho y 1,05 de alto, separados un tercio de período. Ninguna pareja se acerca a menos de unas 0,69 unidades.",
+      "butterfly-i": "Una órbita plana de unas 2,1 unidades de ancho y solo 0,35 de alto. En cada período hay ocho acercamientos; en el más estrecho, dos cuerpos pasan a unas 0,011 unidades.",
+      "goggles": "Unas 2,1 unidades de ancho y 1,5 de alto. En cada período hay dieciséis acercamientos; en el más estrecho, dos cuerpos pasan a unas 0,019 unidades.",
+      "moth-i": "Casi tan alta como ancha, unas 2,2 unidades en cada sentido. En cada período hay cuatro acercamientos, todos a unas 0,08 unidades.",
+      "yin-yang-i": "Unas 2,1 unidades de ancho y 1,0 de alto. En cada período hay ocho acercamientos; en el más estrecho, dos cuerpos pasan a unas 0,010 unidades."
+    }
   },
   "player": {
     "play": "Reproducir",
@@ -131,11 +174,9 @@
     "error": "No se pudo cargar la visualización. Puedes consultar la trayectoria y su explicación.",
     "fallback": "La escena 3D no está disponible. Esta miniatura muestra la trayectoria validada.",
     "loading": "Preparando la órbita…",
-    "physicalTime": "tiempo físico",
     "seconds": "s de reproducción"
   },
   "learn": {
-    "eyebrow": "APRENDER · DE DOS A TRES CUERPOS",
     "title": "La gravedad empieza con dos.",
     "description": "Para entender tres cuerpos primero hay que entender cómo se atraen dos. Mueve las masas, cambia la distancia y predice qué ocurrirá antes de comprobarlo.",
     "formulaTitle": "Una ley, tres ingredientes",
@@ -144,9 +185,27 @@
     "mass1": "Masa del cuerpo 1",
     "mass2": "Masa del cuerpo 2",
     "distance": "Distancia entre centros",
-    "force": "Fuerza de atracción en cada cuerpo",
-    "equal": "Igual magnitud, sentidos opuestos. La aceleración es F/m: la masa menor acelera más.",
-    "scale": "Distancia a escala; radios ilustrativos; flechas de fuerza en escala logarítmica. Los valores se calculan en unidades SI.",
+    "force": "Fuerza inicial de atracción en cada cuerpo",
+    "equal": "La fuerza tiene el mismo valor en ambos y sentidos opuestos. Si las masas difieren, la más ligera acelera más.",
+    "whatHappensTitle": "Qué está pasando",
+    "mutualAttraction": "Los dos cuerpos se atraen a la vez: la fuerza tiene el mismo valor en ambos, pero apunta en sentidos contrarios.",
+    "equalMasses": "Como tienen la misma masa, esa fuerza cambia su movimiento por igual.",
+    "body1Lighter": "El cuerpo 1 tiene menos masa: con la misma fuerza, su movimiento cambia más.",
+    "body2Lighter": "El cuerpo 2 tiene menos masa: con la misma fuerza, su movimiento cambia más.",
+    "distanceEffect": "Cuanto más lejos están, más débil es la atracción. Si duplicas la distancia, queda en una cuarta parte.",
+    "twoBodyPurpose": "Hay solo dos cuerpos a propósito: así aislamos esta interacción. En el último paso añadimos un tercero y verás qué cambia.",
+    "accelerationDetails": "Ver los valores de aceleración",
+    "accelerationMeaning": "La aceleración indica cuánto cambia el movimiento. Para cada cuerpo, se calcula dividiendo la fuerza entre su masa.",
+    "showFall": "Ver cómo caen por gravedad",
+    "replayFall": "Repetir la caída",
+    "resetFall": "Volver a la posición inicial",
+    "animationPlaying": "Las flechas crecen al acercarse. La fuerza indicada es la inicial; el tiempo de simulación está acelerado.",
+    "animationExplanation": "Pulsa para simular en una dimensión la caída gravitatoria desde el reposo. Sigue la ley de Newton y el tiempo está acelerado.",
+    "animationStaticPending": "Calculando la caída en una vista estática…",
+    "animationStatic": "Vista estática de la caída calculada tras {time} de tiempo simulado. No se animó por tu preferencia de movimiento reducido.",
+    "animationDone": "Tras {time} de tiempo simulado, los cuerpos se acercan mucho. El modelo de masas puntuales se detiene antes de la colisión matemática.",
+    "animationUnavailable": "La animación no está disponible en esta vista.",
+    "scale": "Distancia a escala; radios ilustrativos; flechas de fuerza en escala logarítmica. Las posiciones siguen la gravedad de Newton; el modelo no describe un choque entre cuerpos reales.",
     "predictionTitle": "Antes de probar, ¿qué intuyes?",
     "predictionQuestion": "Si duplicamos la distancia y mantenemos las masas, la fuerza será…",
     "half": "La mitad",
@@ -157,15 +216,29 @@
     "tryDistance": "Duplicar la distancia",
     "tryMass": "Duplicar la primera masa",
     "reset": "Restablecer experimento",
-    "step1": "01 · Observa",
-    "step2": "02 · Predice",
     "forceUnits": "newtons (N)",
     "acceleration": "Aceleración",
     "predictionHint": "Elige una respuesta y después comprueba el efecto en el laboratorio.",
     "rotateHint": "Arrastra la escena para girarla.",
     "fallback3d": "La vista 3D no está disponible en este dispositivo. Este diagrama muestra el mismo experimento.",
     "ratio": "{ratio} × la fuerza de la configuración inicial",
-    "legend": "Valores del experimento"
+    "legend": "Valores del experimento",
+    "steps": {
+      "label": "Pasos de la lección",
+      "observe": "Observa",
+      "predict": "Predice",
+      "check": "Comprueba",
+      "explain": "Explica",
+      "three-bodies": "Tres cuerpos",
+      "askTutor": "Pregunta al tutor"
+    },
+    "stepOf": "Paso {step} de {total}",
+    "observeTitle": "Mueve las masas y la distancia",
+    "checkTitle": "Comprueba tu predicción",
+    "checkIntro": "Duplica una magnitud y compara la nueva fuerza con la del principio.",
+    "yourPrediction": "Tu predicción: {answer}",
+    "noPrediction": "Aún no has predicho nada. Elige primero una respuesta en el paso anterior.",
+    "backToStart": "Volver a los valores iniciales"
   },
   "tutor": {
     "title": "Tutor IA",
@@ -189,15 +262,23 @@
     "offline": "La fuerza y las órbitas siguen disponibles sin IA.",
     "suggestions": {
       "learning": [
-        "¿Qué ocurre si duplico la distancia?",
+        "¿Me explicas la gravedad con un ejemplo sencillo?",
         "¿Por qué la masa pequeña acelera más?",
         "¿Por qué tres cuerpos son impredecibles?"
       ],
       "orbit": [
         "¿Por qué se repite esta órbita?",
         "¿Es estable esta órbita?",
-        "¿En qué se diferencia de la figura de ocho?"
-      ]
+        "¿Qué debería observar mientras se mueve?"
+      ],
+      "orbitContext": {
+        "lagrange": "¿Por qué los tres mantienen un triángulo?",
+        "figure-eight": "¿Por qué los tres recorren la misma curva?",
+        "butterfly-i": "¿Qué ocurre cuando dos cuerpos pasan muy cerca?",
+        "goggles": "¿Cómo se conectan los lazos de esta órbita?",
+        "moth-i": "¿Qué patrón siguen los cuerpos en esta órbita?",
+        "yin-yang-i": "¿Por qué esta órbita parece tener dos mitades?"
+      }
     },
     "suggestionsLabel": "Preguntas sugeridas",
     "actionsLabel": "Experimentos propuestos",
@@ -205,17 +286,20 @@
       "setExperiment": "Probar: {changes}",
       "loadPreset": "Probar: {preset} en el simulador",
       "perturb": "Probar: perturbar un 1 % en el simulador",
-      "openOrbit": "Ver la órbita {name}"
-    }
+      "openOrbit": "Ver la órbita {name}",
+      "seekOrbit": "Probar: ir al {moment} del período",
+      "setOrbitSpeed": "Probar: reproducir a {speed}×"
+    },
+    "collapse": "Plegar el tutor IA",
+    "expand": "Desplegar el tutor IA"
   },
   "seo": {
-    "homeTitle": "Gravedad y problema de los tres cuerpos",
+    "homeTitle": "Explorador interactivo de la gravedad y el problema de los tres cuerpos",
     "learnTitle": "Aprende la ley de gravitación",
     "orbitsTitle": "Seis soluciones del problema de los tres cuerpos",
     "description": "Aprende gravitación con experimentos y un tutor IA. Explora seis soluciones periódicas del problema de los tres cuerpos."
   },
   "simulator": {
-    "step": "03 · Tres cuerpos",
     "title": "Añade un tercer cuerpo",
     "intro": "Cada par de cuerpos se atrae con la misma ley que acabas de probar. Con tres, cada uno tira de los otros dos a la vez y el movimiento ya no tiene fórmula: hay que calcularlo paso a paso. Elige un punto de partida y obsérvalo.",
     "presets": "Puntos de partida",
@@ -266,6 +350,7 @@
     "vx": "Velocidad x",
     "vy": "Velocidad y",
     "collision": "Dos cuerpos se han acercado tanto que la fuerza crece sin límite: con masas puntuales sería una colisión. La simulación se detiene aquí; reinicia o elige otro punto de partida.",
+    "closeEncounter": "Dos cuerpos han pasado tan cerca que la simulación no puede resolver su trayectoria en un fotograma. Se detiene aquí en vez de adivinar; reinicia o elige otro punto de partida.",
     "escape": "Un cuerpo se ha alejado mucho de los otros dos: probablemente ha sido expulsado. Es el final más habitual del problema de los tres cuerpos.",
     "model": "Física exacta de Newton con masas puntuales y G = 1, sin suavizar la fuerza. Unidades normalizadas.",
     "sceneLabel": "Simulación de tres cuerpos",

@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { orbitSlugs } from '@/physics/types';
 import { distanceRange, massRange } from './experiment';
+import { PLAYBACK_SPEEDS } from './playback';
 import { SIMULATOR_PRESETS } from './simulator-presets';
 
 export const MAX_TUTOR_ACTIONS = 2;
@@ -22,6 +23,9 @@ export const tutorActionSchema = z.discriminatedUnion('type', [
   z.object({ type: z.literal('loadPreset'), preset: z.enum(SIMULATOR_PRESETS) }).strict(),
   z.object({ type: z.literal('perturb') }).strict(),
   z.object({ type: z.literal('openOrbit'), slug: z.enum(orbitSlugs) }).strict(),
+  // A moment of the current orbit as a fraction of its period, so the period never has to be trusted.
+  z.object({ type: z.literal('seekOrbit'), fraction: z.number().min(0).max(1) }).strict(),
+  z.object({ type: z.literal('setOrbitSpeed'), speed: z.literal(PLAYBACK_SPEEDS) }).strict(),
 ]);
 
 export type TutorAction = z.infer<typeof tutorActionSchema>;
@@ -30,7 +34,7 @@ export type TutorActionType = TutorAction['type'];
 // What the tutor may propose on each page; anything else is discarded on the server.
 export const ACTIONS_BY_CONTEXT = {
   learning: ['setExperiment', 'loadPreset', 'perturb'],
-  orbit: ['openOrbit'],
+  orbit: ['openOrbit', 'seekOrbit', 'setOrbitSpeed'],
 } as const satisfies Record<string, readonly TutorActionType[]>;
 export type TutorContextKind = keyof typeof ACTIONS_BY_CONTEXT;
 

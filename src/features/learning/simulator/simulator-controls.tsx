@@ -37,7 +37,10 @@ export function SimulatorControls({
   const playing = useSimulatorState(controller, (state) => state.playing);
   const speed = useSimulatorState(controller, (state) => state.speed);
   const zoomIndex = useSimulatorState(controller, (state) => state.zoomIndex);
-  const halted = useSimulatorState(controller, (state) => state.event === 'collision');
+  const halted = useSimulatorState(
+    controller,
+    (state) => state.event === 'collision' || state.event === 'closeEncounter',
+  );
   const zoomTo = (index: number) =>
     controller.update({ zoomIndex: Math.min(ZOOM_LEVELS.length - 1, Math.max(0, index)) });
   return (
@@ -66,9 +69,10 @@ export function SimulatorControls({
         className="speed-control"
         aria-label={t('speed')}
         value={speed}
-        onChange={(event) =>
-          controller.update({ speed: Number(event.target.value) as typeof speed })
-        }
+        onChange={(event) => {
+          const selected = SIMULATOR_SPEEDS.find((option) => option === Number(event.target.value));
+          if (selected) controller.update({ speed: selected });
+        }}
       >
         {SIMULATOR_SPEEDS.map((option) => (
           <option key={option} value={option}>

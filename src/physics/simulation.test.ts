@@ -28,15 +28,34 @@ describe('live three-body simulation', () => {
   });
 
   it('stops with a collision event instead of producing non-finite values', () => {
-    // Two bodies at rest fall straight into each other; the third is far away.
-    const headOn: State = [-0.5, 0, 0.5, 0, 0, 30, 0, 0, 0, 0, 0, 0];
-    const simulation = new ThreeBodySimulation(EQUAL_MASSES, headOn);
-    expect(advanceInFrames(simulation, 5)).toContain('collision');
+    // Two bodies are inside the configured collision distance; the third is far away.
+    const closePair: State = [-0.00025, 0, 0.00025, 0, 0, 30, 0, 0, 0, 0, 0, 0];
+    const simulation = new ThreeBodySimulation(EQUAL_MASSES, closePair);
+    expect(simulation.advance(1 / 60)).toBe('collision');
     expect(simulation.halted).toBe(true);
     expect(simulation.state.every(Number.isFinite)).toBe(true);
     const frozen = [...simulation.state];
     expect(simulation.advance(1)).toBe('collision');
     expect(simulation.state).toEqual(frozen);
+  });
+
+  it('reports an unresolved trial-stage encounter separately from a confirmed collision', () => {
+    const nearPass: State = [-100, 0, 100, 0, 10_000, 30_000, 100_000, 0, -100_000, 0, 0, 0];
+    const simulation = new ThreeBodySimulation(EQUAL_MASSES, nearPass);
+
+    expect(simulation.advance(0.001)).toBe('closeEncounter');
+    expect(simulation.halted).toBe(true);
+    expect(simulation.time).toBe(0);
+    expect(simulation.state.every(Number.isFinite)).toBe(true);
+  });
+
+  it('reports an unresolved head-on path as a close encounter, not a confirmed collision', () => {
+    const headOn: State = [-0.5, 0, 0.5, 0, 0, 30, 0, 0, 0, 0, 0, 0];
+    const simulation = new ThreeBodySimulation(EQUAL_MASSES, headOn);
+
+    expect(advanceInFrames(simulation, 5)).toContain('closeEncounter');
+    expect(simulation.halted).toBe(true);
+    expect(simulation.state.every(Number.isFinite)).toBe(true);
   });
 
   it('reports once when a body escapes far from the center of mass', () => {

@@ -9,7 +9,7 @@ import {
   LineBasicMaterial,
   Vector3,
 } from 'three';
-import type { SimulatorController } from '@/features/learning/simulator/simulator-controller';
+import type { SimulatorController } from '../simulator-controller';
 import { BODY_INDICES, bodyPosition, bodyVelocity } from '@/physics/types';
 
 const TRAIL_POINTS = 900;

@@ -3,11 +3,12 @@ import { getLocale } from 'next-intl/server';
 import { Providers } from '@/components/providers';
 import { SITE } from '@/constants/site';
 import { getConfig } from '@/server/config';
+import { FONT_VARIABLES } from './fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(getConfig().appUrl),
-  title: `${SITE.name} · ${SITE.tagline}`,
+  title: `${SITE.name} — ${SITE.tagline}`,
   description: 'Learn gravity through experiments and explore six periodic three-body orbits.',
 };
 
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const locale = await getLocale();
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} className={FONT_VARIABLES} suppressHydrationWarning>
       <body>
         <Providers>{children}</Providers>
       </body>

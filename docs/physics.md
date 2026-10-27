@@ -8,7 +8,9 @@ The learning laboratory uses SI units and `G = 6.67430 × 10⁻¹¹ m³ kg⁻¹ 
 
 An explicit Dormand–Prince 5(4) pair estimates local error using the embedded fourth-order solution. Each component is scaled by `tolerance * (1 + max(abs(previous), abs(next)))`. Steps are bounded and an iteration budget prevents an indefinite run. This adaptive method is not symplectic; accuracy is assessed over one period and playback loops a validated period instead of integrating indefinitely.
 
-The equilateral circular Lagrange solution provides an analytic reference. For radius one and equal unit masses, side length is `sqrt(3)`, centripetal acceleration is `1/sqrt(3)`, angular speed is `3^(-1/4)`, and period is `2π / omega`. Initial velocities are a quarter-turn of positions multiplied by omega.
+## Lagrange's analytic solution
+
+Lagrange (1772) found that three bodies at the vertices of a rotating equilateral triangle form an exact solution. The equilateral circular Lagrange solution provides an analytic reference. For radius one and equal unit masses, side length is `sqrt(3)`, centripetal acceleration is `1/sqrt(3)`, angular speed is `3^(-1/4)`, and period is `2π / omega`. Initial velocities are a quarter-turn of positions multiplied by omega.
 
 ## Acceptance thresholds
 
@@ -32,7 +34,7 @@ Adaptive samples retain both time and velocity. Cubic Hermite interpolation reco
 
 Conditions and periods come from [Li and Liao’s primary numerical movie catalog](https://numericaltank.sjtu.edu.cn/three-body/three-body-movies.htm). Family/name correspondence is given in [their supplementary Table S1](https://arxiv.org/html/1705.00527v4); original names appear in [Šuvakov and Dmitrašinović, Table I](https://arxiv.org/html/1303.0181v1). The figure eight is also described by [Montgomery, with Simó’s conditions in a different orientation/scale](https://people.ucsc.edu/~rmont/NbdyB.html). We do not mix those normalizations.
 
-All five numerical seeds use positions `(-1,0), (1,0), (0,0)` and velocities `(vx,vy), (vx,vy), (-2vx,-2vy)`. `src/data/orbits.ts` records the exact ten-decimal catalog values and periods. Yin-Yang I uses the representation corresponding to original II.C.2b; alternate II.C.2a is related by scale and phase, not an extra gallery solution. Lagrange is derived analytically above. No third-party code, illustrations or animation files are copied. Numeric scientific facts are attributed to their authors; no software license is claimed for their website.
+All five numerical seeds use positions `(-1,0), (1,0), (0,0)` and velocities `(vx,vy), (vx,vy), (-2vx,-2vy)`. `src/data/orbits.ts` records the exact ten-decimal catalog values and periods. Yin-Yang I uses the representation corresponding to original II.C.2b; alternate II.C.2a is related by scale and phase, not an extra gallery solution. Lagrange is derived analytically above; with equal masses it is periodic but linearly unstable, so a live integration drifts away from it after a few turns. No third-party code, illustrations or animation files are copied. Numeric scientific facts are attributed to their authors; no software license is claimed for their website.
 
 Run `pnpm orbits:generate` to integrate and regenerate trajectories, SVG previews and [the machine-readable report](orbit-validation.json). Run `pnpm orbits:validate` to independently check committed data against a finer integration. Generation is offline and deterministic for the pinned runtime. CI validates committed data and does not regenerate them during a web build.
 
