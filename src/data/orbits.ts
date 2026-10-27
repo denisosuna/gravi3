@@ -1,7 +1,8 @@
+import { SITE } from '@/constants/site';
 import type { OrbitDefinition } from '../physics/types';
 
 const LI_LIAO_CATALOG_URL = 'https://numericaltank.sjtu.edu.cn/three-body/three-body-movies.htm';
-const SUVAKOV_DMITRASINOVIC_URL = 'https://arxiv.org/html/1303.0181v1';
+const LAGRANGE_DERIVATION_URL = `${SITE.repositoryUrl}/blob/main/docs/physics.md#lagranges-analytic-solution`;
 // All catalog orbits use equal unit masses and G = 1 (normalized units).
 const NORMALIZED_UNITS = { masses: [1, 1, 1], gravitationalConstant: 1 } as const;
 
@@ -51,8 +52,9 @@ export const orbits: readonly OrbitDefinition[] = [
       height * omega,
       -omega / 2,
     ],
-    source: SUVAKOV_DMITRASINOVIC_URL,
-    variant: 'Analytic circular equilateral solution; unit circumradius, omega=3^(-1/4).',
+    source: LAGRANGE_DERIVATION_URL,
+    variant:
+      'Lagrange (1772) analytic circular equilateral solution; unit circumradius, omega=3^(-1/4).',
   },
   collinear({
     slug: 'figure-eight',

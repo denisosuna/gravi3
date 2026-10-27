@@ -66,9 +66,10 @@ export function SimulatorControls({
         className="speed-control"
         aria-label={t('speed')}
         value={speed}
-        onChange={(event) =>
-          controller.update({ speed: Number(event.target.value) as typeof speed })
-        }
+        onChange={(event) => {
+          const selected = SIMULATOR_SPEEDS.find((option) => option === Number(event.target.value));
+          if (selected) controller.update({ speed: selected });
+        }}
       >
         {SIMULATOR_SPEEDS.map((option) => (
           <option key={option} value={option}>

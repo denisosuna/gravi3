@@ -51,7 +51,7 @@ export function TutorPanel({
           aria-expanded={expanded}
           aria-controls={id}
           onClick={() => setExpanded(!expanded)}
-          aria-label={t('title')}
+          aria-label={t(expanded ? 'collapse' : 'expand')}
         >
           {expanded ? <Minus size={16} /> : <Plus size={16} />}
         </button>
@@ -74,8 +74,8 @@ export function TutorPanel({
           aria-label={t('reply')}
           aria-live="polite"
         >
-          {messages.map((message, index) => (
-            <div key={index} className={`tutor-message ${message.role}`}>
+          {messages.map((message) => (
+            <div key={message.id} className={`tutor-message ${message.role}`}>
               <span>{t(message.role === 'user' ? 'you' : 'title')}</span>
               <p>{message.content}</p>
               {message.actions ? (

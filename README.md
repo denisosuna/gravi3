@@ -103,8 +103,8 @@ docs/                  Architecture, physics provenance and verification evidenc
 
 Conventions worth knowing before changing code:
 
-- **Bracketed folders** are Next.js dynamic segments. `[locale]` puts the language in the URL so links are shareable and indexable per language; `[slug]` serves all six orbits from one page, validated against the catalog (unknown slugs return 404).
-- **`'use client'`** marks the boundary where a Server Component hands over to browser code that needs state, effects or browser APIs. It appears only on boundary files (`header`, `providers`, `gallery`, `learning-experience`, `orbit-player`, `tutor-panel`); modules they import are client code automatically. Everything else renders on the server.
+- **Bracketed folders** are Next.js dynamic segments. `[locale]` puts the language in the URL so links are shareable and indexable per language; `[slug]` serves all six orbits from one page, validated against the catalog (unknown slugs return 404). `[...rest]` catches any other path under a locale so it gets the translated `not-found` page; `error.tsx` is the translated error boundary for each page.
+- **`'use client'`** marks the boundary where a Server Component hands over to browser code that needs state, effects or browser APIs. It appears only on boundary files (`header`, `providers`, `gallery`, `learning-experience`, `orbit-player`, `tutor-panel`, and `error`, which Next.js requires to be a client component); modules they import are client code automatically. Everything else renders on the server.
 - **No magic strings:** paths come from `src/constants/routes.ts`, limits and error codes from `src/data/tutor-contract.ts`, log event names from `src/server/logger.ts`.
 - **Lint-enforced boundaries:** `physics`, `data` and `constants` cannot import React, Next.js, Three.js or server code; UI cannot import `src/server`; features cannot import each other and shared components cannot import a feature. Complexity, nesting depth, parameter count and file length are capped.
 - **Logging:** Pino JSON on the server only, with named events and redaction; prompts, messages, keys and raw IPs are never logged.
