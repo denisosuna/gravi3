@@ -1,4 +1,4 @@
-import { invariants, validateSystem } from './gravity';
+import { invariants, UnresolvedEncounterError, validateSystem } from './gravity';
 import { integrateAdaptive, StepBudgetError } from './integrator';
 import { BODY_INDICES, bodyPosition, VELOCITY_OFFSET, type Masses, type State } from './types';
 
@@ -73,6 +73,8 @@ export class ThreeBodySimulation {
   advance(duration: number): SimulationEvent | undefined {
     if (this.haltedBy) return this.haltedBy;
     if (duration <= 0) return undefined;
+    if (invariants(this.current, this.masses).minimumDistance < COLLISION_DISTANCE)
+      return this.halt('collision');
     try {
       const { samples, nextStep } = integrateAdaptive(this.current, this.masses, duration, {
         tolerance: TOLERANCE,
@@ -87,8 +89,8 @@ export class ThreeBodySimulation {
       this.elapsed += duration;
       this.step = nextStep;
     } catch (error) {
-      if (error instanceof StepBudgetError) return this.halt('closeEncounter');
-      if (error instanceof RangeError) return this.halt('collision');
+      if (error instanceof StepBudgetError || error instanceof UnresolvedEncounterError)
+        return this.halt('closeEncounter');
       throw error;
     }
     return this.checkEscape();

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { derivatives, gravitationalForce, invariants } from './gravity';
+import { derivatives, gravitationalForce, invariants, UnresolvedEncounterError } from './gravity';
 import { integrate, integrateAdaptive, StepBudgetError } from './integrator';
 import { samplePositions } from './interpolation';
 
@@ -43,7 +43,7 @@ describe('Newtonian gravity', () => {
     expect(d[6]).not.toBe(d[8]);
   });
   it('does not conceal a collision with softening', () => {
-    expect(() => derivatives(Array(12).fill(0), [1, 1, 1])).toThrow('Collision');
+    expect(() => derivatives(Array(12).fill(0), [1, 1, 1])).toThrow(UnresolvedEncounterError);
   });
 });
 

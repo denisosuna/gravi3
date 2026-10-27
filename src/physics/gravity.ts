@@ -2,6 +2,12 @@ import { STATE_LENGTH, type Masses, type State } from './types';
 
 export const GRAVITATIONAL_CONSTANT = 6.6743e-11;
 
+export class UnresolvedEncounterError extends RangeError {
+  constructor() {
+    super('A trial integration stage encountered an unresolved close encounter.');
+  }
+}
+
 export function gravitationalForce(mass1: number, mass2: number, distance: number): number {
   if (![mass1, mass2, distance].every((value) => Number.isFinite(value) && value > 0)) {
     throw new RangeError('Masses and center-to-center distance must be positive and finite.');
@@ -27,7 +33,7 @@ export function derivatives(state: State, masses: Masses, constant = 1): number[
       const dx = state[2 * j]! - state[2 * i]!;
       const dy = state[2 * j + 1]! - state[2 * i + 1]!;
       const squaredDistance = dx * dx + dy * dy;
-      if (squaredDistance < 1e-16) throw new RangeError('Collision or unresolved close encounter.');
+      if (squaredDistance < 1e-16) throw new UnresolvedEncounterError();
       const scale = constant / (squaredDistance * Math.sqrt(squaredDistance));
       result[6 + 2 * i]! += masses[j]! * dx * scale;
       result[7 + 2 * i]! += masses[j]! * dy * scale;
