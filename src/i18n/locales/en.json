@@ -324,7 +324,7 @@
     "vx": "Velocity x",
     "vy": "Velocity y",
     "collision": "Two bodies came so close that the force grows without bound: with point masses this is a collision. The simulation stops here; restart or pick another starting point.",
-    "closeEncounter": "Two bodies passed so close that following them would take more steps than one frame allows. The simulation pauses here instead of guessing; restart or pick another starting point.",
+    "closeEncounter": "Two bodies passed so close that the simulation could not resolve their path within one frame. It pauses here instead of guessing; restart or pick another starting point.",
     "escape": "One body has moved far away from the other two: it has probably been ejected. That is the most common ending of the three-body problem.",
     "model": "Exact Newtonian physics with point masses and G = 1, without softening the force. Normalized units.",
     "sceneLabel": "Three-body simulation",
