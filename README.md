@@ -146,7 +146,7 @@ Orbits start paused. Use Play, Restart, speed, timeline, front/3D, trails and ca
 
 ## Deploy on Render
 
-The repository owner manages Render deployment. No hosted URL is claimed until it is actually deployed.
+Live deployment: **https://gravi3.onrender.com/es** (Render, automatic deploy on every merge to `main`).
 
 Create a Blueprint from this repository (`main` branch); `render.yaml` defines a free Docker web service with `/api/health` and deployment after passing checks. For an ordinary service, select Docker, the `main` branch, free plan, one instance, and the same health path.
 
