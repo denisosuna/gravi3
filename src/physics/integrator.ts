@@ -75,6 +75,19 @@ function nextStepScale(error: number): number {
   return Math.min(MAX_STEP_SCALE, Math.max(MIN_STEP_SCALE, proposed));
 }
 
+function assertPositive(values: readonly number[]) {
+  if (!values.every((value) => Number.isFinite(value) && value > 0)) {
+    throw new RangeError('Integration duration, tolerance and limits must be positive and finite.');
+  }
+}
+
+// A step shortened only to land on the end time says nothing new about the right size.
+function nextProposal(step: number, proposal: number, error: number, maxStep: number): number {
+  const scaled = step * nextStepScale(error);
+  const shortenedButAccepted = error <= 1 && step < proposal;
+  return Math.min(maxStep, shortenedButAccepted ? Math.max(proposal, scaled) : scaled);
+}
+
 export function integrateAdaptive(
   initialState: State,
   masses: Masses,
@@ -88,11 +101,7 @@ export function integrateAdaptive(
   }: IntegrationOptions = {},
 ): AdaptiveIntegration {
   validateSystem(initialState, masses, gravitationalConstant);
-  if (
-    ![duration, tolerance, maxStep, maxSteps].every((value) => Number.isFinite(value) && value > 0)
-  ) {
-    throw new RangeError('Integration duration, tolerance and limits must be positive and finite.');
-  }
+  assertPositive([duration, tolerance, maxStep, maxSteps, initialStep]);
   const slopeAt = (stage: number[]) => derivatives(stage, masses, gravitationalConstant);
   let state = [...initialState];
   let time = 0;
@@ -106,15 +115,12 @@ export function integrateAdaptive(
     const { next, lower } = dormandPrinceStep(state, step, slopeAt);
     const error = scaledError(next, lower, state, tolerance);
     if (!Number.isFinite(error)) throw new RangeError('Non-finite integration state.');
-    const accepted = error <= 1;
-    if (accepted) {
+    if (error <= 1) {
       time += step;
       state = next;
       samples.push({ time, state });
     }
-    const scaled = step * nextStepScale(error);
-    // A step shortened only to land on `duration` says nothing new about the right size.
-    proposal = Math.min(maxStep, accepted && step < proposal ? Math.max(proposal, scaled) : scaled);
+    proposal = nextProposal(step, proposal, error, maxStep);
   }
   return { samples, nextStep: proposal, attempts: attempt };
 }
