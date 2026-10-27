@@ -1,8 +1,12 @@
 import { useId } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { UNITS, type Experiment } from '@/data/experiment';
+import { forceLabLayout } from '@/visualization/force-lab-layout';
 
-export function ForceDiagram({ experiment }: { experiment: Experiment }) {
+// Same logarithmic arrow scale as the 3D laboratory, converted from world units to SVG pixels.
+const ARROW_PIXELS_PER_UNIT = 60;
+
+export function ForceDiagram({ experiment, force }: { experiment: Experiment; force: number }) {
   const t = useTranslations('learn');
   const locale = useLocale();
   const id = useId();
@@ -11,6 +15,7 @@ export function ForceDiagram({ experiment }: { experiment: Experiment }) {
   const radius1 = 12 + experiment.mass1 / 160;
   const radius2 = 12 + experiment.mass2 / 160;
   const format = new Intl.NumberFormat(locale);
+  const arrow = forceLabLayout(experiment, force).arrowLength * ARROW_PIXELS_PER_UNIT;
   return (
     <svg viewBox="0 0 640 265" role="img" aria-label={t('equal')}>
       <defs>
@@ -35,7 +40,7 @@ export function ForceDiagram({ experiment }: { experiment: Experiment }) {
         <line
           x1={left}
           y1="87"
-          x2={left + experiment.distance * 6}
+          x2={left + arrow}
           y2="87"
           stroke="currentColor"
           strokeWidth="2"
@@ -43,9 +48,9 @@ export function ForceDiagram({ experiment }: { experiment: Experiment }) {
         />
         <line
           x1={right}
-          y1="87"
-          x2={right - experiment.distance * 6}
-          y2="87"
+          y1="173"
+          x2={right - arrow}
+          y2="173"
           stroke="currentColor"
           strokeWidth="2"
           markerEnd={`url(#${id}-arrow)`}
