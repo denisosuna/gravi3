@@ -112,3 +112,24 @@ test('on an orbit page the tutor can move the player to the closest approach', a
   await experiments.getByRole('button', { name: 'Try it: play at 0.5×' }).click();
   await expect(page.getByRole('combobox', { name: 'Speed' })).toHaveValue('0.5');
 });
+
+test('orbit suggestions are specific to the orbit being viewed', async ({ page }) => {
+  await page.route('**/api/tutor', (route) => route.fulfill({ json: { enabled: true } }));
+  const contextualQuestions = [
+    { slug: 'lagrange', question: '¿Por qué los tres mantienen un triángulo?' },
+    { slug: 'figure-eight', question: '¿Por qué los tres recorren la misma curva?' },
+    { slug: 'butterfly-i', question: '¿Qué ocurre cuando dos cuerpos pasan muy cerca?' },
+    { slug: 'goggles', question: '¿Cómo se conectan los lazos de esta órbita?' },
+    { slug: 'moth-i', question: '¿Qué patrón siguen los cuerpos en esta órbita?' },
+    { slug: 'yin-yang-i', question: '¿Por qué esta órbita parece tener dos mitades?' },
+  ];
+  for (const { slug, question } of contextualQuestions) {
+    await page.goto(`/es/orbits/${slug}`);
+    const suggestions = page.getByRole('list', { name: 'Preguntas sugeridas' });
+    await expect(suggestions.getByRole('button')).toHaveCount(3);
+    await expect(suggestions.getByRole('button').nth(2)).toHaveText(question);
+    await expect(
+      suggestions.getByRole('button', { name: '¿En qué se diferencia de la figura de ocho?' }),
+    ).toHaveCount(0);
+  }
+});

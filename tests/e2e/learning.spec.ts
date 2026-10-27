@@ -45,6 +45,48 @@ test('the experiment explains the two-body interaction before showing optional c
   await expect(page.getByText(/^a₁ =/)).toBeVisible();
 });
 
+test('the gravitational fall follows Newtonian motion and leaves setup measurements untouched', async ({
+  page,
+}) => {
+  await page.goto('/es/learn');
+  const distance = page.getByRole('slider', { name: 'Distancia entre centros' });
+  const force = page.getByTestId('force-value');
+  const originalForce = Number(await force.getAttribute('data-force'));
+  await page.getByRole('button', { name: 'Ver cómo caen por gravedad' }).click();
+  await expect(
+    page.getByRole('button', {
+      name: 'Las flechas crecen al acercarse. La fuerza indicada es la inicial; el tiempo de simulación está acelerado.',
+    }),
+  ).toBeDisabled();
+  await expect(
+    page.getByText(/Tras .+ de tiempo simulado, los cuerpos se acercan mucho/),
+  ).toBeVisible({ timeout: 10000 });
+  await expect(page.getByRole('button', { name: 'Repetir la caída' })).toBeEnabled();
+  await expect(distance).toHaveValue('5');
+  expect(Number(await force.getAttribute('data-force'))).toBe(originalForce);
+  await distance.press('ArrowRight');
+  await expect(distance).toHaveValue('5.5');
+  await expect(page.getByText(/Pulsa para simular en una dimensión/)).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Ver cómo caen por gravedad' })).toBeEnabled();
+});
+
+test('reduced-motion preference presents a still version of the physical fall', async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/es/learn');
+  await page.getByRole('button', { name: 'Ver cómo caen por gravedad' }).click();
+  await expect(
+    page.getByText(/Vista estática de la caída calculada tras .+ de tiempo simulado/),
+  ).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Volver a la posición inicial' })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await page.getByRole('button', { name: 'Volver a la posición inicial' }).click();
+  await expect(page.getByRole('button', { name: 'Ver cómo caen por gravedad' })).toBeVisible();
+});
+
 test('the lesson rail follows the steps and the check step recalls the prediction', async ({
   page,
 }) => {

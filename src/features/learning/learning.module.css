@@ -184,6 +184,29 @@
   scroll-margin-top: 16px;
 }
 
+.animation {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  margin: 10px 0 2px;
+}
+
+.animationButton {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.animationStatus {
+  max-width: 60ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  text-align: center;
+}
+
 /* Graph paper only on the experiment bench. */
 .steps :global(.lab-scene) {
   background-color: var(--surface-raised);

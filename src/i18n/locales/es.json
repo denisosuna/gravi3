@@ -185,7 +185,7 @@
     "mass1": "Masa del cuerpo 1",
     "mass2": "Masa del cuerpo 2",
     "distance": "Distancia entre centros",
-    "force": "Fuerza de atracción en cada cuerpo",
+    "force": "Fuerza inicial de atracción en cada cuerpo",
     "equal": "La fuerza tiene el mismo valor en ambos y sentidos opuestos. Si las masas difieren, la más ligera acelera más.",
     "whatHappensTitle": "Qué está pasando",
     "mutualAttraction": "Los dos cuerpos se atraen a la vez: la fuerza tiene el mismo valor en ambos, pero apunta en sentidos contrarios.",
@@ -196,7 +196,16 @@
     "twoBodyPurpose": "Hay solo dos cuerpos a propósito: así aislamos esta interacción. En el último paso añadimos un tercero y verás qué cambia.",
     "accelerationDetails": "Ver los valores de aceleración",
     "accelerationMeaning": "La aceleración indica cuánto cambia el movimiento. Para cada cuerpo, se calcula dividiendo la fuerza entre su masa.",
-    "scale": "Distancia a escala; radios ilustrativos; flechas de fuerza en escala logarítmica. Los valores se calculan en unidades SI.",
+    "showFall": "Ver cómo caen por gravedad",
+    "replayFall": "Repetir la caída",
+    "resetFall": "Volver a la posición inicial",
+    "animationPlaying": "Las flechas crecen al acercarse. La fuerza indicada es la inicial; el tiempo de simulación está acelerado.",
+    "animationExplanation": "Pulsa para simular en una dimensión la caída gravitatoria desde el reposo. Sigue la ley de Newton y el tiempo está acelerado.",
+    "animationStaticPending": "Calculando la caída en una vista estática…",
+    "animationStatic": "Vista estática de la caída calculada tras {time} de tiempo simulado. No se animó por tu preferencia de movimiento reducido.",
+    "animationDone": "Tras {time} de tiempo simulado, los cuerpos se acercan mucho. El modelo de masas puntuales se detiene antes de la colisión matemática.",
+    "animationUnavailable": "La animación no está disponible en esta vista.",
+    "scale": "Distancia a escala; radios ilustrativos; flechas de fuerza en escala logarítmica. Las posiciones siguen la gravedad de Newton; el modelo no describe un choque entre cuerpos reales.",
     "predictionTitle": "Antes de probar, ¿qué intuyes?",
     "predictionQuestion": "Si duplicamos la distancia y mantenemos las masas, la fuerza será…",
     "half": "La mitad",
@@ -260,8 +269,16 @@
       "orbit": [
         "¿Por qué se repite esta órbita?",
         "¿Es estable esta órbita?",
-        "¿En qué se diferencia de la figura de ocho?"
-      ]
+        "¿Qué debería observar mientras se mueve?"
+      ],
+      "orbitContext": {
+        "lagrange": "¿Por qué los tres mantienen un triángulo?",
+        "figure-eight": "¿Por qué los tres recorren la misma curva?",
+        "butterfly-i": "¿Qué ocurre cuando dos cuerpos pasan muy cerca?",
+        "goggles": "¿Cómo se conectan los lazos de esta órbita?",
+        "moth-i": "¿Qué patrón siguen los cuerpos en esta órbita?",
+        "yin-yang-i": "¿Por qué esta órbita parece tener dos mitades?"
+      }
     },
     "suggestionsLabel": "Preguntas sugeridas",
     "actionsLabel": "Experimentos propuestos",

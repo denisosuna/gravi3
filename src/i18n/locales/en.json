@@ -185,7 +185,7 @@
     "mass1": "Body 1 mass",
     "mass2": "Body 2 mass",
     "distance": "Center-to-center distance",
-    "force": "Attractive force on each body",
+    "force": "Initial attractive force on each body",
     "equal": "The force has the same size on each body and points in opposite directions. If their masses differ, the lighter one accelerates more.",
     "whatHappensTitle": "What is happening",
     "mutualAttraction": "Both bodies attract each other: the force has the same size on each, but points in the opposite direction.",
@@ -196,7 +196,16 @@
     "twoBodyPurpose": "There are only two bodies on purpose: this isolates their interaction. In the last step we add a third and see what changes.",
     "accelerationDetails": "See the acceleration values",
     "accelerationMeaning": "Acceleration tells you how much motion changes. For each body, divide the force by its mass.",
-    "scale": "Distance to scale; illustrative radii; force arrows on a logarithmic scale. Values are calculated in SI units.",
+    "showFall": "See them fall under gravity",
+    "replayFall": "Replay the fall",
+    "resetFall": "Restore starting positions",
+    "animationPlaying": "The arrows grow as the bodies approach. The force shown is the initial one; simulation time is accelerated.",
+    "animationExplanation": "Run a one-dimensional simulation of the bodies falling under gravity from rest. It follows Newton's law, and time is accelerated.",
+    "animationStaticPending": "Calculating the fall for a still view…",
+    "animationStatic": "Still view of the calculated fall after {time} of simulated time. Animation is off because reduced motion is preferred.",
+    "animationDone": "After {time} of simulated time, the bodies are very close. The point-mass model stops before the mathematical collision.",
+    "animationUnavailable": "Animation is unavailable in this view.",
+    "scale": "Distance to scale; illustrative radii; force arrows on a logarithmic scale. Positions follow Newtonian gravity; the model does not describe real-body collisions.",
     "predictionTitle": "Before you try it, what do you predict?",
     "predictionQuestion": "If we double the distance and keep the masses, the force becomes…",
     "half": "One half",
@@ -260,8 +269,16 @@
       "orbit": [
         "Why does this orbit repeat?",
         "Is this orbit stable?",
-        "How is it different from the figure eight?"
-      ]
+        "What should I watch as it moves?"
+      ],
+      "orbitContext": {
+        "lagrange": "Why do the three bodies keep a triangle?",
+        "figure-eight": "Why do all three follow the same path?",
+        "butterfly-i": "What happens when two bodies pass very close?",
+        "goggles": "How do the loops in this orbit connect?",
+        "moth-i": "What pattern do the bodies follow in this orbit?",
+        "yin-yang-i": "Why does this orbit look like two halves?"
+      }
     },
     "suggestionsLabel": "Suggested questions",
     "actionsLabel": "Suggested experiments",
