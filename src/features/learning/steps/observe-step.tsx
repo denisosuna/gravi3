@@ -9,6 +9,7 @@ import {
 } from '@/data/experiment';
 import { ForceLab } from '../lab/force-lab';
 import { LessonStep } from '../lesson-step';
+import styles from '../learning.module.css';
 
 const SLIDERS = ['mass1', 'mass2', 'distance'] as const;
 
@@ -63,20 +64,36 @@ export function ObserveStep({
           </label>
         ))}
       </div>
+      <section className={styles.explanation} aria-live="polite">
+        <h3>{t('whatHappensTitle')}</h3>
+        <p>{t('mutualAttraction')}</p>
+        <p>
+          {experiment.mass1 === experiment.mass2
+            ? t('equalMasses')
+            : experiment.mass1 < experiment.mass2
+              ? t('body1Lighter')
+              : t('body2Lighter')}
+        </p>
+        <p>{t('distanceEffect')}</p>
+        <p>{t('twoBodyPurpose')}</p>
+      </section>
       <div className="force-result">
         <span>{t('force')}</span>
         <output data-testid="force-value" data-force={force}>
           {scientific.format(force)} <small>{UNITS.force}</small>
         </output>
-        <p>{t('equal')}</p>
-        <div className="acceleration-values">
-          <span>
-            a₁ = {scientific.format(force / experiment.mass1)} {UNITS.acceleration}
-          </span>
-          <span>
-            a₂ = {scientific.format(force / experiment.mass2)} {UNITS.acceleration}
-          </span>
-        </div>
+        <details className={styles.accelerationDetails}>
+          <summary>{t('accelerationDetails')}</summary>
+          <p>{t('accelerationMeaning')}</p>
+          <div className="acceleration-values">
+            <span>
+              a₁ = {scientific.format(force / experiment.mass1)} {UNITS.acceleration}
+            </span>
+            <span>
+              a₂ = {scientific.format(force / experiment.mass2)} {UNITS.acceleration}
+            </span>
+          </div>
+        </details>
       </div>
     </LessonStep>
   );

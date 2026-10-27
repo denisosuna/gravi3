@@ -111,6 +111,8 @@ describe('configuration and deterministic context', () => {
     expect(messages[0]?.content).toBe(prompt);
     expect(prompt).toContain('forceAfterDoublingDistance');
     expect(prompt).toContain('prediction');
+    expect(prompt).toContain('Put the physical meaning before calculations');
+    expect(prompt).toContain('Give at most one numerical example');
     expect(prompt).toContain('untrusted');
     expect(prompt).toContain('"type":"setExperiment"');
     expect(prompt).not.toContain('"type":"openOrbit"');

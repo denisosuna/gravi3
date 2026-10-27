@@ -23,6 +23,28 @@ test('experiment demonstrates inverse-square gravity and evaluates a prediction'
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
+test('the experiment explains the two-body interaction before showing optional calculations', async ({
+  page,
+}) => {
+  await page.goto('/es/learn');
+  await expect(page.getByRole('heading', { name: 'Qué está pasando' })).toBeVisible();
+  await expect(
+    page.getByText('Hay solo dos cuerpos a propósito: así aislamos esta interacción.'),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      'Cuanto más lejos están, más débil es la atracción. Si duplicas la distancia, queda en una cuarta parte.',
+    ),
+  ).toBeVisible();
+  await expect(page.getByText(/^a₁ =/)).toBeHidden();
+  await page.getByRole('slider', { name: 'Masa del cuerpo 2' }).press('ArrowRight');
+  await expect(
+    page.getByText('El cuerpo 1 tiene menos masa: con la misma fuerza, su movimiento cambia más.'),
+  ).toBeVisible();
+  await page.getByText('Ver los valores de aceleración').click();
+  await expect(page.getByText(/^a₁ =/)).toBeVisible();
+});
+
 test('the lesson rail follows the steps and the check step recalls the prediction', async ({
   page,
 }) => {

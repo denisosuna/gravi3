@@ -96,6 +96,50 @@
   line-height: 1.7;
 }
 
+.explanation {
+  margin: 20px 0;
+  padding: 14px 16px;
+  border-inline-start: 3px solid var(--accent);
+  background: var(--surface-raised);
+}
+
+.explanation h3 {
+  margin: 0 0 8px;
+  font-size: var(--text-md);
+}
+
+.explanation p {
+  max-width: 68ch;
+  margin: 0 0 8px;
+  line-height: 1.6;
+}
+
+.explanation p:last-child {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.accelerationDetails {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.accelerationDetails summary {
+  width: fit-content;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.accelerationDetails p {
+  max-width: 68ch;
+  line-height: 1.6;
+}
+
 .prediction mark {
   background: var(--highlight);
   color: var(--highlight-ink);
