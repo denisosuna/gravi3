@@ -3,7 +3,6 @@ node_modules
 pnpm-lock.yaml
 public/orbits
 public/previews
-PLAN.local.md
 *.png
 *.pdf
 next-env.d.ts
