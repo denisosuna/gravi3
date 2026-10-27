@@ -85,4 +85,4 @@ CI runs all of the above plus the production build, with no real AI credentials.
 - Numerical checks show finite-precision agreement over one period. They do not prove stability.
 - Rate limits live in memory, which suits a single-instance demo, not distributed abuse prevention.
 - Mobile tests are emulated and accessibility scans are basic checks, not a certification.
-- Initial conditions come from Šuvakov and Dmitrašinović, Li and Liao, and the figure-eight authors (see [physics](docs/physics.md)). No third-party animation or implementation code is copied. Dependency licenses are in [third-party notices](docs/third-party.md).
+- Initial conditions come from Šuvakov and Dmitrašinović, Li and Liao, and the figure-eight authors (see [physics](docs/physics.md)). No third-party animation or implementation code is copied.
