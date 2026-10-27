@@ -115,6 +115,36 @@ describe('configuration and deterministic context', () => {
     expect(prompt).toContain('"type":"setExperiment"');
     expect(prompt).not.toContain('"type":"openOrbit"');
   });
+  it('derives the misconception behind a wrong prediction on the server', () => {
+    const parse = (prediction: string | null) => {
+      const input = tutorRequestSchema.parse({
+        ...payload,
+        context: { ...payload.context, prediction, checked: true },
+      });
+      if (input.context.kind !== 'learning') throw new Error('Expected learning fixture.');
+      return learningFacts(input.context);
+    };
+    expect(parse('half').misconception).toMatch(/square/);
+    expect(parse('double').misconception).toMatch(/stronger/);
+    expect(parse('quarter').misconception).toBeNull();
+    expect(parse(null).misconception).toBeNull();
+    expect(parse(null).checked).toBe(true);
+    expect(
+      tutorRequestSchema.safeParse({
+        ...payload,
+        context: { ...payload.context, misconception: 'client says so' },
+      }).success,
+    ).toBe(false);
+  });
+  it('gives orbit pages the measured closest approach and the player actions', () => {
+    const prompt = tutorSystemPrompt(
+      tutorRequestSchema.parse({ ...payload, context: { kind: 'orbit', slug: 'butterfly-i' } }),
+    );
+    expect(prompt).toContain('"closestApproach":{"fraction":0.2024,"distance":0.011}');
+    expect(prompt).toContain('"type":"seekOrbit"');
+    expect(prompt).toContain('"type":"setOrbitSpeed"');
+    expect(prompt).not.toContain('"type":"setExperiment"');
+  });
 });
 
 describe('bounded limiter', () => {

@@ -98,17 +98,44 @@ export interface OrbitCatalogEntry {
   // Šuvakov–Dmitrašinović catalogue code, when the orbit has one.
   code?: string;
   discovery: { year: number; authors: string };
+  // First moment, as a fraction of the period, when two bodies come closest, and that distance.
+  // Measured on the validated trajectory; Lagrange's separations never change.
+  closestApproach?: { fraction: number; distance: number };
 }
 
 const SUVAKOV_DMITRASINOVIC = { year: 2013, authors: 'Šuvakov & Dmitrašinović' } as const;
 
 export const ORBIT_CATALOG: Readonly<Record<OrbitSlug, OrbitCatalogEntry>> = {
   lagrange: { family: 'analytic', discovery: { year: 1772, authors: 'Lagrange' } },
-  'figure-eight': { family: 'I.A', discovery: { year: 1993, authors: 'Moore' } },
-  'butterfly-i': { family: 'I.A', code: 'I.A.1', discovery: SUVAKOV_DMITRASINOVIC },
-  goggles: { family: 'I.B', code: 'I.B.5', discovery: SUVAKOV_DMITRASINOVIC },
-  'moth-i': { family: 'I.B', code: 'I.B.1', discovery: SUVAKOV_DMITRASINOVIC },
-  'yin-yang-i': { family: 'II.C', code: 'II.C.2b', discovery: SUVAKOV_DMITRASINOVIC },
+  'figure-eight': {
+    family: 'I.A',
+    discovery: { year: 1993, authors: 'Moore' },
+    closestApproach: { fraction: 0.0833, distance: 0.6905 },
+  },
+  'butterfly-i': {
+    family: 'I.A',
+    code: 'I.A.1',
+    discovery: SUVAKOV_DMITRASINOVIC,
+    closestApproach: { fraction: 0.2024, distance: 0.011 },
+  },
+  goggles: {
+    family: 'I.B',
+    code: 'I.B.5',
+    discovery: SUVAKOV_DMITRASINOVIC,
+    closestApproach: { fraction: 0.1016, distance: 0.0185 },
+  },
+  'moth-i': {
+    family: 'I.B',
+    code: 'I.B.1',
+    discovery: SUVAKOV_DMITRASINOVIC,
+    closestApproach: { fraction: 0.1523, distance: 0.0795 },
+  },
+  'yin-yang-i': {
+    family: 'II.C',
+    code: 'II.C.2b',
+    discovery: SUVAKOV_DMITRASINOVIC,
+    closestApproach: { fraction: 0.384, distance: 0.0098 },
+  },
 };
 
 export function findOrbit(slug: string) {

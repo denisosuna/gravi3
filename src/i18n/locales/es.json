@@ -260,7 +260,9 @@
       "setExperiment": "Probar: {changes}",
       "loadPreset": "Probar: {preset} en el simulador",
       "perturb": "Probar: perturbar un 1 % en el simulador",
-      "openOrbit": "Ver la órbita {name}"
+      "openOrbit": "Ver la órbita {name}",
+      "seekOrbit": "Probar: ir al {moment} del período",
+      "setOrbitSpeed": "Probar: reproducir a {speed}×"
     },
     "collapse": "Plegar el tutor IA",
     "expand": "Desplegar el tutor IA"

@@ -260,7 +260,9 @@
       "setExperiment": "Try it: {changes}",
       "loadPreset": "Try it: {preset} in the simulator",
       "perturb": "Try it: perturb by 1% in the simulator",
-      "openOrbit": "See the {name} orbit"
+      "openOrbit": "See the {name} orbit",
+      "seekOrbit": "Try it: go to {moment} of the period",
+      "setOrbitSpeed": "Try it: play at {speed}×"
     },
     "collapse": "Collapse the AI tutor",
     "expand": "Expand the AI tutor"

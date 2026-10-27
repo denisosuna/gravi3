@@ -4,8 +4,8 @@ import { ROUTES } from '@/constants/routes';
 import { ORBIT_CATALOG, orbits } from '@/data/orbits';
 import { Link } from '@/i18n/routing';
 import type { OrbitDefinition } from '@/physics/types';
-import { TutorPanel } from '@/components/tutor/tutor-panel';
 import { BackToGallery } from './back-to-gallery';
+import { OrbitPlaybackProvider, OrbitTutor, STAGE_ID } from './orbit-playback';
 import { OrbitPlayer } from './orbit-player';
 import { ScientificDetails } from './scientific-details';
 import styles from './orbit-detail.module.css';
@@ -59,33 +59,31 @@ export function OrbitDetail({ orbit }: { orbit: OrbitDefinition }) {
           <ArrowRight size={16} aria-hidden="true" />
         </Link>
       </nav>
-      <div className={styles.layout}>
-        <section className={styles.stage} aria-labelledby={TITLE_ID}>
-          <OrbitPlayer
-            key={orbit.slug}
-            orbit={orbit}
-            labels={{ label: name, descriptionId: DESCRIPTION_ID }}
-          />
-        </section>
-        <article className={styles.text}>
-          <header className={styles.header}>
-            <h1 id={TITLE_ID}>{name}</h1>
-            <p className={styles.lede}>{t(`${orbit.slug}.description`)}</p>
-            <Placard orbit={orbit} />
-          </header>
-          <section>
-            <h2>{t('detail.seeing')}</h2>
-            <p id={DESCRIPTION_ID}>{t(`visual.${orbit.slug}`)}</p>
-            <p className={styles.note}>{t('planar')}</p>
+      <OrbitPlaybackProvider key={orbit.slug} orbit={orbit}>
+        <div className={styles.layout}>
+          <section id={STAGE_ID} className={styles.stage} aria-labelledby={TITLE_ID}>
+            <OrbitPlayer orbit={orbit} labels={{ label: name, descriptionId: DESCRIPTION_ID }} />
           </section>
-          <section>
-            <h2>{t('concept')}</h2>
-            <p>{t('conceptText')}</p>
-          </section>
-          <ScientificDetails orbit={orbit} />
-          <TutorPanel context={{ kind: 'orbit', slug: orbit.slug }} />
-        </article>
-      </div>
+          <article className={styles.text}>
+            <header className={styles.header}>
+              <h1 id={TITLE_ID}>{name}</h1>
+              <p className={styles.lede}>{t(`${orbit.slug}.description`)}</p>
+              <Placard orbit={orbit} />
+            </header>
+            <section>
+              <h2>{t('detail.seeing')}</h2>
+              <p id={DESCRIPTION_ID}>{t(`visual.${orbit.slug}`)}</p>
+              <p className={styles.note}>{t('planar')}</p>
+            </section>
+            <section>
+              <h2>{t('concept')}</h2>
+              <p>{t('conceptText')}</p>
+            </section>
+            <ScientificDetails orbit={orbit} />
+            <OrbitTutor slug={orbit.slug} />
+          </article>
+        </div>
+      </OrbitPlaybackProvider>
     </main>
   );
 }

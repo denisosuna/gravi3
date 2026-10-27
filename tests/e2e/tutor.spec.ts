@@ -81,3 +81,32 @@ test('the tutor proposes experiments that run with one click', async ({ page }) 
   );
   await expect(simulator.getByRole('button', { name: 'Pause' })).toBeVisible();
 });
+
+test('on an orbit page the tutor can move the player to the closest approach', async ({ page }) => {
+  await page.route('**/api/tutor', (route) =>
+    route.fulfill(
+      route.request().method() === 'GET'
+        ? { json: { enabled: true } }
+        : {
+            json: {
+              reply: 'Press Try it to jump to the closest approach and slow down.',
+              actions: [
+                { type: 'seekOrbit', fraction: 0.5 },
+                { type: 'setOrbitSpeed', speed: 0.5 },
+              ],
+            },
+          },
+    ),
+  );
+  await page.goto('/en/orbits/butterfly-i');
+  const timeline = page.getByRole('slider', { name: 'Orbit timeline' });
+  await expect(timeline).toHaveValue('0');
+  await page.getByRole('button', { name: 'Is this orbit stable?' }).click();
+  const experiments = page.getByRole('list', { name: 'Suggested experiments' });
+  await expect(experiments.getByRole('button')).toHaveCount(2);
+  await expect(timeline).toHaveValue('0');
+  await experiments.getByRole('button', { name: 'Try it: go to 50% of the period' }).click();
+  expect(Number(await timeline.inputValue())).toBeCloseTo(6.2346748391 / 2, 3);
+  await experiments.getByRole('button', { name: 'Try it: play at 0.5×' }).click();
+  await expect(page.getByRole('combobox', { name: 'Speed' })).toHaveValue('0.5');
+});

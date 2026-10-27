@@ -1,9 +1,10 @@
 import type { TutorContext, TutorRequest } from '@/data/tutor-contract';
-import { findOrbit } from '@/data/orbits';
+import { ORBIT_CATALOG, orbitFor } from '@/data/orbits';
+import { PLAYBACK_SPEEDS } from '@/data/playback';
 import type { Locale } from '@/i18n/config';
 import { gravitationalForce } from '@/physics/gravity';
 import { orbitSlugs } from '@/physics/types';
-import { distanceRange, massRange } from '@/data/experiment';
+import { distanceRange, massRange, type PredictionAnswer } from '@/data/experiment';
 import type { TutorContextKind } from '@/data/tutor-actions';
 import type { ChatMessage } from './llm-client';
 
@@ -14,11 +15,22 @@ const ACTION_GUIDE: Record<TutorContextKind, string> = {
   learning: `- {"type":"setExperiment","mass1"?:number,"mass2"?:number,"distance"?:number}: masses ${massRange.min}–${massRange.max} kg, distance ${distanceRange.min}–${distanceRange.max} m. Use it so the learner can test a claim, e.g. doubling the distance.
 - {"type":"loadPreset","preset":"figure-eight"|"lagrange"|"pythagorean"|"sun-planet-moon"}: loads the three-body simulator (periodic and stable; periodic but unstable with equal masses, so it breaks apart after about seven turns; chaotic with an ejection; hierarchical and nearly regular).
 - {"type":"perturb"}: changes body 1's velocity in the simulator by 1% to reveal sensitivity to initial conditions.
-Propose an action whenever the learner could see the answer: mass or distance questions → setExperiment; chaos, unpredictability or sensitivity → loadPreset "pythagorean" or perturb; periodic or stable motion → loadPreset "figure-eight"; periodic but unstable motion → loadPreset "lagrange". Name the place where the effect appears: the laboratory for setExperiment, the simulator for the others.`,
-  orbit: `- {"type":"openOrbit","slug":${orbitSlugs.map((slug) => `"${slug}"`).join('|')}}: opens another periodic orbit to compare.`,
+Propose an action whenever the learner could see the answer: mass or distance questions → setExperiment; chaos, unpredictability or sensitivity → loadPreset "pythagorean" or perturb; periodic or stable motion → loadPreset "figure-eight"; periodic but unstable motion → loadPreset "lagrange". Name the place where the effect appears: the laboratory for setExperiment, the simulator for the others.
+Adapt to the learner using the verified context: if "misconception" is set, address that idea first, without saying the learner was foolish, and propose the setExperiment that doubles the distance so they can see the force become a quarter. If "prediction" is null and the question is about how distance or mass changes the force, ask for their guess in step 2 before giving the full answer. If "checked" is false, invite them to press the doubling buttons in step 3.`,
+  orbit: `- {"type":"openOrbit","slug":${orbitSlugs.map((slug) => `"${slug}"`).join('|')}}: opens another periodic orbit to compare.
+- {"type":"seekOrbit","fraction":number}: moves the current animation to that fraction of its period, 0 to 1. To show the closest approach, use closestApproach.fraction from the verified context.
+- {"type":"setOrbitSpeed","speed":${PLAYBACK_SPEEDS.join('|')}}: changes playback speed; 0.5 helps to follow fast close approaches.
+Questions about close encounters or collisions → seekOrbit to the closest approach, optionally with setOrbitSpeed 0.5; comparisons → openOrbit.`,
 };
 
-export const TUTOR_PROMPT_VERSION = '2.2';
+export const TUTOR_PROMPT_VERSION = '2.3';
+
+// What a wrong answer to "double the distance" reveals; derived on the server, never sent by the client.
+const MISCONCEPTIONS: Record<PredictionAnswer, string | null> = {
+  quarter: null,
+  half: 'treats force as inversely proportional to distance instead of to its square',
+  double: 'thinks gravity grows stronger as bodies move apart',
+};
 
 export function learningFacts(context: Extract<TutorContext, { kind: 'learning' }>) {
   const force = gravitationalForce(context.mass1, context.mass2, context.distance);
@@ -26,6 +38,8 @@ export function learningFacts(context: Extract<TutorContext, { kind: 'learning' 
   const acceleration2 = force / context.mass2;
   return {
     ...context,
+    checked: context.checked ?? false,
+    misconception: context.prediction ? MISCONCEPTIONS[context.prediction] : null,
     forceNewtons: force,
     acceleration1,
     acceleration2,
@@ -44,10 +58,10 @@ export function learningFacts(context: Extract<TutorContext, { kind: 'learning' 
 }
 
 function orbitFacts(context: Extract<TutorContext, { kind: 'orbit' }>) {
-  const orbit = findOrbit(context.slug);
-  if (!orbit) throw new RangeError(`Unknown orbit: ${context.slug}`);
+  const orbit = orbitFor(context.slug);
   return {
     ...context,
+    closestApproach: ORBIT_CATALOG[context.slug].closestApproach ?? null,
     period: orbit.period,
     masses: orbit.masses,
     G: orbit.gravitationalConstant,
