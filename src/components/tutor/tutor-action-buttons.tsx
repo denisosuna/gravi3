@@ -7,7 +7,9 @@ function useActionLabel() {
   const t = useTranslations('tutor.actions');
   const simulator = useTranslations('simulator.preset');
   const orbits = useTranslations('orbits');
-  const number = new Intl.NumberFormat(useLocale());
+  const locale = useLocale();
+  const number = new Intl.NumberFormat(locale);
+  const percent = new Intl.NumberFormat(locale, { style: 'percent' });
   return (action: TutorAction): string => {
     switch (action.type) {
       case 'setExperiment': {
@@ -25,6 +27,10 @@ function useActionLabel() {
         return t('perturb');
       case 'openOrbit':
         return t('openOrbit', { name: orbits(`${action.slug}.name`) });
+      case 'seekOrbit':
+        return t('seekOrbit', { moment: percent.format(action.fraction) });
+      case 'setOrbitSpeed':
+        return t('setOrbitSpeed', { speed: number.format(action.speed) });
     }
   };
 }

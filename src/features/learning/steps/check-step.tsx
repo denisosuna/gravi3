@@ -48,20 +48,26 @@ export function CheckStep({
         <button
           className="button"
           disabled={experiment.distance * 2 > distanceRange.max}
-          onClick={() => update({ distance: experiment.distance * 2 })}
+          onClick={() => update({ distance: experiment.distance * 2, checked: true })}
         >
           {t('tryDistance')}
         </button>
         <button
           className="button"
           disabled={experiment.mass1 * 2 > massRange.max}
-          onClick={() => update({ mass1: experiment.mass1 * 2 })}
+          onClick={() => update({ mass1: experiment.mass1 * 2, checked: true })}
         >
           {t('tryMass')}
         </button>
         <button
           className="button"
-          onClick={() => update({ ...initialExperiment, prediction: experiment.prediction })}
+          onClick={() =>
+            update({
+              ...initialExperiment,
+              prediction: experiment.prediction,
+              checked: experiment.checked,
+            })
+          }
         >
           {t('backToStart')}
         </button>

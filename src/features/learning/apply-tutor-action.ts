@@ -37,7 +37,10 @@ export function applyTutorAction(
       simulator.update({ playing: true });
       reveal(SIMULATOR_ID);
       return;
+    // Orbit actions never reach the Learn page: the server only allows them on orbit pages.
     case 'openOrbit':
+    case 'seekOrbit':
+    case 'setOrbitSpeed':
       return;
   }
 }

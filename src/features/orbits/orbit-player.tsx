@@ -7,13 +7,11 @@ import { useTranslations } from 'next-intl';
 import { ASSETS } from '@/constants/routes';
 import { parseTrajectory } from '@/physics/trajectory-schema';
 import type { OrbitDefinition, OrbitSlug, Trajectory } from '@/physics/types';
-import { createSessionKey, useSessionMemory } from '@/components/providers';
 import { SceneBoundary } from '@/components/scene/scene-boundary';
 import { useDocumentVisible } from '@/components/scene/use-document-visible';
-import { PlaybackController, type OrbitSession } from './playback';
+import { usePlaybackController } from './orbit-playback';
+import type { PlaybackController } from './playback';
 import { PlayerControls, ViewControls } from './player-controls';
-
-const ORBIT_SESSIONS = createSessionKey('orbit-sessions', () => new Map<OrbitSlug, OrbitSession>());
 
 const OrbitScene = dynamic(() => import('./scene/orbit-scene'), { ssr: false });
 interface SceneLabels {
@@ -85,15 +83,9 @@ function Viewport({
 
 export function OrbitPlayer({ orbit, labels }: { orbit: OrbitDefinition; labels: SceneLabels }) {
   const { slug, period } = orbit;
-  const sessions = useSessionMemory().get(ORBIT_SESSIONS);
-  const [controller] = useState(() => new PlaybackController(period, sessions.get(slug)));
+  const controller = usePlaybackController();
   const [resource, setResource] = useState<{ data?: Trajectory; error?: boolean }>({});
   const t = useTranslations('player');
-  useEffect(() => {
-    const persist = () => sessions.set(slug, controller.export());
-    persist();
-    return controller.subscribe(persist);
-  }, [sessions, slug, controller]);
   useEffect(() => {
     const abort = new AbortController();
     fetch(ASSETS.orbitTrajectory(slug), { signal: abort.signal })
@@ -104,11 +96,8 @@ export function OrbitPlayer({ orbit, labels }: { orbit: OrbitDefinition; labels:
       .catch(() => {
         if (!abort.signal.aborted) setResource({ error: true });
       });
-    return () => {
-      abort.abort();
-      sessions.set(slug, controller.export());
-    };
-  }, [slug, period, sessions, controller]);
+    return () => abort.abort();
+  }, [slug, period]);
   return (
     <div className="orbit-visualization">
       <ViewControls controller={controller} />
