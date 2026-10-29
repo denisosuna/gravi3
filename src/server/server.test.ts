@@ -161,6 +161,9 @@ describe('configuration and deterministic context', () => {
     };
     const parsed = tutorRequestSchema.parse(explorer);
     expect(tutorSystemPrompt(parsed)).toContain('explorer level');
+    expect(tutorSystemPrompt(parsed)).toContain(
+      'Never say or agree that doubling the distance halves',
+    );
     expect(tutorSystemPrompt(parsed)).toContain('"capsule":"check"');
     expect(tutorSystemPrompt(tutorRequestSchema.parse(payload))).toContain('student level');
     const unknown = { ...payload, context: { ...payload.context, capsule: 'admin' } };
