@@ -2,7 +2,7 @@ import { useTranslations } from 'next-intl';
 import { ArrowRight, MoveUpRight } from 'lucide-react';
 import { ROUTES } from '@/shared/constants/routes';
 import { Link } from '@/i18n/routing';
-import { OrbitTrace } from '@/shared/three/orbit-trace';
+import { HeroOrbit } from './hero-orbit';
 
 export function HomeHero() {
   const t = useTranslations('home');
@@ -23,7 +23,7 @@ export function HomeHero() {
         </div>
       </div>
       <figure className="home-visual">
-        <OrbitTrace slug="figure-eight" width={560} height={330} pausable />
+        <HeroOrbit slug="figure-eight" width={560} height={330} />
         <figcaption>{t('visualCaption')}</figcaption>
       </figure>
     </section>

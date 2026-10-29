@@ -10,6 +10,7 @@ import { scenePalette } from '@/shared/three/scene-palette';
 import { GRAVITATIONAL_CONSTANT, gravitationalForce } from '@/physics/gravity';
 import { TwoBodySimulation } from '@/physics/two-body-simulation';
 import { CameraFit, DistanceRuler, ForceArrow, LEFT, RIGHT } from './force-lab-scene-parts';
+import { LiquidBody, LiquidEnvironment } from '@/shared/three/liquid-body';
 
 const CAMERA_POSITION: [number, number, number] = [0, 0.7, 4];
 const FIELD_OF_VIEW_DEGREES = 40;
@@ -171,23 +172,16 @@ function ForceLabContents({
 
   return (
     <>
-      <ambientLight intensity={1.4} />
-      <directionalLight position={[-3, 4, 6]} intensity={2.2} />
+      <ambientLight intensity={0.6} />
+      <directionalLight position={[-3, 4, 6]} intensity={1.6} />
+      <LiquidEnvironment />
       <gridHelper
         args={[10, 20, palette.gridCenter, palette.grid]}
         position={[0, RULER_OFFSET_Y - 0.4, 0]}
       />
       {positions.map((x, body) => (
         <group key={body} ref={body === 0 ? body1 : body2} position={[x, 0, 0]}>
-          <mesh>
-            <sphereGeometry args={[radii[body]!, 32, 24]} />
-            <meshStandardMaterial
-              color={palette.bodies[body]}
-              emissive={palette.bodies[body]}
-              emissiveIntensity={0.25}
-              roughness={0.35}
-            />
-          </mesh>
+          <LiquidBody index={body} radius={radii[body]!} />
         </group>
       ))}
       <ForceArrow

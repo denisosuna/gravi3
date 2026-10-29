@@ -12,6 +12,7 @@ import type { PlaybackController } from '@/features/orbits/model/playback';
 import { samplePositions } from '@/physics/interpolation';
 import { BODY_INDICES, type Trajectory } from '@/physics/types';
 import { createBodyLabels } from '@/shared/three/body-labels';
+import { LiquidBody } from '@/shared/three/liquid-body';
 
 const TRAIL_SEGMENTS = 128;
 // Each moving trail covers the most recent third of a period.
@@ -102,15 +103,7 @@ export function MovingBodies({
           <sprite position={[0.18, 0.18, 0.04]} scale={[0.22, 0.22, 1]}>
             <spriteMaterial map={labels[body]} depthTest={false} />
           </sprite>
-          <mesh>
-            <sphereGeometry args={[BODY_RADIUS, 24, 20]} />
-            <meshStandardMaterial
-              color={color}
-              emissive={color}
-              emissiveIntensity={0.7}
-              roughness={0.25}
-            />
-          </mesh>
+          <LiquidBody index={body} radius={BODY_RADIUS} />
           {GLOW_LAYERS.map(({ radius, opacity }) => (
             <mesh key={radius}>
               <sphereGeometry args={[radius, 16, 12]} />

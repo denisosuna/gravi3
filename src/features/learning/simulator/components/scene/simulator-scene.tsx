@@ -8,6 +8,7 @@ import {
 import { useSimulatorState } from '@/features/learning/simulator/state/use-simulator-state';
 import { scenePalette } from '@/shared/three/scene-palette';
 import { SimulatorBodies } from './simulator-bodies';
+import { LiquidEnvironment } from '@/shared/three/liquid-body';
 
 const BASE_CAMERA_DISTANCE = 9;
 const FIELD_OF_VIEW_DEGREES = 40;
@@ -47,8 +48,9 @@ export default function SimulatorScene({
       frameloop={playing && visible ? 'always' : 'demand'}
       gl={{ antialias: true, alpha: true }}
     >
-      <ambientLight intensity={1.5} />
-      <directionalLight position={[-3, 4, 8]} intensity={2} />
+      <ambientLight intensity={0.6} />
+      <directionalLight position={[-3, 4, 8]} intensity={1.6} />
+      <LiquidEnvironment />
       <gridHelper
         args={[GRID_SIZE, GRID_DIVISIONS, palette.gridCenter, palette.grid]}
         rotation={[Math.PI / 2, 0, 0]}
