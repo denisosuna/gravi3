@@ -2,7 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { invariants } from '@/physics/gravity';
 import { ThreeBodySimulation, toCenterOfMassFrame } from '@/physics/simulation';
 import { findOrbit } from '@/physics/orbit-catalog';
-import { simulatorPreset, type SimulatorPresetId } from './simulator-presets';
+import { VELOCITY_OFFSET } from '@/physics/types';
+import {
+  PERTURBATION,
+  perturbedState,
+  simulatorPreset,
+  type SimulatorPresetId,
+} from './simulator-presets';
 
 const FRAME = 1 / 60;
 
@@ -30,5 +36,20 @@ describe('simulator presets behave as the interface describes', () => {
     const period = findOrbit('lagrange')!.period;
     const { closest } = run('lagrange', 3 * period);
     expect(closest).toBeCloseTo(Math.sqrt(3), 3);
+  });
+});
+
+describe('the 1% perturbation', () => {
+  it('changes every preset, including the Pythagorean one that starts at rest', () => {
+    for (const id of ['figure-eight', 'lagrange', 'pythagorean', 'sun-planet-moon'] as const) {
+      const { initialState } = simulatorPreset(id);
+      expect(perturbedState(initialState)).not.toEqual(initialState);
+    }
+    const pythagorean = simulatorPreset('pythagorean').initialState;
+    expect(perturbedState(pythagorean)[0]).toBeCloseTo(pythagorean[0]! * (1 + PERTURBATION));
+    const eight = simulatorPreset('figure-eight').initialState;
+    expect(perturbedState(eight)[VELOCITY_OFFSET]).toBeCloseTo(
+      eight[VELOCITY_OFFSET]! * (1 + PERTURBATION),
+    );
   });
 });

@@ -26,6 +26,10 @@ function useActionLabel() {
         return t('loadPreset', { preset: simulator(`${action.preset}.name`) });
       case 'perturb':
         return t('perturb');
+      case 'scaleBodyVelocity':
+        return t('scaleBodyVelocity', { body: action.body, factor: number.format(action.factor) });
+      case 'setBodyMass':
+        return t('setBodyMass', { body: action.body, mass: number.format(action.mass) });
       case 'openOrbit':
         return t('openOrbit', { name: orbits(`${action.slug}.name`) });
       case 'seekOrbit':

@@ -2,7 +2,11 @@ import { z } from 'zod';
 import { orbitSlugs } from '@/physics/types';
 import { distanceRange, massRange } from '@/features/learning/model/experiment';
 import { PLAYBACK_SPEEDS } from '@/features/orbits/model/playback';
-import { SIMULATOR_PRESETS } from '@/features/learning/model/simulator-presets';
+import {
+  MASS_RANGE,
+  SIMULATOR_PRESETS,
+  VELOCITY_FACTOR_RANGE,
+} from '@/features/learning/model/simulator-presets';
 
 export const MAX_TUTOR_ACTIONS = 2;
 
@@ -18,10 +22,27 @@ const setExperiment = z
   .strict()
   .refine(({ mass1, mass2, distance }) => [mass1, mass2, distance].some((v) => v !== undefined));
 
+// Bodies are numbered from 1, as the learner sees them in the simulator.
+const body = z.union([z.literal(1), z.literal(2), z.literal(3)]);
+
 const tutorActionSchema = z.discriminatedUnion('type', [
   setExperiment,
   z.object({ type: z.literal('loadPreset'), preset: z.enum(SIMULATOR_PRESETS) }).strict(),
   z.object({ type: z.literal('perturb') }).strict(),
+  z
+    .object({
+      type: z.literal('scaleBodyVelocity'),
+      body,
+      factor: z.number().min(VELOCITY_FACTOR_RANGE.min).max(VELOCITY_FACTOR_RANGE.max),
+    })
+    .strict(),
+  z
+    .object({
+      type: z.literal('setBodyMass'),
+      body,
+      mass: z.number().min(MASS_RANGE.min).max(MASS_RANGE.max),
+    })
+    .strict(),
   z.object({ type: z.literal('openOrbit'), slug: z.enum(orbitSlugs) }).strict(),
   // A moment of the current orbit as a fraction of its period, so the period never has to be trusted.
   z.object({ type: z.literal('seekOrbit'), fraction: z.number().min(0).max(1) }).strict(),
@@ -33,7 +54,7 @@ type TutorActionType = TutorAction['type'];
 
 // What the tutor may propose on each page; anything else is discarded on the server.
 const ACTIONS_BY_CONTEXT = {
-  learning: ['setExperiment', 'loadPreset', 'perturb'],
+  learning: ['setExperiment', 'loadPreset', 'perturb', 'scaleBodyVelocity', 'setBodyMass'],
   orbit: ['openOrbit', 'seekOrbit', 'setOrbitSpeed'],
 } as const satisfies Record<string, readonly TutorActionType[]>;
 export type TutorContextKind = keyof typeof ACTIONS_BY_CONTEXT;

@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import en from '@/i18n/locales/en.json';
+import es from '@/i18n/locales/es.json';
 import {
   CAPSULES,
   CHAPTERS,
@@ -43,5 +45,24 @@ describe('learning deck', () => {
       'predict',
       'check',
     ]);
+  });
+});
+
+// The point of a capsule is one short idea; longer text belongs in "Learn more".
+const MAX_BODY_WORDS = 40;
+
+describe('capsule copy', () => {
+  it.each([
+    ['es', es],
+    ['en', en],
+  ])('gives every capsule a title, a short body and a discovery in %s', (_, messages) => {
+    const copy: Record<string, { title?: string; body?: string; discovery?: string }> =
+      messages.learn.capsules;
+    for (const { id } of CAPSULES) {
+      const capsule = copy[id];
+      expect(capsule?.title, id).toBeTruthy();
+      expect(capsule?.discovery, id).toBeTruthy();
+      expect(capsule?.body?.split(/\s+/).length, id).toBeLessThanOrEqual(MAX_BODY_WORDS);
+    }
   });
 });

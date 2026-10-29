@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
+import { numberFormat } from '@/shared/i18n/number-format';
 import { SceneBoundary } from '@/shared/three/scene-boundary';
 import { useDocumentVisible } from '@/shared/three/use-document-visible';
 import type { SimulatorController } from '../state/simulator-controller';
@@ -9,6 +10,7 @@ import { useSimulatorState } from '../state/use-simulator-state';
 
 const SimulatorScene = dynamic(() => import('./scene/simulator-scene'), { ssr: false });
 const READOUT_INTERVAL_MS = 200;
+const DIVERGENCE_DIGITS = 2;
 
 // The live scene with its playback controls; capsules add presets, readouts or the editor around it.
 export function SimulatorStage({ controller }: { controller: SimulatorController }) {
@@ -17,6 +19,8 @@ export function SimulatorStage({ controller }: { controller: SimulatorController
   const visible = useDocumentVisible();
   const playing = useSimulatorState(controller, (state) => state.playing);
   const event = useSimulatorState(controller, (state) => state.event);
+  const divergence = useSimulatorState(controller, (state) => state.divergence);
+  const distance = numberFormat(useLocale(), { maximumFractionDigits: DIVERGENCE_DIGITS });
 
   useEffect(() => {
     if (!playing) return;
@@ -35,6 +39,11 @@ export function SimulatorStage({ controller }: { controller: SimulatorController
         <p className="simulator-event" role="status">
           {event ? t(event) : null}
         </p>
+        {divergence === null ? null : (
+          <p className="simulator-comparison" data-testid="simulator-comparison">
+            {t('comparison', { distance: distance.format(divergence) })}
+          </p>
+        )}
       </div>
       <SimulatorControls
         controller={controller}

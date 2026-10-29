@@ -297,7 +297,7 @@
       },
       "chaos": {
         "title": "Un 1 % lo cambia todo",
-        "body": "Reproduce el sistema pitagórico y fíjate en cómo acaba. Después pulsa «Perturbar 1 %»: un cambio mínimo en una velocidad lleva a otro final. Eso es el caos.",
+        "body": "Reproduce el sistema pitagórico. Después pulsa «Perturbar 1 %»: el punto de partida cambia un 1 % y unas esferas translúcidas siguen la ejecución original. Un cambio mínimo lleva a otro final.",
         "discovery": "Caos: un cambio mínimo, otro final.",
         "more": "Caos no es azar: las reglas son exactas y deterministas. Lo que falla es nuestra capacidad de medir el punto de partida con precisión infinita."
       },
@@ -372,7 +372,9 @@
       "perturb": "Probar: perturbar un 1 % en el simulador",
       "openOrbit": "Ver la órbita {name}",
       "seekOrbit": "Probar: ir al {moment} del período",
-      "setOrbitSpeed": "Probar: reproducir a {speed}×"
+      "setOrbitSpeed": "Probar: reproducir a {speed}×",
+      "scaleBodyVelocity": "Probar: velocidad del cuerpo {body} × {factor}",
+      "setBodyMass": "Probar: masa del cuerpo {body} = {mass}"
     },
     "collapse": "Plegar el tutor IA",
     "expand": "Desplegar el tutor IA"
@@ -412,7 +414,7 @@
     "pause": "Pausar",
     "reset": "Reiniciar",
     "perturb": "Perturbar 1 %",
-    "perturbHint": "Cambia un 1 % la velocidad del cuerpo 1 y vuelve a empezar: compara cuánto cambia el resultado.",
+    "perturbHint": "Cambia un 1 % el punto de partida y vuelve a empezar: las esferas translúcidas siguen la ejecución original para que compares.",
     "speed": "Velocidad de la simulación",
     "zoomIn": "Acercar",
     "zoomOut": "Alejar",
@@ -439,7 +441,8 @@
     "sceneLabel": "Simulación de tres cuerpos",
     "fallback": "La simulación necesita WebGL, que no está disponible en este dispositivo.",
     "next": "Las órbitas periódicas son la excepción: condiciones tan precisas que el movimiento se repite. Explora las seis más conocidas.",
-    "explore": "Descubre las seis órbitas"
+    "explore": "Descubre las seis órbitas",
+    "comparison": "Las esferas translúcidas repiten el punto de partida original. Mayor separación ahora entre un cuerpo y su original: {distance}."
   },
   "calibration": {
     "progress": "Calibración {step} de {total}",

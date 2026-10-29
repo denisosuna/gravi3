@@ -297,7 +297,7 @@
       },
       "chaos": {
         "title": "A 1% change changes everything",
-        "body": "Play the Pythagorean system and notice how it ends. Then press “Perturb 1%”: a tiny change in one velocity leads to another ending. That is chaos.",
+        "body": "Play the Pythagorean system. Then press “Perturb 1%”: the start changes by 1% and translucent spheres follow the original run. A tiny change leads to another ending.",
         "discovery": "Chaos: a tiny change, another ending.",
         "more": "Chaos is not randomness: the rules are exact and deterministic. What fails is our ability to measure the starting point with infinite precision."
       },
@@ -372,7 +372,9 @@
       "perturb": "Try it: perturb by 1% in the simulator",
       "openOrbit": "See the {name} orbit",
       "seekOrbit": "Try it: go to {moment} of the period",
-      "setOrbitSpeed": "Try it: play at {speed}×"
+      "setOrbitSpeed": "Try it: play at {speed}×",
+      "scaleBodyVelocity": "Try it: body {body} velocity × {factor}",
+      "setBodyMass": "Try it: body {body} mass = {mass}"
     },
     "collapse": "Collapse the AI tutor",
     "expand": "Expand the AI tutor"
@@ -412,7 +414,7 @@
     "pause": "Pause",
     "reset": "Restart",
     "perturb": "Perturb 1%",
-    "perturbHint": "Changes body 1's velocity by 1% and starts again: compare how much the outcome changes.",
+    "perturbHint": "Changes the starting point by 1% and starts again: translucent spheres follow the original run so you can compare.",
     "speed": "Simulation speed",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
@@ -439,7 +441,8 @@
     "sceneLabel": "Three-body simulation",
     "fallback": "The simulation needs WebGL, which is not available on this device.",
     "next": "Periodic orbits are the exception: conditions so precise that the motion repeats. Explore the six best known.",
-    "explore": "Discover the six orbits"
+    "explore": "Discover the six orbits",
+    "comparison": "The translucent spheres replay the original starting point. Largest gap right now between a body and its original: {distance}."
   },
   "calibration": {
     "progress": "Calibration {step} of {total}",

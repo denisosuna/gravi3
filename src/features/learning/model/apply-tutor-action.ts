@@ -34,6 +34,16 @@ export function applyTutorAction(
       simulator.perturb();
       simulator.update({ playing: true });
       return;
+    case 'scaleBodyVelocity':
+      reveal(SIMULATOR);
+      simulator.scaleBodyVelocity(action.body - 1, action.factor);
+      simulator.update({ playing: true });
+      return;
+    case 'setBodyMass':
+      reveal(SIMULATOR);
+      simulator.editBody(action.body - 1, { mass: action.mass });
+      simulator.update({ playing: true });
+      return;
     // Orbit actions never reach the Learn page: the server only allows them on orbit pages.
     case 'openOrbit':
     case 'seekOrbit':

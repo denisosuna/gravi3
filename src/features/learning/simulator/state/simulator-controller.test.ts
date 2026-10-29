@@ -29,7 +29,7 @@ describe('simulator controller', () => {
     expect(next).toBeGreaterThan(revision);
   });
 
-  it('perturbs the first body velocity slightly to reveal sensitivity', () => {
+  it('perturbs the start slightly to reveal sensitivity', () => {
     const controller = new SimulatorController();
     const before = controller.snapshot().setup.initialState[VELOCITY_OFFSET]!;
     controller.perturb();
@@ -37,6 +37,33 @@ describe('simulator controller', () => {
       before * (1 + PERTURBATION),
     );
     expect(controller.snapshot().presetId).toBe('custom');
+  });
+
+  it('scales one body velocity without changing its direction', () => {
+    const controller = new SimulatorController();
+    const before = controller.snapshot().setup.initialState;
+    controller.scaleBodyVelocity(1, 1.5);
+    const after = controller.snapshot().setup.initialState;
+    expect(after[VELOCITY_OFFSET + 2]).toBeCloseTo(before[VELOCITY_OFFSET + 2]! * 1.5);
+    expect(after[VELOCITY_OFFSET + 3]).toBeCloseTo(before[VELOCITY_OFFSET + 3]! * 1.5);
+    expect(after[VELOCITY_OFFSET]).toBe(before[VELOCITY_OFFSET]);
+    expect(controller.snapshot().presetId).toBe('custom');
+  });
+
+  it('runs the original preset beside an edited setup until another preset loads', () => {
+    const controller = new SimulatorController();
+    expect(controller.reference).toBeNull();
+    controller.scaleBodyVelocity(1, 1.2);
+    expect(controller.snapshot().divergence).toBe(0);
+    controller.editBody(0, { mass: 1.5 });
+    expect(controller.reference?.masses).toEqual(simulatorPreset('figure-eight').masses);
+    controller.update({ playing: true });
+    for (let frame = 0; frame < 120; frame++) controller.step(1 / 60);
+    controller.publish();
+    expect(controller.snapshot().divergence).toBeGreaterThan(0);
+    controller.loadPreset('lagrange');
+    expect(controller.reference).toBeNull();
+    expect(controller.snapshot().divergence).toBeNull();
   });
 
   it('only advances while playing and pauses on an unresolved close encounter', () => {
