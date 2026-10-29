@@ -17,7 +17,9 @@ export const SIMULATOR_PRESETS = [
 export type SimulatorPresetId = (typeof SIMULATOR_PRESETS)[number];
 // Shown once the learner edits a body, so no starting point matches any more.
 export const CUSTOM_PRESET = 'custom';
-export type SimulatorPresetSelection = SimulatorPresetId | typeof CUSTOM_PRESET;
+// Any gallery orbit can also start the simulator, opened from its detail page.
+export type SimulatorStart = SimulatorPresetId | OrbitSlug;
+export type SimulatorPresetSelection = SimulatorStart | typeof CUSTOM_PRESET;
 
 export interface SimulatorSetup {
   masses: Masses;
@@ -64,16 +66,19 @@ const SUN_PLANET_MOON: SimulatorSetup = {
   ]),
 };
 
-export function simulatorPreset(id: SimulatorPresetId): SimulatorSetup {
+export function simulatorPreset(id: SimulatorStart): SimulatorSetup {
   switch (id) {
-    case 'figure-eight':
-    case 'lagrange':
-      return fromCatalog(id);
     case 'pythagorean':
       return PYTHAGOREAN;
     case 'sun-planet-moon':
       return SUN_PLANET_MOON;
+    default:
+      return fromCatalog(id);
   }
+}
+
+export function isSimulatorPreset(value: string): value is SimulatorPresetId {
+  return (SIMULATOR_PRESETS as readonly string[]).includes(value);
 }
 
 // Scales the first moving body's velocity by 1%. A system that starts at rest (Pythagorean) has no

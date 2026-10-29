@@ -157,7 +157,8 @@
       "seeing": "What you see",
       "class": "Class",
       "found": "Found by",
-      "nav": "More orbits"
+      "nav": "More orbits",
+      "tryInLab": "Try it in the laboratory"
     },
     "visual": {
       "lagrange": "An equilateral triangle turns rigidly around its center. Each body moves on a circle of radius 1, and every pair stays √3 ≈ 1.73 units apart.",
@@ -442,7 +443,8 @@
     "fallback": "The simulation needs WebGL, which is not available on this device.",
     "next": "Periodic orbits are the exception: conditions so precise that the motion repeats. Explore the six best known.",
     "explore": "Discover the six orbits",
-    "comparison": "The translucent spheres replay the original starting point. Largest gap right now between a body and its original: {distance}."
+    "comparison": "The translucent spheres replay the original starting point. Largest gap right now between a body and its original: {distance}.",
+    "fromGallery": "Loaded from the gallery: {name}. Edit a body or perturb it by 1% to see how stable it is."
   },
   "calibration": {
     "progress": "Calibration {step} of {total}",

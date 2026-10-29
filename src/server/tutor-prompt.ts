@@ -24,7 +24,7 @@ const ACTION_GUIDE: Record<TutorContextKind, string> = {
 - {"type":"scaleBodyVelocity","body":1|2|3,"factor":number}: multiplies that body's starting velocity in the simulator by ${VELOCITY_FACTOR_RANGE.min}–${VELOCITY_FACTOR_RANGE.max}, keeping its direction, and restarts from the currently loaded setup.
 - {"type":"setBodyMass","body":1|2|3,"mass":number}: sets that body's mass in the simulator to ${MASS_RANGE.min}–${MASS_RANGE.max} (normalized units, G = 1) and restarts.
 Propose an action whenever the learner could see the answer: mass or distance questions → setExperiment; chaos, unpredictability or sensitivity → loadPreset "pythagorean" or perturb; periodic or stable motion → loadPreset "figure-eight"; periodic but unstable motion → loadPreset "lagrange". "What if body N were faster, slower, heavier or lighter?" → scaleBodyVelocity or setBodyMass, run in the free laboratory; say you cannot know the exact outcome in advance and invite the learner to watch it. Name the place where the effect appears: the laboratory for setExperiment, the simulator for the others.
-Adapt to the learner using the verified context: if "misconception" is set, address that idea first, without saying the learner was foolish, and propose the setExperiment that doubles the distance so they can see the force become a quarter. If "prediction" is null and the question is about how distance or mass changes the force, ask for their guess in the prediction capsule before giving the full answer. If "checked" is false, invite them to press the doubling buttons in the "check" capsule. "capsule" is the capsule on screen: connect the answer to it when it is relevant.`,
+Adapt to the learner using the verified context: if "misconception" is set, address that idea first, without saying the learner was foolish, and propose the setExperiment that doubles the distance so they can see the force become a quarter. If "prediction" is null and the question is about how distance or mass changes the force, ask for their guess in the prediction capsule before giving the full answer. If "checked" is false, invite them to press the doubling buttons in the "check" capsule. "capsule" is the capsule on screen: connect the answer to it when it is relevant. "simulator.preset" may also be a gallery orbit slug, opened from its detail page: it is periodic in exact arithmetic, and the 1% perturbation shows how stable it is.`,
   orbit: `- {"type":"openOrbit","slug":${orbitSlugs.map((slug) => `"${slug}"`).join('|')}}: opens another periodic orbit to compare.
 - {"type":"seekOrbit","fraction":number}: moves the current animation to that fraction of its period, 0 to 1. To show the closest approach, use closestApproach.fraction from the verified context.
 - {"type":"setOrbitSpeed","speed":${PLAYBACK_SPEEDS.join('|')}}: changes playback speed; 0.5 helps to follow fast close approaches.
@@ -41,7 +41,7 @@ const LEVEL_STYLES: Record<Level, string> = {
     'The learner chose the advanced level: you may use scientific notation, units and the limits of the numerical method when relevant.',
 };
 
-const TUTOR_PROMPT_VERSION = '2.9';
+const TUTOR_PROMPT_VERSION = '2.10';
 
 // What a wrong answer to "double the distance" reveals; derived on the server, never sent by the client.
 const MISCONCEPTIONS: Record<PredictionAnswer, string | null> = {

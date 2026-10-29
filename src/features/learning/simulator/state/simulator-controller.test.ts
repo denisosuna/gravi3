@@ -18,6 +18,14 @@ describe('simulator controller', () => {
     expect(controller.simulation.masses).toEqual(simulatorPreset('pythagorean').masses);
   });
 
+  it('can start from any gallery orbit', () => {
+    const controller = new SimulatorController('butterfly-i');
+    expect(controller.snapshot()).toMatchObject({ presetId: 'butterfly-i', playing: false });
+    expect(controller.simulation.masses).toEqual(simulatorPreset('butterfly-i').masses);
+    controller.perturb();
+    expect(controller.reference?.masses).toEqual(simulatorPreset('butterfly-i').masses);
+  });
+
   it('marks edited setups as custom and restarts the simulation', () => {
     const controller = new SimulatorController();
     const revision = controller.snapshot().revision;

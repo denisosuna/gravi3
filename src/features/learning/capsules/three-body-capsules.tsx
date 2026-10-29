@@ -4,7 +4,12 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { ROUTES } from '@/shared/constants/routes';
 import { LEVEL_PRESENTATION, READOUTS } from '@/features/learning/model/level-presentation';
-import type { SimulatorPresetId } from '@/features/learning/model/simulator-presets';
+import {
+  CUSTOM_PRESET,
+  isSimulatorPreset,
+  type SimulatorPresetId,
+} from '@/features/learning/model/simulator-presets';
+import { useSimulatorState } from '../simulator/state/use-simulator-state';
 import { BodyEditor } from '../simulator/components/body-editor';
 import { SimulationReadouts } from '../simulator/components/simulation-readouts';
 import { SimulatorPresets } from '../simulator/components/simulator-controls';
@@ -55,8 +60,14 @@ export function EnergyCapsule({ lesson }: { lesson: Lesson }) {
 // Everything at once and no script: every preset, every readout and the body editor.
 export function LabCapsule({ lesson }: { lesson: Lesson }) {
   const t = useTranslations('simulator');
+  const orbits = useTranslations('orbits');
+  const loaded = useSimulatorState(lesson.simulator, (state) => state.presetId);
+  const fromGallery = loaded !== CUSTOM_PRESET && !isSimulatorPreset(loaded);
   return (
     <div className="simulator-panel">
+      {fromGallery ? (
+        <p className="simulator-origin">{t('fromGallery', { name: orbits(`${loaded}.name`) })}</p>
+      ) : null}
       <SimulatorPresets controller={lesson.simulator} />
       <SimulatorStage controller={lesson.simulator} />
       <SimulationReadouts controller={lesson.simulator} shown={READOUTS} />

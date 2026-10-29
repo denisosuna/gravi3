@@ -37,7 +37,7 @@ const learningContext = z
     capsule: z.custom<CapsuleId>(isCapsuleId).optional(),
     simulator: z
       .object({
-        preset: z.enum([...SIMULATOR_PRESETS, CUSTOM_PRESET]),
+        preset: z.union([z.enum(SIMULATOR_PRESETS), z.enum(orbitSlugs), z.literal(CUSTOM_PRESET)]),
         event: z.enum(SIMULATION_EVENTS).nullable(),
       })
       .strict()
