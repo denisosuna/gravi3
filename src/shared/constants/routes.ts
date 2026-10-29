@@ -6,6 +6,8 @@ export const ROUTES = {
   calibration: '/learn/calibration',
   orbits: '/orbits',
   orbit: (slug: OrbitSlug) => `/orbits/${slug}`,
+  // The free laboratory of Learn, started from a gallery orbit.
+  orbitInLab: (slug: OrbitSlug) => `/learn?orbit=${slug}#lab`,
 } as const;
 
 export const API_ROUTES = {

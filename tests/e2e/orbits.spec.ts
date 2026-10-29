@@ -188,3 +188,18 @@ test('playback controls are on screen without scrolling on a short desktop', asy
   await page.getByRole('link', { name: /Next orbit/ }).click();
   await expect(page).toHaveURL(/\/en\/orbits\/moth-i$/);
 });
+
+test('an orbit opens in the Learn laboratory, and unknown orbits are ignored', async ({ page }) => {
+  await page.goto('/en/orbits/butterfly-i');
+  await page.getByRole('link', { name: 'Try it in the laboratory' }).click();
+  await expect(page).toHaveURL(/\/en\/learn\?orbit=butterfly-i#lab$/);
+  const lab = page.getByRole('region', { name: 'Free laboratory' });
+  await expect(
+    lab.getByText('Loaded from the gallery: Butterfly I.', { exact: false }),
+  ).toBeVisible();
+  await lab.getByRole('button', { name: 'Perturb 1%' }).click();
+  await expect(lab.getByTestId('simulator-comparison')).toBeVisible();
+  await page.goto('/en/learn?orbit=not-an-orbit#lab');
+  await expect(page.getByRole('region', { name: 'Free laboratory' })).toBeVisible();
+  await expect(page.getByText('Loaded from the gallery', { exact: false })).toHaveCount(0);
+});

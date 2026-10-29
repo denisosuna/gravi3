@@ -974,6 +974,14 @@ button.control-button:hover {
   font-size: 13px;
   line-height: 1.6;
 }
+.simulator-origin {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: var(--radius-inner);
+  background: var(--accent-soft);
+  font-size: 13px;
+  line-height: 1.6;
+}
 .simulator-comparison {
   margin: 10px 0 0;
   color: var(--muted);

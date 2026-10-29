@@ -6,6 +6,7 @@ import { DEFAULT_LEVEL } from '@/features/calibration/model/calibration';
 import { LEVEL_SESSION } from '@/features/calibration/model/level-session';
 import { initialExperiment, type Experiment } from '@/features/learning/model/experiment';
 import { gravitationalForce } from '@/physics/gravity';
+import type { OrbitSlug } from '@/physics/types';
 import { TutorPanel } from '@/features/tutor/components/tutor-panel';
 import { applyTutorAction } from '../model/apply-tutor-action';
 import { capsulesForLevel, resolveCapsule } from '../model/capsules';
@@ -23,10 +24,10 @@ const EXPERIMENT_SESSION = createSessionKey<Experiment>('experiment', () => ({
 }));
 
 // Chapters of short capsules filtered by level; the experiment and simulator persist across them.
-export function LearningExperience() {
+export function LearningExperience({ startOrbit }: { startOrbit?: OrbitSlug }) {
   const memory = useSessionMemory();
   const [experiment, setExperiment] = useState(() => memory.get(EXPERIMENT_SESSION));
-  const [simulator] = useState(() => new SimulatorController());
+  const [simulator] = useState(() => new SimulatorController(startOrbit));
   const simulatorPreset = useSimulatorState(simulator, (state) => state.presetId);
   const simulatorEvent = useSimulatorState(simulator, (state) => state.event ?? null);
   const level = useSessionValue(LEVEL_SESSION).level ?? DEFAULT_LEVEL;

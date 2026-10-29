@@ -1,5 +1,5 @@
 import { useLocale, useTranslations } from 'next-intl';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, FlaskConical } from 'lucide-react';
 import { ROUTES } from '@/shared/constants/routes';
 import { ORBIT_CATALOG, orbits } from '@/physics/orbit-catalog';
 import { Link } from '@/i18n/routing';
@@ -75,6 +75,10 @@ export function OrbitDetail({ orbit }: { orbit: OrbitDefinition }) {
               <h2>{t('detail.seeing')}</h2>
               <p id={DESCRIPTION_ID}>{t(`visual.${orbit.slug}`)}</p>
               <p className={styles.note}>{t('planar')}</p>
+              <Link href={ROUTES.orbitInLab(orbit.slug)} className="button">
+                <FlaskConical size={16} aria-hidden="true" />
+                {t('detail.tryInLab')}
+              </Link>
             </section>
             <section>
               <h2>{t('concept')}</h2>

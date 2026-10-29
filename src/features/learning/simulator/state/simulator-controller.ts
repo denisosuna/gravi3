@@ -4,6 +4,7 @@ import {
   simulatorPreset,
   type SimulatorPresetId,
   type SimulatorPresetSelection,
+  type SimulatorStart,
   type SimulatorSetup,
 } from '@/features/learning/model/simulator-presets';
 import {
@@ -56,11 +57,11 @@ export class SimulatorController {
   private value: SimulatorSnapshot;
   private listeners = new Set<() => void>();
 
-  constructor() {
-    const setup = simulatorPreset(DEFAULT_PRESET);
+  constructor(start: SimulatorStart = DEFAULT_PRESET) {
+    const setup = simulatorPreset(start);
     this.simulation = createSimulation(setup);
     this.value = {
-      presetId: DEFAULT_PRESET,
+      presetId: start,
       setup,
       playing: false,
       speed: 1,
@@ -84,7 +85,7 @@ export class SimulatorController {
     this.emit(patch);
   }
 
-  loadPreset(presetId: SimulatorPresetId) {
+  loadPreset(presetId: SimulatorStart) {
     this.restart(simulatorPreset(presetId), presetId);
   }
 
