@@ -72,6 +72,7 @@
     inset 0 1px 0 var(--glass-highlight),
     var(--glass-shadow);
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 16px;
   animation: capsule-in 0.35s ease-out;
 }
