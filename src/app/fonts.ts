@@ -1,4 +1,4 @@
-import { Atkinson_Hyperlegible_Next, JetBrains_Mono, Young_Serif } from 'next/font/google';
+import { Atkinson_Hyperlegible_Next, JetBrains_Mono, Manrope } from 'next/font/google';
 
 // Self-hosted at build time: no request to Google at runtime and no layout shift on load.
 // Atkinson Hyperlegible was designed for low-vision readers; it carries all body and UI text.
@@ -10,8 +10,8 @@ const body = Atkinson_Hyperlegible_Next({
   fallback: ['Atkinson Hyperlegible', 'system-ui', 'sans-serif'],
   adjustFontFallback: false,
 });
-// Young Serif sets page titles and orbit names, like the plates of a printed catalogue.
-const display = Young_Serif({ subsets: ['latin'], weight: '400', variable: '--font-display' });
+// Manrope sets titles and orbit names: rounded and heavy, like the liquid glass around it.
+const display = Manrope({ subsets: ['latin'], weight: ['600', '800'], variable: '--font-display' });
 // Aligned numbers only: initial conditions and simulator readouts.
 const mono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' });
 

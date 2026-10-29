@@ -1,54 +1,71 @@
 @import 'tailwindcss';
 
-/* Light paper and ink with a cyanotype accent; three Okabe-Ito body colors stay distinguishable with color blindness. */
+/* Fusion: deep space with slow, blurred body-colored light under glass panels. Dark is the default;
+   the light variant keeps the same structure. Body colors stay Okabe-Ito so they remain distinguishable. */
 :root {
   color-scheme: light;
-  --bg: #fbfcfe;
-  --surface: #ffffff;
-  --surface-raised: #eef2f8;
-  --text: #1b2540;
-  --muted: #4f5a72;
-  --line: #d9e0eb;
-  --accent: #1f4e79;
-  --accent-strong: #173b5c;
+  --bg: #eef1fb;
+  --surface: rgba(255, 255, 255, 0.62);
+  --surface-raised: rgba(255, 255, 255, 0.85);
+  --surface-solid: #ffffff;
+  --text: #0d1330;
+  --muted: #48506a;
+  --line: rgba(13, 19, 48, 0.14);
+  --accent: #1f4e9e;
+  --accent-strong: #163a78;
   --accent-contrast: #ffffff;
-  --accent-soft: #e3edf6;
+  --accent-soft: rgba(31, 78, 158, 0.1);
   --highlight: #ffe066;
-  --highlight-ink: #1b2540;
-  --grid: rgba(31, 78, 121, 0.08);
+  --highlight-ink: #0d1330;
+  --grid: rgba(31, 78, 158, 0.07);
   --body-1: #0072b2;
   --body-2: #d55e00;
   --body-3: #009e73;
+  --glow-1: rgba(0, 114, 178, 0.22);
+  --glow-2: rgba(213, 94, 0, 0.16);
+  --glow-3: rgba(0, 158, 115, 0.18);
+  --glass-highlight: rgba(255, 255, 255, 0.9);
+  --glass-shadow: 0 20px 50px -26px rgba(13, 19, 48, 0.35);
+  --glass-blur: 22px;
+  --radius-card: 24px;
+  --radius-inner: 16px;
+  --radius-pill: 999px;
   --font-ui: var(--font-body), 'Atkinson Hyperlegible', system-ui, sans-serif;
-  --font-title: var(--font-display), Georgia, 'Times New Roman', serif;
+  --font-title: var(--font-display), 'Avenir Next', system-ui, sans-serif;
   --font-number: var(--font-mono), ui-monospace, Menlo, monospace;
   --text-xs: 12px;
   --text-sm: 14px;
   --text-md: 16px;
-  --text-lg: 20px;
-  --text-xl: 26px;
-  --text-2xl: 34px;
-  --text-3xl: clamp(34px, 4.6vw, 52px);
+  --text-lg: clamp(18px, 1rem + 0.4vw, 21px);
+  --text-xl: clamp(22px, 1.1rem + 0.9vw, 28px);
+  --text-2xl: clamp(28px, 1.3rem + 1.6vw, 36px);
+  --text-3xl: clamp(34px, 1.4rem + 3.4vw, 60px);
   font-family: var(--font-ui);
 }
 .dark {
   color-scheme: dark;
-  --bg: #0f1420;
-  --surface: #151c2b;
-  --surface-raised: #1c2537;
-  --text: #e9edf5;
-  --muted: #a7b1c5;
-  --line: #29334a;
-  --accent: #8fb8e8;
-  --accent-strong: #b3cff0;
-  --accent-contrast: #0f1420;
-  --accent-soft: #1c2b42;
-  --highlight: #ffd84d;
-  --highlight-ink: #0f1420;
-  --grid: rgba(143, 184, 232, 0.08);
+  --bg: #070a1a;
+  --surface: rgba(20, 26, 64, 0.42);
+  --surface-raised: rgba(255, 255, 255, 0.09);
+  --surface-solid: #10153a;
+  --text: #f2f5ff;
+  --muted: #b4bfd8;
+  --line: rgba(255, 255, 255, 0.18);
+  --accent: #9ee8ff;
+  --accent-strong: #c9f3ff;
+  --accent-contrast: #061022;
+  --accent-soft: rgba(158, 232, 255, 0.14);
+  --highlight: #ffd27a;
+  --highlight-ink: #1a1030;
+  --grid: rgba(158, 232, 255, 0.07);
   --body-1: #56b4e9;
   --body-2: #e69f00;
   --body-3: #2fbf8f;
+  --glow-1: rgba(61, 139, 255, 0.34);
+  --glow-2: rgba(255, 154, 61, 0.22);
+  --glow-3: rgba(31, 197, 155, 0.24);
+  --glass-highlight: rgba(255, 255, 255, 0.28);
+  --glass-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.65);
 }
 * {
   box-sizing: border-box;
@@ -104,13 +121,13 @@ p {
 h1,
 h2 {
   font-family: var(--font-title);
-  font-weight: 400;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 h1 {
   font-size: var(--text-3xl);
-  line-height: 1.08;
-  letter-spacing: -0.01em;
+  line-height: 1.04;
 }
 h2 {
   font-size: var(--text-lg);
@@ -139,19 +156,20 @@ h2 {
   top: 10px;
 }
 .site-header {
-  height: 80px;
-  padding: 0 34px;
+  min-height: 64px;
+  margin: 12px clamp(12px, 3vw, 32px) 0;
+  padding: 0 clamp(12px, 2vw, 24px);
   display: flex;
-  gap: 50px;
+  gap: clamp(16px, 3vw, 40px);
   align-items: center;
-  border-bottom: 1px solid var(--line);
-  background: var(--bg);
 }
 .brand {
   display: flex;
   align-items: center;
   gap: 10px;
   font-family: var(--font-title);
+  font-weight: 800;
+  letter-spacing: -0.03em;
   font-size: var(--text-xl);
   white-space: nowrap;
 }
@@ -226,11 +244,11 @@ h2 {
 }
 .button,
 button.control-button {
-  min-height: 42px;
+  min-height: 44px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: var(--radius-pill);
   background: var(--surface);
-  padding: 10px 16px;
+  padding: 10px 20px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -1344,4 +1362,88 @@ button.control-button:hover {
 .initial-conditions span {
   display: block;
   overflow-wrap: anywhere;
+}
+
+/* Fusion layer: glass panels floating over slow light. */
+html {
+  background: var(--bg);
+}
+body {
+  background: transparent;
+  position: relative;
+  isolation: isolate;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: -10%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(38% 34% at 16% 20%, var(--glow-1), transparent 70%),
+    radial-gradient(34% 30% at 84% 16%, var(--glow-2), transparent 70%),
+    radial-gradient(44% 40% at 62% 88%, var(--glow-3), transparent 70%);
+  filter: blur(30px);
+  animation: glow-drift 40s ease-in-out infinite alternate;
+}
+@keyframes glow-drift {
+  to {
+    transform: translate3d(3%, -2%, 0) scale(1.06);
+  }
+}
+.site-header,
+.milestone-card,
+.path-step,
+.why-panel,
+.tutor-panel,
+.scientific-details,
+.body-fieldset {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    var(--glass-shadow);
+}
+.site-header {
+  border-radius: var(--radius-pill);
+}
+.icon-button,
+.speed-control,
+.segmented-control,
+.suggestion-button,
+.preset-button,
+.tutor-notice {
+  border-radius: var(--radius-inner);
+}
+.button.primary {
+  box-shadow: 0 12px 30px -14px var(--accent);
+}
+.scene-container,
+.lab-scene,
+.simulator-scene {
+  border-radius: var(--radius-inner);
+}
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+  }
+}
+/* Some people turn transparency off, and older browsers cannot blur: both get solid panels. */
+@media (prefers-reduced-transparency: reduce) {
+  :root,
+  .dark {
+    --surface: var(--surface-solid);
+  }
+  body::before {
+    display: none;
+  }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root,
+  .dark {
+    --surface: var(--surface-solid);
+  }
 }
