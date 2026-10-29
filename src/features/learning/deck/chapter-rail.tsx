@@ -1,14 +1,24 @@
+import { useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { CHAPTERS, chapterCapsules, type Capsule } from '../model/capsules';
 import { openCapsule } from './use-capsule-hash';
 import styles from './chapter-rail.module.css';
 
 export const TUTOR_ANCHOR = 'tutor';
+// Space left before the open chapter when the row scrolls to it.
+const RAIL_INSET_PX = 8;
 
 // Chapters with how far the learner is in each; a chapter link opens its first capsule.
 export function ChapterRail({ deck, current }: { deck: readonly Capsule[]; current: Capsule }) {
   const t = useTranslations('learn.chapters');
   const currentChapter = CHAPTERS.indexOf(current.chapter);
+  const currentLink = useRef<HTMLAnchorElement>(null);
+  // On phones the row scrolls sideways; keep the open chapter in sight without moving the page.
+  useEffect(() => {
+    const link = currentLink.current;
+    const row = link?.closest('ol');
+    if (link && row) row.scrollTo({ left: link.offsetLeft - RAIL_INSET_PX });
+  }, [currentChapter]);
   return (
     <nav className={styles.rail} aria-label={t('label')}>
       <ol>
@@ -24,6 +34,7 @@ export function ChapterRail({ deck, current }: { deck: readonly Capsule[]; curre
           return (
             <li key={chapter}>
               <a
+                ref={index === currentChapter ? currentLink : undefined}
                 href={`#${first?.id ?? chapter}`}
                 aria-current={index === currentChapter ? 'step' : undefined}
                 onClick={(event) => {
