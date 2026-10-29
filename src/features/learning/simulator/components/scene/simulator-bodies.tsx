@@ -11,6 +11,7 @@ import {
 } from 'three';
 import type { SimulatorController } from '@/features/learning/simulator/state/simulator-controller';
 import { BODY_INDICES, bodyPosition, bodyVelocity } from '@/physics/types';
+import { LiquidBody } from '@/shared/three/liquid-body';
 
 const TRAIL_POINTS = 900;
 const TRAIL_OPACITY = 0.8;
@@ -123,15 +124,7 @@ export function SimulatorBodies({
             groups.current[body] = group;
           }}
         >
-          <mesh>
-            <sphereGeometry args={[bodyRadius(masses[body]!), 24, 18]} />
-            <meshStandardMaterial
-              color={color}
-              emissive={color}
-              emissiveIntensity={0.6}
-              roughness={0.3}
-            />
-          </mesh>
+          <LiquidBody index={body} radius={bodyRadius(masses[body]!)} />
         </group>
       ))}
     </>

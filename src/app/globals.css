@@ -330,6 +330,10 @@ button.control-button:hover {
   color: var(--text);
   cursor: pointer;
 }
+.hero-orbit-scene {
+  position: absolute;
+  inset: 0;
+}
 .orbit-trace[data-ready] img {
   visibility: hidden;
 }

@@ -8,6 +8,7 @@ import { BODY_INDICES, bodyPosition, type Trajectory } from '@/physics/types';
 import { CameraRig, INITIAL_CAMERA_POSITION } from './camera-rig';
 import { MovingBodies } from './moving-bodies';
 import { scenePalette } from '@/shared/three/scene-palette';
+import { LiquidEnvironment } from '@/shared/three/liquid-body';
 
 const FIELD_OF_VIEW_DEGREES = 42;
 // Leaves a margin so the full trajectory fits inside the initial front view.
@@ -55,8 +56,9 @@ const SceneContents = memo(function SceneContents({
   const traces = usePlaybackState(controller, (session) => session.traces);
   return (
     <>
-      <ambientLight intensity={1.5} />
-      <directionalLight position={[-3, 4, 8]} intensity={2} />
+      <ambientLight intensity={0.6} />
+      <directionalLight position={[-3, 4, 8]} intensity={1.6} />
+      <LiquidEnvironment />
       <gridHelper
         args={[GRID_SIZE, GRID_DIVISIONS, palette.gridCenter, palette.grid]}
         rotation={[Math.PI / 2, 0, 0]}
