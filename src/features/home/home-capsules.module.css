@@ -1,0 +1,201 @@
+/* Home deck: three glass capsules, one at a time, with previous/next and dots below. */
+.deck {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  touch-action: pan-y;
+}
+
+.slide {
+  min-height: clamp(420px, 60svh, 560px);
+  padding: clamp(20px, 4vw, 48px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    var(--glass-shadow);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 20px;
+  animation: slide-in 0.35s ease-out;
+}
+
+.slide[hidden] {
+  display: none;
+}
+
+.slide h2 {
+  margin: 0;
+  font-size: var(--text-3xl);
+  line-height: 1.08;
+}
+
+.slide h2:focus {
+  outline: none;
+}
+
+.body {
+  margin: 0;
+  max-width: 56ch;
+  font-size: var(--text-lg);
+  line-height: 1.6;
+}
+
+.question {
+  display: grid;
+  gap: 24px;
+  align-items: center;
+}
+
+.copy {
+  display: grid;
+  gap: 24px;
+  justify-items: start;
+}
+
+.milestones,
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: 12px;
+}
+
+.milestones li,
+.steps li {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-inner);
+  background: var(--surface-raised);
+}
+
+.milestones span {
+  color: var(--accent);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.milestones h3 {
+  margin: 6px 0 0;
+  font-size: var(--text-md);
+}
+
+.steps li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+}
+
+.steps svg {
+  flex: none;
+  color: var(--accent);
+}
+
+.more summary {
+  width: fit-content;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--accent);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.more p {
+  max-width: 68ch;
+  margin: 0 0 10px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.dots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.dots button {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.dots button::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+}
+
+.dots button[aria-current='step']::before {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+}
+
+/* Movement only: fading would briefly lower the text contrast. */
+@keyframes slide-in {
+  from {
+    transform: translateY(8px);
+  }
+}
+
+@media (min-width: 900px) {
+  .question {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+  }
+}
+
+/* On the narrowest phones previous and next keep only their arrows; the text stays as their name. */
+@media (max-width: 400px) {
+  .nav :global(.button) {
+    width: 44px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .navLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .slide {
+    background: var(--surface-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

@@ -20,7 +20,7 @@ flowchart LR
 | ----------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
 | `src/app`               | Routing, server composition, metadata and thin API handlers                                     | No numerical integration in pages                           |
 | `src/physics`           | Newtonian equations, integrator, invariants, interpolation and the six-orbit catalogue          | No React, Three.js, Next.js or server imports               |
-| `src/features/home`     | Landing page sections                                                                           | No other feature's UI                                       |
+| `src/features/home`     | Landing page in three capsules (question, why it matters, how you will learn)                   | No other feature's UI                                       |
 | `src/features/learning` | Capsule deck (`deck/`), capsules (`capsules/`), force lab (`lab/`) and simulator (`simulator/`) | Scenes cannot alter the physics                             |
 | `src/features/orbits`   | Gallery, playback controller, transport UI and orbit scene                                      | Physical time independent of render frames                  |
 | `src/features/tutor`    | Tutor panel, client conversation lifecycle, action contract and validation                      | No provider key, model selection or system prompt           |

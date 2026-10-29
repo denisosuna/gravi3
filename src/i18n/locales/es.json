@@ -28,11 +28,9 @@
   },
   "home": {
     "title": "El problema de los tres cuerpos",
-    "lead": "¿Puedes predecir cómo se moverán tres objetos que se atraen por la gravedad? Con dos es fácil; con tres no existe una fórmula general. Aquí lo entenderás experimentando, paso a paso y sin conocimientos previos de física.",
     "start": "Empieza por la gravedad",
     "explore": "Ver las seis órbitas",
     "visualCaption": "Figura de ocho: tres masas iguales que se persiguen por la misma curva.",
-    "problemTitle": "¿Qué es el problema de los tres cuerpos?",
     "problemIntro": "Es una pregunta sencilla de plantear: si conoces dónde están tres masas y a qué velocidad se mueven, ¿dónde estarán dentro de un tiempo? Cada una atrae a las otras dos según la ley de gravitación de Newton.",
     "milestones": {
       "two": {
@@ -51,26 +49,33 @@
         "text": "Con condiciones iniciales muy precisas aparecen órbitas que se repiten: el triángulo de Lagrange (1772), la figura de ocho (1993) y nuevas familias halladas por ordenador en 2013."
       }
     },
-    "whyTitle": "¿Por qué importa?",
-    "whyText": "El Sol, la Tierra y la Luna forman un sistema de tres cuerpos. Los satélites y las sondas se planifican con estas ideas: el telescopio James Webb orbita cerca del punto L2, una de las posiciones de equilibrio que estudiaron Euler y Lagrange.",
-    "pathTitle": "Cómo aprenderás aquí",
-    "steps": {
-      "learn": {
-        "title": "Entiende la gravedad",
-        "text": "Cambia masas y distancias entre dos cuerpos, haz una predicción y compruébala con el experimento.",
-        "cta": "Ir a Aprender"
+    "deck": {
+      "label": "Introducción en tres cápsulas",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "goTo": "Ir a la cápsula {number}: {title}"
+    },
+    "capsules": {
+      "question": {
+        "title": "¿Puedes predecir cómo se mueven tres cuerpos?",
+        "body": "Con dos cuerpos que se atraen basta una fórmula. Con tres no existe una general: un cambio mínimo lo cambia todo. Aquí lo entenderás experimentando, sin saber física."
       },
-      "tutor": {
-        "title": "Pregunta al tutor IA",
-        "text": "Resuelve tus dudas con un tutor que conoce los valores de tu experimento. Funciona también sin él: los cálculos no dependen de la IA.",
-        "cta": "Abrir el laboratorio"
+      "why": {
+        "title": "Por qué importa",
+        "body": "El Sol, la Tierra y la Luna son tres cuerpos. Satélites y sondas se planifican con estas ideas: el telescopio James Webb orbita cerca de L2, un punto de equilibrio que estudiaron Euler y Lagrange."
       },
-      "orbits": {
-        "title": "Explora seis soluciones",
-        "text": "Observa en 3D seis órbitas periódicas reales, calculadas a partir de condiciones iniciales publicadas y validadas numéricamente.",
-        "cta": "Ir a Órbitas"
+      "how": {
+        "title": "Cómo vas a aprender",
+        "body": "Primero una calibración de un minuto. Después, cápsulas cortas con experimentos y un tutor que los ejecuta contigo. Al final, seis órbitas reales.",
+        "steps": {
+          "calibrate": "Calibra tu punto de partida",
+          "capsules": "Experimenta cápsula a cápsula con el tutor",
+          "gallery": "Explora seis órbitas periódicas"
+        }
       }
-    }
+    },
+    "startCalibration": "Empezar con la calibración",
+    "milestonesLabel": "Tres momentos de la historia"
   },
   "orbits": {
     "title": "Seis órbitas que vuelven.",

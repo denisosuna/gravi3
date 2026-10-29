@@ -271,27 +271,16 @@ button.control-button:hover {
 .home-page {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 72px 48px 72px;
+  padding: 56px 48px 72px;
   display: grid;
-  gap: 88px;
+  gap: 24px;
 }
-.home-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  align-items: center;
-  gap: 48px;
-}
-.home-hero h1 {
-  font-size: clamp(44px, 5.4vw, 72px);
+.home-title {
+  margin: 0;
+  font-size: clamp(36px, 5vw, 64px);
   line-height: 1.05;
-  margin-bottom: 24px;
 }
-.hero-copy {
-  color: var(--muted);
-  max-width: 540px;
-  font-size: 17px;
-  line-height: 1.75;
-}
+
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
@@ -343,83 +332,7 @@ button.control-button:hover {
   font-size: 13px;
   line-height: 1.6;
 }
-.home-section h2 {
-  font-size: clamp(28px, 3.2vw, 40px);
-  line-height: 1.15;
-  margin-bottom: 16px;
-}
-.section-intro {
-  color: var(--muted);
-  max-width: 720px;
-  font-size: 16px;
-  line-height: 1.75;
-  margin-bottom: 32px;
-}
-.milestones,
-.learning-path {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
-}
-.milestone-card,
-.path-step {
-  position: relative;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--surface);
-  padding: 24px;
-}
-.milestone-card h3,
-.path-step h3 {
-  font-size: 18px;
-  margin: 10px 0 8px;
-}
-.milestone-card p,
-.path-step p,
-.why-panel p {
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.7;
-}
-.milestone-year {
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 650;
-  letter-spacing: 0.08em;
-}
-.why-panel {
-  margin-top: 20px;
-  border-radius: 14px;
-  background: var(--accent-soft);
-  padding: 24px;
-}
-.why-panel h3 {
-  font-size: 16px;
-  margin-bottom: 8px;
-}
-.path-number {
-  position: absolute;
-  top: 20px;
-  right: 22px;
-  color: var(--muted);
-  font-size: 12px;
-  font-weight: 650;
-}
-.path-icon {
-  color: var(--accent);
-}
-.path-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 14px;
-  color: var(--accent);
-  font-size: 13px;
-  font-weight: 600;
-}
+
 .status-page {
   max-width: 720px;
   margin: 0 auto;
@@ -502,7 +415,6 @@ button.control-button:hover {
   padding: 45px 36px;
 }
 @media (max-width: 1150px) {
-  .brand-note,
   .source-link {
     display: none;
   }
@@ -512,11 +424,6 @@ button.control-button:hover {
   }
 }
 @media (max-width: 900px) {
-  .home-hero,
-  .milestones,
-  .learning-path {
-    grid-template-columns: minmax(0, 1fr);
-  }
   .scientific-details {
     margin-top: 0;
     align-self: start;
@@ -573,17 +480,7 @@ button.control-button:hover {
     padding: 40px 16px 48px;
     gap: 56px;
   }
-  .home-hero,
-  .milestones,
-  .learning-path {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .home-hero h1 {
-    font-size: 40px;
-  }
-  .hero-copy {
-    font-size: 15px;
-  }
+
   .home-visual {
     padding: 16px;
   }
@@ -1416,9 +1313,6 @@ body::before {
   }
 }
 .site-header,
-.milestone-card,
-.path-step,
-.why-panel,
 .tutor-panel,
 .scientific-details,
 .body-fieldset {

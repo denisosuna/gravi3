@@ -64,8 +64,8 @@ Next.js 16 (App Router) and React 19, strict TypeScript, React Three Fiber, `nex
 - **Orbits are precomputed, not integrated in the browser.** Three-body motion is chaotic, so an offline script (`pnpm orbits:generate`) integrates each orbit with an adaptive Dormand–Prince 5(4) method and the app replays validated samples with cubic Hermite interpolation. Fixed acceptance thresholds and an independent finer integration check energy, momentum, return to the start and convergence ([report](docs/orbit-validation.json)).
 - **The AI never does the maths.** Forces are recomputed on the server and the tutor answers around them. It can only propose range-checked actions from an allowlist, and nothing runs until the learner presses its button.
 - **Any OpenAI-compatible provider**, selected with environment variables, so reviewers can plug in their own key.
-- **Lightweight.** 3D code loads on demand, the home page animation is a 2D canvas, there is one canvas per page and paused scenes render on demand.
-- **Organised by feature.** `src/features/{home,learning,orbits,tutor}` each hold their components, pure `model/` logic and 3D scene, and `src/physics` has no framework imports. ESLint enforces these boundaries.
+- **Lightweight.** 3D code loads on demand, the home page shows a static preview first and loads its 3D figure-eight afterwards, there is one WebGL canvas per page and paused scenes render on demand.
+- **Organised by feature.** `src/features/{home,calibration,learning,orbits,tutor}` each hold their components, pure `model/` logic and 3D scene, and `src/physics` has no framework imports. ESLint enforces these boundaries.
 
 Details: [architecture and tradeoffs](docs/architecture.md) and [numerical model and provenance](docs/physics.md).
 
