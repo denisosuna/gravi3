@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useState, useSyncExternalStore } from 'react';
 import { ThemeProvider } from 'next-themes';
 
 export const THEMES = ['system', 'dark', 'light'] as const;
@@ -20,6 +20,7 @@ export function createSessionKey<T>(description: string, initial: () => T): Sess
 // Survives client navigation and locale changes; a reload starts fresh, as the brief allows.
 class SessionMemory {
   private values = new Map<symbol, unknown>();
+  private listeners = new Map<symbol, Set<() => void>>();
 
   get<T>(key: SessionKey<T>): T {
     if (!this.values.has(key.id)) this.values.set(key.id, key.initial());
@@ -29,6 +30,16 @@ class SessionMemory {
 
   set<T>(key: SessionKey<T>, value: T) {
     this.values.set(key.id, value);
+    this.listeners.get(key.id)?.forEach((listener) => listener());
+  }
+
+  subscribe<T>(key: SessionKey<T>, listener: () => void) {
+    const listeners = this.listeners.get(key.id) ?? new Set();
+    listeners.add(listener);
+    this.listeners.set(key.id, listeners);
+    return () => {
+      listeners.delete(listener);
+    };
   }
 }
 
@@ -47,4 +58,15 @@ export function useSessionMemory() {
   const memory = useContext(MemoryContext);
   if (!memory) throw new Error('Session memory provider is missing.');
   return memory;
+}
+
+// A stored value that re-renders its readers whenever any component sets it.
+export function useSessionValue<T>(key: SessionKey<T>): T {
+  const memory = useSessionMemory();
+  const subscribe = useCallback(
+    (listener: () => void) => memory.subscribe(key, listener),
+    [memory, key],
+  );
+  const read = () => memory.get(key);
+  return useSyncExternalStore(subscribe, read, read);
 }

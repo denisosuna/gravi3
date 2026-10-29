@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 import { ArrowUpRight, Globe2, Orbit, SunMoon } from 'lucide-react';
@@ -15,7 +15,8 @@ const NAV_ITEMS = [
   { href: ROUTES.orbits, label: 'orbits' },
 ] as const;
 
-export function Header() {
+// `tools` lets a page area add its own control (Learn adds the level) without shared depending on it.
+export function Header({ tools }: { tools?: ReactNode }) {
   const t = useTranslations('common');
   const locale = useLocale();
   const pathname = usePathname();
@@ -42,6 +43,7 @@ export function Header() {
         ))}
       </nav>
       <div className="header-tools">
+        {tools}
         <label className="icon-select">
           <Globe2 size={16} aria-hidden="true" />
           <span className="sr-only">{t('language')}</span>

@@ -239,11 +239,6 @@
       "progress": "{current} of {total}",
       "finish": "Explore the orbits"
     },
-    "level": {
-      "label": "Level",
-      "notChosen": "You start as a student. Calibrate your level or pick another one at any time.",
-      "calibrate": "Calibrate my level"
-    },
     "numbers": {
       "force": "Attraction between the two bodies",
       "weight": "Weight of body 1 on Earth",
@@ -542,6 +537,13 @@
       },
       "start": "Start learning",
       "repeat": "Repeat the calibration"
+    },
+    "menu": {
+      "open": "Level: {level}. Change level",
+      "title": "Your level",
+      "pending": "You start as a student. Pick another level or calibrate yours in a minute.",
+      "chosen": "It changes what the capsules show, not the physics. You can change it at any time.",
+      "calibrate": "Calibrate my level"
     }
   }
 }

@@ -75,6 +75,11 @@
 }
 
 @media (min-width: 1180px) {
+  .rail {
+    position: sticky;
+    top: 16px;
+  }
+
   .rail ol {
     flex-direction: column;
   }

@@ -239,11 +239,6 @@
       "progress": "{current} de {total}",
       "finish": "Explora las órbitas"
     },
-    "level": {
-      "label": "Nivel",
-      "notChosen": "Empiezas como estudiante. Calibra tu nivel o elige otro cuando quieras.",
-      "calibrate": "Calibrar mi nivel"
-    },
     "numbers": {
       "force": "Atracción entre los dos cuerpos",
       "weight": "Peso del cuerpo 1 en la Tierra",
@@ -542,6 +537,13 @@
       },
       "start": "Empezar a aprender",
       "repeat": "Repetir la calibración"
+    },
+    "menu": {
+      "open": "Nivel: {level}. Cambiar nivel",
+      "title": "Tu nivel",
+      "pending": "Empiezas como estudiante. Elige otro nivel o calibra el tuyo en un minuto.",
+      "chosen": "Cambia lo que ves en las cápsulas, no la física. Puedes cambiarlo cuando quieras.",
+      "calibrate": "Calibrar mi nivel"
     }
   }
 }
