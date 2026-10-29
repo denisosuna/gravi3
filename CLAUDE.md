@@ -28,7 +28,7 @@ src/i18n/       Locale config and locales/{es,en}.json
 ```
 
 - Boundaries are enforced by ESLint (`eslint.config.mjs`). A feature's UI cannot be imported by another feature; other features and the server may import only `features/*/model`. The tutor panel is the one allowed exception. `shared` never imports a feature.
-- Learn is a deck of capsules (`features/learning/model/capsules.ts`): the URL hash names the open capsule, only that capsule is mounted (one WebGL scene at a time), and the level (`calibration/model`, session only) filters capsules and sets presentation (`learning/model/level-presentation.ts`).
+- Learn is a deck of capsules (`features/learning/model/capsules.ts`): the URL hash names the open capsule, only that capsule is mounted (one WebGL scene at a time), and the level (`calibration/model`, session only, chosen from the header menu on Learn) filters capsules and sets presentation (`learning/model/level-presentation.ts`).
 - The browser replays precomputed orbits. Only the Learn simulator integrates live, with the same integrator as the generator.
 - The tutor never does the maths: forces are recomputed on the server and model actions are validated against a strict schema (`features/tutor/model`). Details in `docs/architecture.md` and `docs/physics.md`.
 - Three.js loads lazily (`next/dynamic`). On the home page it loads after the static preview, which stays the LCP image. Bodies everywhere use the shared liquid-marble material (`shared/three/liquid-body.tsx`); the gallery comparison stays on 2D canvases to avoid one WebGL context per orbit.

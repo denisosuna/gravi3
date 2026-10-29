@@ -2,6 +2,7 @@ import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Header } from '@/shared/ui/header';
+import { LevelMenu } from '@/features/calibration/components/level-menu';
 import { routing } from '@/i18n/routing';
 
 export default async function LocaleLayout({
@@ -20,7 +21,7 @@ export default async function LocaleLayout({
       <a href="#main" className="skip-link">
         {t('skip')}
       </a>
-      <Header />
+      <Header tools={<LevelMenu />} />
       {children}
     </NextIntlClientProvider>
   );

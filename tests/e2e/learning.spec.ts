@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 test('the deck moves capsule by capsule with buttons, dots and keys', async ({ page }) => {
   await page.goto('/en/learn');
@@ -46,26 +46,32 @@ test('a prediction is checked against the inverse-square law', async ({ page }) 
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
+async function chooseLevel(page: Page, level: string) {
+  await page.getByRole('button', { name: /^Level: .+ Change level$/ }).click();
+  await page.getByRole('button', { name: new RegExp(`^${level}`) }).click();
+  await expect(page.getByRole('button', { name: `Level: ${level}. Change level` })).toBeVisible();
+}
+
 test('the level changes which capsules appear and how numbers are shown', async ({ page }) => {
   await page.goto('/en/learn');
   const chapters = page.getByRole('navigation', { name: 'Lesson chapters' });
-  await page.getByLabel('explorer').check();
+  await chooseLevel(page, 'explorer');
   await expect(page.getByTestId('force-value')).toHaveText('1 × the force of the starting setup');
   await chapters.getByRole('link', { name: /Mass and distance/ }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   await page.getByRole('button', { name: 'Next' }).click();
   await expect(page.getByText('F = G · m₁ · m₂ / r²')).toBeHidden();
-  await page.getByText('See the formula').click();
+  await page.getByText('See the formula', { exact: true }).click();
   await expect(page.getByText('F = G · m₁ · m₂ / r²')).toBeVisible();
-  await page.getByLabel('advanced').check();
+  await chooseLevel(page, 'advanced');
   await chapters.getByRole('link', { name: /Three bodies/ }).click();
   await page.getByRole('button', { name: 'Go to capsule 4: Energy gives the error away' }).click();
   await expect(page.getByRole('heading', { name: 'Energy gives the error away' })).toBeVisible();
-  await page.getByLabel('explorer').check();
+  await chooseLevel(page, 'explorer');
   await expect(page.getByRole('heading', { name: 'Add a third body' })).toBeVisible();
   await expect(page.getByRole('button', { name: /^Go to capsule/ })).toHaveCount(2);
-  await page.getByLabel('advanced').check();
+  await chooseLevel(page, 'advanced');
   await chapters.getByRole('link', { name: /Attraction/ }).click();
   await expect(page.getByTestId('force-value')).toContainText('N');
 });
@@ -118,4 +124,18 @@ test('the chapter rail tracks progress and reaches the tutor', async ({ page }) 
   await chapters.getByRole('link', { name: 'Ask the tutor' }).click();
   await expect(page.getByRole('heading', { name: 'AI tutor' })).toBeInViewport();
   await expect(page).toHaveURL(/#third$/);
+});
+
+test('the level lives in a header menu that opens on demand', async ({ page }) => {
+  await page.goto('/es/learn');
+  const trigger = page.getByRole('button', { name: 'Nivel: estudiante. Cambiar nivel' });
+  await expect(page.getByRole('heading', { name: 'Tu nivel' })).toBeHidden();
+  await trigger.click();
+  await expect(page.getByRole('heading', { name: 'Tu nivel' })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('heading', { name: 'Tu nivel' })).toBeHidden();
+  await trigger.click();
+  await page.getByRole('link', { name: 'Calibrar mi nivel' }).click();
+  await expect(page).toHaveURL(/\/es\/learn\/calibration$/);
+  await expect(page.getByRole('button', { name: /Cambiar nivel/ })).toHaveCount(0);
 });

@@ -4,6 +4,7 @@ test('the calibration places the learner and Learn remembers the level in the se
   page,
 }) => {
   await page.goto('/es/learn');
+  await page.getByRole('button', { name: /Cambiar nivel/ }).click();
   await page.getByRole('link', { name: 'Calibrar mi nivel' }).click();
   await expect(page.getByRole('heading', { name: '¿Cuánta física has estudiado?' })).toBeFocused();
   const confirm = page.getByRole('button', { name: 'Confirmar respuesta' });
@@ -26,8 +27,9 @@ test('the calibration places the learner and Learn remembers the level in the se
   await page.getByLabel('estudiante').check();
   await expect(page.getByRole('heading', { name: 'Empiezas como estudiante' })).toBeVisible();
   await page.getByRole('link', { name: 'Empezar a aprender' }).click();
-  await expect(page.getByRole('radio', { name: 'estudiante' })).toBeChecked();
-  await expect(page.getByText('Verás la fórmula y números redondeados.')).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Nivel: estudiante. Cambiar nivel' }),
+  ).toBeVisible();
 });
 
 test('unknown answers lead to the explorer level with links to review', async ({ page }) => {

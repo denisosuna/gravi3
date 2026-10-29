@@ -597,6 +597,19 @@ button.control-button:hover {
     padding: 35px 19px;
   }
 }
+/* The narrowest phones fit the brand, language, theme and the Learn level in one row. */
+@media (max-width: 400px) {
+  .site-header {
+    gap: 8px;
+    padding: 0 12px;
+  }
+  .header-tools {
+    gap: 4px;
+  }
+  .icon-select > svg {
+    display: none;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

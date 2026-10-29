@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { createSessionKey, useSessionMemory } from '@/shared/ui/providers';
-import { DEFAULT_LEVEL, type Level } from '@/features/calibration/model/calibration';
+import { createSessionKey, useSessionMemory, useSessionValue } from '@/shared/ui/providers';
+import { DEFAULT_LEVEL } from '@/features/calibration/model/calibration';
 import { LEVEL_SESSION } from '@/features/calibration/model/level-session';
 import { initialExperiment, type Experiment } from '@/features/learning/model/experiment';
 import { gravitationalForce } from '@/physics/gravity';
@@ -16,7 +16,6 @@ import { CapsuleContent } from '../capsules/capsule-content';
 import type { Lesson } from '../capsules/lesson';
 import { SimulatorController } from '../simulator/state/simulator-controller';
 import { useSimulatorState } from '../simulator/state/use-simulator-state';
-import { LevelBar } from './level-bar';
 import styles from './learning.module.css';
 
 const EXPERIMENT_SESSION = createSessionKey<Experiment>('experiment', () => ({
@@ -27,11 +26,10 @@ const EXPERIMENT_SESSION = createSessionKey<Experiment>('experiment', () => ({
 export function LearningExperience() {
   const memory = useSessionMemory();
   const [experiment, setExperiment] = useState(() => memory.get(EXPERIMENT_SESSION));
-  const [chosenLevel, setChosenLevel] = useState(() => memory.get(LEVEL_SESSION).level);
   const [simulator] = useState(() => new SimulatorController());
   const simulatorPreset = useSimulatorState(simulator, (state) => state.presetId);
   const simulatorEvent = useSimulatorState(simulator, (state) => state.event ?? null);
-  const level = chosenLevel ?? DEFAULT_LEVEL;
+  const level = useSessionValue(LEVEL_SESSION).level ?? DEFAULT_LEVEL;
   const deck = capsulesForLevel(level);
   const current = resolveCapsule(useCapsuleHash(), deck);
 
@@ -41,19 +39,11 @@ export function LearningExperience() {
     setExperiment(next);
   }
 
-  function chooseLevel(next: Level) {
-    memory.set(LEVEL_SESSION, { level: next });
-    setChosenLevel(next);
-  }
-
   const force = gravitationalForce(experiment.mass1, experiment.mass2, experiment.distance);
   const lesson: Lesson = { experiment, force, update, simulator, level };
   return (
     <div className={styles.layout}>
-      <div className={styles.side}>
-        <ChapterRail deck={deck} current={current} />
-        <LevelBar level={level} chosen={chosenLevel !== null} onLevel={chooseLevel} />
-      </div>
+      <ChapterRail deck={deck} current={current} />
       <div className={styles.main}>
         <Deck deck={deck} current={current}>
           <CapsuleContent id={current.id} lesson={lesson} />
