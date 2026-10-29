@@ -38,8 +38,8 @@ test('a provider limit is visible and the experiment remains usable', async ({ p
     .getByRole('button', { name: 'Can you explain gravity with a simple example?' })
     .click();
   await expect(page.getByText(/^The usage limit has been reached/)).toBeVisible();
-  await page.getByRole('button', { name: 'Double the distance', exact: true }).click();
-  await expect(page.getByRole('slider', { name: 'Center-to-center distance' })).toHaveValue('10');
+  await page.getByRole('slider', { name: 'Center-to-center distance' }).press('End');
+  await expect(page.getByRole('slider', { name: 'Center-to-center distance' })).toHaveValue('20');
 });
 
 test('reduced mode is explicit without replacing AI replies with static content', async ({
@@ -50,8 +50,8 @@ test('reduced mode is explicit without replacing AI replies with static content'
   await expect(page.getByText('Reduced tutor mode.', { exact: false })).toBeVisible();
   await expect(page.getByLabel('Your question', { exact: true })).toBeDisabled();
   await expect(page.getByRole('log')).toBeEmpty();
-  await page.getByRole('button', { name: 'Double the first mass' }).click();
-  await expect(page.getByRole('slider', { name: 'Body 1 mass' })).toHaveValue('200');
+  await page.getByRole('slider', { name: 'Body 1 mass' }).press('ArrowRight');
+  await expect(page.getByRole('slider', { name: 'Body 1 mass' })).toHaveValue('150');
 });
 
 test('the tutor proposes experiments that run with one click', async ({ page }) => {
@@ -76,7 +76,8 @@ test('the tutor proposes experiments that run with one click', async ({ page }) 
   await experiments.getByRole('button', { name: 'Try it: r = 10 m' }).click();
   await expect(page.getByRole('slider', { name: 'Center-to-center distance' })).toHaveValue('10');
   await experiments.getByRole('button', { name: 'Try it: Pythagorean in the simulator' }).click();
-  const simulator = page.getByRole('region', { name: 'Add a third body' });
+  await expect(page).toHaveURL(/#lab$/);
+  const simulator = page.getByRole('region', { name: 'Free laboratory' });
   await expect(simulator.getByRole('button', { name: /^Pythagorean/ })).toHaveAttribute(
     'aria-pressed',
     'true',

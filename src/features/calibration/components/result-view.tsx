@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl';
 import { Check } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { ROUTES } from '@/shared/constants/routes';
-import type { LearnStep } from '@/features/learning/model/learn-steps';
+import type { CapsuleId } from '@/features/learning/model/capsules';
 import {
   LEVELS,
   type CalibrationResult,
@@ -12,14 +12,14 @@ import {
 } from '../model/calibration';
 import styles from './calibration.module.css';
 
-// The Learn step where each idea is worked on.
-const REVIEW_STEPS: Readonly<Record<Misconception, LearnStep>> = {
-  'one-way-gravity': 'observe',
-  'heavier-falls-faster': 'observe',
-  'linear-distance': 'predict',
-  'constant-gravity': 'predict',
-  'chaos-is-random': 'three-bodies',
-  'no-sensitivity': 'three-bodies',
+// The Learn capsule where each idea is worked on.
+const REVIEW_CAPSULES: Readonly<Record<Misconception, CapsuleId>> = {
+  'one-way-gravity': 'pull',
+  'heavier-falls-faster': 'mutual',
+  'linear-distance': 'check',
+  'constant-gravity': 'check',
+  'chaos-is-random': 'chaos',
+  'no-sensitivity': 'chaos',
 };
 
 export function ResultView({
@@ -83,7 +83,7 @@ export function ResultView({
           <ul className={styles.links}>
             {result.review.map((misconception) => (
               <li key={misconception}>
-                <Link href={`${ROUTES.learn}#${REVIEW_STEPS[misconception]}`}>
+                <Link href={`${ROUTES.learn}#${REVIEW_CAPSULES[misconception]}`}>
                   {t(`reviewItems.${misconception}`)}
                 </Link>
               </li>

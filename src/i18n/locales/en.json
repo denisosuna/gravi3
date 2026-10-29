@@ -181,23 +181,15 @@
   "learn": {
     "title": "Gravity starts with two.",
     "description": "To understand three bodies you first need to understand how two attract each other. Move the masses, change the distance and predict what will happen before you check.",
-    "formulaTitle": "One law, three ingredients",
     "formulaText": "Force F increases with masses m₁ and m₂ and decreases with the square of center-to-center distance r. G is the universal gravitational constant.",
     "constant": "G = 6.67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²",
     "mass1": "Body 1 mass",
     "mass2": "Body 2 mass",
     "distance": "Center-to-center distance",
     "force": "Initial attractive force on each body",
-    "equal": "The force has the same size on each body and points in opposite directions. If their masses differ, the lighter one accelerates more.",
-    "whatHappensTitle": "What is happening",
-    "mutualAttraction": "Both bodies attract each other: the force has the same size on each, but points in the opposite direction.",
     "equalMasses": "Because they have the same mass, that force changes their motion equally.",
     "body1Lighter": "Body 1 has less mass: the same force changes its motion more.",
     "body2Lighter": "Body 2 has less mass: the same force changes its motion more.",
-    "distanceEffect": "The farther apart they are, the weaker the pull. If you double the distance, it becomes one quarter as strong.",
-    "twoBodyPurpose": "There are only two bodies on purpose: this isolates their interaction. In the last step we add a third and see what changes.",
-    "accelerationDetails": "See the acceleration values",
-    "accelerationMeaning": "Acceleration tells you how much motion changes. For each body, divide the force by its mass.",
     "showFall": "See them fall under gravity",
     "replayFall": "Replay the fall",
     "resetFall": "Restore starting positions",
@@ -209,7 +201,6 @@
     "animationDone": "After {time} of simulated time, the bodies are very close. The point-mass model stops before the mathematical collision.",
     "animationUnavailable": "Animation is unavailable in this view.",
     "scale": "Distance to scale; illustrative radii; force arrows on a logarithmic scale. Positions follow Newtonian gravity; the model does not describe real-body collisions.",
-    "predictionTitle": "Before you try it, what do you predict?",
     "predictionQuestion": "If we double the distance and keep the masses, the force becomes…",
     "half": "One half",
     "quarter": "One quarter",
@@ -219,35 +210,119 @@
     "tryDistance": "Double the distance",
     "tryMass": "Double the first mass",
     "reset": "Reset experiment",
-    "forceUnits": "newtons (N)",
-    "acceleration": "Acceleration",
     "predictionHint": "Choose an answer, then check its effect in the laboratory.",
     "rotateHint": "Drag the scene to rotate it.",
     "fallback3d": "The 3D view is not available on this device. This diagram shows the same experiment.",
     "ratio": "{ratio} × the force of the starting setup",
     "legend": "Experiment values",
-    "steps": {
-      "label": "Lesson steps",
-      "observe": "Observe",
-      "predict": "Predict",
-      "check": "Check",
-      "explain": "Explain",
+    "yourPrediction": "Your prediction: {answer}",
+    "noPrediction": "You have not predicted anything yet. Choose an answer in the previous capsule first.",
+    "backToStart": "Back to the starting values",
+    "chapters": {
+      "label": "Lesson chapters",
+      "attraction": "Attraction",
+      "mass-distance": "Mass and distance",
       "three-bodies": "Three bodies",
+      "periodic": "Order in chaos",
+      "lab": "Laboratory",
       "askTutor": "Ask the tutor"
     },
-    "stepOf": "Step {step} of {total}",
-    "observeTitle": "Move the masses and the distance",
-    "checkTitle": "Check your prediction",
-    "checkIntro": "Double one quantity and compare the new force with the one you started with.",
-    "yourPrediction": "Your prediction: {answer}",
-    "noPrediction": "You have not predicted yet. Choose an answer in the previous step first.",
-    "backToStart": "Back to the starting values",
-    "calibration": {
-      "prompt": "Where are you starting from? Calibrate your starting point in a minute.",
-      "start": "Calibrate",
-      "current": "Your level: {level}",
-      "repeat": "Repeat the calibration"
-    }
+    "deck": {
+      "chapterOf": "Chapter {number} · {name}",
+      "capsulesLabel": "Capsules in this chapter",
+      "goTo": "Go to capsule {number}: {title}",
+      "discoveries": "What you have discovered",
+      "more": "Learn more",
+      "navigation": "Capsules",
+      "previous": "Previous",
+      "next": "Next",
+      "progress": "{current} of {total}",
+      "finish": "Explore the orbits"
+    },
+    "level": {
+      "label": "Level",
+      "notChosen": "You start as a student. Calibrate your level or pick another one at any time.",
+      "calibrate": "Calibrate my level"
+    },
+    "numbers": {
+      "force": "Attraction between the two bodies",
+      "weight": "Weight of body 1 on Earth",
+      "weightRatio": "Times the weight exceeds the attraction"
+    },
+    "showFormula": "See the formula",
+    "capsules": {
+      "pull": {
+        "title": "Any two bodies attract each other",
+        "body": "Move the masses and the distance. The arrows show how hard each body pulls on the other: there is never one that pulls and one that is only pulled.",
+        "discovery": "Two masses always attract each other.",
+        "more": "There are only two bodies on purpose: that isolates this interaction. Later we add a third one and you will see what changes."
+      },
+      "mutual": {
+        "title": "Same force, different motion",
+        "body": "Release the bodies. The force is the same on both, but the lighter one moves more: with less mass, the same force changes its motion more.",
+        "discovery": "Equal forces; the lighter body accelerates more.",
+        "more": "Acceleration tells how much the motion changes. For each body it is the force divided by its mass."
+      },
+      "numbers": {
+        "title": "Why don't you feel another person pulling on you?",
+        "body": "Between everyday objects the attraction is tiny compared with their weight. Gravity is only noticeable when one of the masses is huge, like the Earth.",
+        "discovery": "Between everyday objects gravity is tiny."
+      },
+      "mass": {
+        "title": "Double the mass, double the force",
+        "body": "Double the first mass and compare the new force with the starting one. Every extra kilogram pulls a little more.",
+        "discovery": "Mass × 2 → force × 2."
+      },
+      "predict": {
+        "title": "What if you move them twice as far apart?",
+        "body": "Before trying it, choose what you think will happen to the force. There is no grade: being wrong here is part of the experiment.",
+        "discovery": "First you predict, then you measure."
+      },
+      "check": {
+        "title": "Check it",
+        "body": "Double the distance and compare the force with the starting one. Does it match your prediction?",
+        "discovery": "Distance × 2 → force ÷ 4."
+      },
+      "formula": {
+        "title": "It all fits in one law",
+        "body": "What you have discovered fits in one line: the force grows with both masses and drops with the square of the distance.",
+        "discovery": "F = G · m₁ · m₂ / r².",
+        "more": "The force has the same size on both bodies and opposite directions. If the masses differ, the lighter one accelerates more."
+      },
+      "third": {
+        "title": "Add a third body",
+        "body": "Each pair attracts with the same law. With three, each body pulls on the other two at once and there is no formula any more: it has to be computed step by step. Press play.",
+        "discovery": "With three bodies, motion is computed step by step.",
+        "more": "Exact Newtonian physics with point masses and G = 1, no force softening. Normalized units."
+      },
+      "chaos": {
+        "title": "A 1% change changes everything",
+        "body": "Play the Pythagorean system and notice how it ends. Then press “Perturb 1%”: a tiny change in one velocity leads to another ending. That is chaos.",
+        "discovery": "Chaos: a tiny change, another ending.",
+        "more": "Chaos is not randomness: the rules are exact and deterministic. What fails is our ability to measure the starting point with infinite precision."
+      },
+      "unstable": {
+        "title": "Repeating is not being stable",
+        "body": "The Lagrange solution is periodic, but after a few turns rounding errors grow and the triangle breaks. The figure-eight, instead, holds.",
+        "discovery": "Periodic does not mean stable."
+      },
+      "energy": {
+        "title": "Energy gives the error away",
+        "body": "With no external forces, total energy is conserved. Its small change measures the numerical error of the calculation, not new physics.",
+        "discovery": "Energy drift measures numerical error."
+      },
+      "periodic": {
+        "title": "Order within chaos",
+        "body": "Some starting conditions are so precise that the motion repeats forever. Thousands are known; here are six of the most famous.",
+        "discovery": "Some orbits repeat forever."
+      },
+      "lab": {
+        "title": "Free laboratory",
+        "body": "Everything at once and no script: choose a starting point, edit masses and velocities and see what happens.",
+        "discovery": "You experimented without a script."
+      }
+    },
+    "equal": "The force has the same size on each body and points in opposite directions. If their masses differ, the lighter one accelerates more."
   },
   "tutor": {
     "title": "AI tutor",
@@ -310,8 +385,6 @@
     "calibrationTitle": "Calibration: where are you starting from?"
   },
   "simulator": {
-    "title": "Add a third body",
-    "intro": "Every pair of bodies attracts with the same law you just tested. With three, each one pulls on the other two at once and the motion no longer has a formula: it must be computed step by step. Pick a starting point and watch.",
     "presets": "Starting points",
     "preset": {
       "figure-eight": {

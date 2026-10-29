@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
-import { ArrowRight } from 'lucide-react';
 import { SceneBoundary } from '@/shared/three/scene-boundary';
 import { useDocumentVisible } from '@/shared/three/use-document-visible';
-import { ROUTES } from '@/shared/constants/routes';
-import { Link } from '@/i18n/routing';
-import { BodyEditor } from './body-editor';
-import { SimulationReadouts } from './simulation-readouts';
 import type { SimulatorController } from '../state/simulator-controller';
-import { SimulatorControls, SimulatorPresets } from './simulator-controls';
+import { SimulatorControls } from './simulator-controls';
 import { useSimulatorState } from '../state/use-simulator-state';
 
 const SimulatorScene = dynamic(() => import('./scene/simulator-scene'), { ssr: false });
 const READOUT_INTERVAL_MS = 200;
 
-export function ThreeBodySimulator({ controller }: { controller: SimulatorController }) {
+// The live scene with its playback controls; capsules add presets, readouts or the editor around it.
+export function SimulatorStage({ controller }: { controller: SimulatorController }) {
   const t = useTranslations('simulator');
   const [showVectors, setShowVectors] = useState(true);
   const visible = useDocumentVisible();
@@ -29,9 +25,7 @@ export function ThreeBodySimulator({ controller }: { controller: SimulatorContro
   }, [controller, playing]);
 
   return (
-    <div className="simulator-panel">
-      <p className="simulator-intro">{t('intro')}</p>
-      <SimulatorPresets controller={controller} />
+    <>
       <div className="simulator-stage" role="group" aria-label={t('sceneLabel')}>
         <div className="simulator-scene" data-testid="simulator-scene">
           <SceneBoundary fallback={<p className="simulator-fallback">{t('fallback')}</p>}>
@@ -47,16 +41,6 @@ export function ThreeBodySimulator({ controller }: { controller: SimulatorContro
         showVectors={showVectors}
         onShowVectors={setShowVectors}
       />
-      <SimulationReadouts controller={controller} />
-      <BodyEditor controller={controller} />
-      <p className="simulator-model">{t('model')}</p>
-      <div className="simulator-next">
-        <p>{t('next')}</p>
-        <Link href={ROUTES.orbits} className="button">
-          {t('explore')}
-          <ArrowRight size={16} aria-hidden="true" />
-        </Link>
-      </div>
-    </div>
+    </>
   );
 }

@@ -1,11 +1,10 @@
 import { expect, test } from '@playwright/test';
 
-test('the three-body simulator runs presets, reports diagnostics and accepts edits', async ({
+test('the free laboratory runs presets, reports diagnostics and accepts edits', async ({
   page,
 }) => {
-  await page.goto('/en/learn');
-  const simulator = page.getByRole('region', { name: 'Add a third body' });
-  await simulator.scrollIntoViewIfNeeded();
+  await page.goto('/en/learn#lab');
+  const simulator = page.getByRole('region', { name: 'Free laboratory' });
   await expect(simulator.getByTestId('simulator-scene').locator('canvas')).toBeVisible();
 
   await simulator.getByRole('button', { name: /Pythagorean/ }).click();
@@ -30,4 +29,15 @@ test('the three-body simulator runs presets, reports diagnostics and accepts edi
   await simulator.getByText('Edit bodies').click();
   await expect(simulator.getByRole('group', { name: 'Body 1' })).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('guided capsules start from the system they talk about', async ({ page }) => {
+  await page.goto('/en/learn#chaos');
+  const capsule = page.getByRole('region', { name: 'A 1% change changes everything' });
+  await expect(capsule.getByTestId('simulator-scene').locator('canvas')).toBeVisible();
+  await expect(capsule.locator('dt', { hasText: 'Time' })).toBeVisible();
+  await expect(capsule.locator('dt', { hasText: 'Total energy' })).toHaveCount(0);
+  await capsule.getByRole('button', { name: 'Play' }).click();
+  await capsule.getByRole('button', { name: 'Perturb 1%' }).click();
+  await expect(capsule.getByRole('button', { name: 'Play' })).toBeVisible();
 });

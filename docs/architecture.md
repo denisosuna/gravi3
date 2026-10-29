@@ -16,20 +16,20 @@ flowchart LR
 
 ## Responsibilities
 
-| Directory               | Responsibility                                                                         | Boundary                                                    |
-| ----------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `src/app`               | Routing, server composition, metadata and thin API handlers                            | No numerical integration in pages                           |
-| `src/physics`           | Newtonian equations, integrator, invariants, interpolation and the six-orbit catalogue | No React, Three.js, Next.js or server imports               |
-| `src/features/home`     | Landing page sections                                                                  | No other feature's UI                                       |
-| `src/features/learning` | Force lab (`lab/`), prediction steps and live simulator (`simulator/`)                 | Scenes cannot alter the physics                             |
-| `src/features/orbits`   | Gallery, playback controller, transport UI and orbit scene                             | Physical time independent of render frames                  |
-| `src/features/tutor`    | Tutor panel, client conversation lifecycle, action contract and validation             | No provider key, model selection or system prompt           |
-| `src/features/*/model`  | Pure, framework-free logic and contracts of each feature                               | The only part of a feature the server and others may import |
-| `src/shared/ui`         | Header and providers                                                                   | No feature or server imports                                |
-| `src/shared/three`      | Scene palette, body labels, orbit trace, WebGL error boundary, tab visibility          | No feature or server imports                                |
-| `src/shared/constants`  | Routes, asset paths, HTTP statuses and site identity                                   | Plain values; no framework imports                          |
-| `src/i18n`              | Locale config, routing and `locales/{es,en}.json` catalogs                             | Locale list defined once in `config.ts`                     |
-| `src/server`            | Env validation, LLM client, limits, prompts and safe logs                              | Sensitive modules use `server-only`                         |
+| Directory               | Responsibility                                                                                  | Boundary                                                    |
+| ----------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `src/app`               | Routing, server composition, metadata and thin API handlers                                     | No numerical integration in pages                           |
+| `src/physics`           | Newtonian equations, integrator, invariants, interpolation and the six-orbit catalogue          | No React, Three.js, Next.js or server imports               |
+| `src/features/home`     | Landing page sections                                                                           | No other feature's UI                                       |
+| `src/features/learning` | Capsule deck (`deck/`), capsules (`capsules/`), force lab (`lab/`) and simulator (`simulator/`) | Scenes cannot alter the physics                             |
+| `src/features/orbits`   | Gallery, playback controller, transport UI and orbit scene                                      | Physical time independent of render frames                  |
+| `src/features/tutor`    | Tutor panel, client conversation lifecycle, action contract and validation                      | No provider key, model selection or system prompt           |
+| `src/features/*/model`  | Pure, framework-free logic and contracts of each feature                                        | The only part of a feature the server and others may import |
+| `src/shared/ui`         | Header and providers                                                                            | No feature or server imports                                |
+| `src/shared/three`      | Scene palette, body labels, orbit trace, WebGL error boundary, tab visibility                   | No feature or server imports                                |
+| `src/shared/constants`  | Routes, asset paths, HTTP statuses and site identity                                            | Plain values; no framework imports                          |
+| `src/i18n`              | Locale config, routing and `locales/{es,en}.json` catalogs                                      | Locale list defined once in `config.ts`                     |
+| `src/server`            | Env validation, LLM client, limits, prompts and safe logs                                       | Sensitive modules use `server-only`                         |
 
 Each feature groups its own `components/`, `scene/` (3D) and `model/`. A feature never imports another feature's UI, except the tutor panel, which the Learn and Orbits pages embed. Cross-feature and server code may only reach a feature's `model/` folder; ESLint `no-restricted-imports` enforces these boundaries. Each 3D scene lives in the feature that drives it, so a scene and its controller change together. Components are separated where there is a distinct responsibility, not to satisfy arbitrary file-length limits. The physics formula and server evaluation share one implementation.
 
