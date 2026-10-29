@@ -4,6 +4,8 @@ import { orbitSlugs } from '@/physics/types';
 import { distanceRange, massRange, PREDICTIONS } from '@/features/learning/model/experiment';
 import { CUSTOM_PRESET, SIMULATOR_PRESETS } from '@/features/learning/model/simulator-presets';
 import { SIMULATION_EVENTS } from '@/physics/simulation';
+import { LEVELS } from '@/features/calibration/model/calibration';
+import { isCapsuleId, type CapsuleId } from '@/features/learning/model/capsules';
 
 export const TUTOR_LIMITS = {
   messageLength: 1000,
@@ -30,6 +32,9 @@ const learningContext = z
     distance: z.number().min(distanceRange.min).max(distanceRange.max),
     prediction: z.enum(PREDICTIONS).nullable(),
     checked: z.boolean().optional(),
+    level: z.enum(LEVELS).optional(),
+    // The capsule on screen, so the reply can refer to what the learner is looking at.
+    capsule: z.custom<CapsuleId>(isCapsuleId).optional(),
     simulator: z
       .object({
         preset: z.enum([...SIMULATOR_PRESETS, CUSTOM_PRESET]),

@@ -64,6 +64,8 @@ export function LearningExperience() {
           context={{
             kind: 'learning',
             ...experiment,
+            level,
+            capsule: current.id,
             simulator: { preset: simulatorPreset, event: simulatorEvent },
           }}
           onAction={(action) =>

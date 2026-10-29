@@ -31,7 +31,7 @@ export function capsulesForLevel(level: Level): Capsule[] {
   return CAPSULES.filter((capsule) => (capsule.levels as readonly Level[]).includes(level));
 }
 
-function isCapsuleId(value: unknown): value is CapsuleId {
+export function isCapsuleId(value: unknown): value is CapsuleId {
   return CAPSULES.some((capsule) => capsule.id === value);
 }
 
