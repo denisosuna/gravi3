@@ -4,7 +4,8 @@ import { createContext, useContext, useState } from 'react';
 import { ThemeProvider } from 'next-themes';
 
 export const THEMES = ['system', 'dark', 'light'] as const;
-export const DEFAULT_THEME = 'system';
+// The fusion design is dark first; system and light remain available in the header.
+export const DEFAULT_THEME = 'dark';
 
 // Each feature declares the keys it stores, so this provider does not depend on any feature.
 interface SessionKey<T> {
