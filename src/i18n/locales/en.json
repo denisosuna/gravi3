@@ -28,11 +28,9 @@
   },
   "home": {
     "title": "The three-body problem",
-    "lead": "Can you predict how three objects pulling on each other through gravity will move? With two it is easy; with three there is no general formula. Here you will understand why by experimenting, step by step, with no physics background.",
     "start": "Start with gravity",
     "explore": "See the six orbits",
     "visualCaption": "Figure eight: three equal masses chasing each other along the same curve.",
-    "problemTitle": "What is the three-body problem?",
     "problemIntro": "It is a simple question to ask: if you know where three masses are and how fast they move, where will they be later? Each one attracts the other two according to Newton's law of gravitation.",
     "milestones": {
       "two": {
@@ -51,26 +49,33 @@
         "text": "With very precise starting conditions, some orbits repeat: Lagrange's triangle (1772), the figure eight (1993) and new families found by computer in 2013."
       }
     },
-    "whyTitle": "Why does it matter?",
-    "whyText": "The Sun, Earth and Moon form a three-body system. Satellites and probes are planned with these ideas: the James Webb telescope orbits near the L2 point, one of the equilibrium positions studied by Euler and Lagrange.",
-    "pathTitle": "How you will learn here",
-    "steps": {
-      "learn": {
-        "title": "Understand gravity",
-        "text": "Change masses and distances between two bodies, make a prediction and check it against the experiment.",
-        "cta": "Go to Learn"
+    "deck": {
+      "label": "Introduction in three capsules",
+      "previous": "Previous",
+      "next": "Next",
+      "goTo": "Go to capsule {number}: {title}"
+    },
+    "capsules": {
+      "question": {
+        "title": "Can you predict how three bodies move?",
+        "body": "For two bodies that attract each other, one formula is enough. For three there is no general one: a tiny change changes everything. Here you will understand it by experimenting, no physics needed."
       },
-      "tutor": {
-        "title": "Ask the AI tutor",
-        "text": "Clear up doubts with a tutor that knows your experiment's values. Everything works without it too: calculations never depend on AI.",
-        "cta": "Open the laboratory"
+      "why": {
+        "title": "Why it matters",
+        "body": "The Sun, the Earth and the Moon are three bodies. Satellites and probes are planned with these ideas: the James Webb telescope orbits near L2, a balance point studied by Euler and Lagrange."
       },
-      "orbits": {
-        "title": "Explore six solutions",
-        "text": "Watch six real periodic orbits in 3D, computed from published initial conditions and validated numerically.",
-        "cta": "Go to Orbits"
+      "how": {
+        "title": "How you will learn",
+        "body": "First a one-minute calibration. Then short capsules with experiments and a tutor that runs them with you. Finally, six real orbits.",
+        "steps": {
+          "calibrate": "Calibrate your starting point",
+          "capsules": "Experiment capsule by capsule with the tutor",
+          "gallery": "Explore six periodic orbits"
+        }
       }
-    }
+    },
+    "startCalibration": "Start with the calibration",
+    "milestonesLabel": "Three moments in history"
   },
   "orbits": {
     "title": "Six orbits that come back.",

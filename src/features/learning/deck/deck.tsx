@@ -14,7 +14,7 @@ import {
 } from '../model/capsules';
 import { CapsuleFrame } from './capsule-frame';
 import { openCapsule } from './use-capsule-hash';
-import { useDeckGestures } from './use-deck-gestures';
+import { useDeckGestures } from '@/shared/ui/use-deck-gestures';
 import styles from './deck.module.css';
 
 // Moving inside a chapter replaces the history entry; crossing chapters adds one, so Back returns.
