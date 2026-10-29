@@ -3,6 +3,7 @@ import type { OrbitSlug } from '@/physics/types';
 export const ROUTES = {
   home: '/',
   learn: '/learn',
+  calibration: '/learn/calibration',
   orbits: '/orbits',
   orbit: (slug: OrbitSlug) => `/orbits/${slug}`,
 } as const;

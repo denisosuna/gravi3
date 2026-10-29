@@ -9,6 +9,7 @@ export const dynamic = 'force-dynamic';
 const PATHS = [
   ROUTES.home,
   ROUTES.learn,
+  ROUTES.calibration,
   ROUTES.orbits,
   ...orbits.map((orbit) => ROUTES.orbit(orbit.slug)),
 ];

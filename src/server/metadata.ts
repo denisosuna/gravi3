@@ -51,7 +51,7 @@ export function pageMetadata(
   };
 }
 
-type SeoTitleKey = 'homeTitle' | 'learnTitle' | 'orbitsTitle';
+type SeoTitleKey = 'homeTitle' | 'learnTitle' | 'orbitsTitle' | 'calibrationTitle';
 
 export async function sectionMetadata(
   params: Promise<{ locale: string }>,

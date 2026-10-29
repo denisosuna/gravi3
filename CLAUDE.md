@@ -2,7 +2,7 @@
 
 # Gravi3
 
-Interactive course on the three-body problem: a learning lab with an LLM tutor (`/{locale}/learn`) and a gallery of six periodic orbits (`/{locale}/orbits`). One Next.js 16 / React 19 / strict TypeScript app, no database. Code, comments and docs are in English; the UI is Spanish and English.
+Interactive course on the three-body problem: a short animated calibration (`/{locale}/learn/calibration`), a learning lab with an LLM tutor (`/{locale}/learn`) and a gallery of six periodic orbits (`/{locale}/orbits`). One Next.js 16 / React 19 / strict TypeScript app, no database. Code, comments and docs are in English; the UI is Spanish and English.
 
 ## Environment
 
@@ -20,7 +20,7 @@ Interactive course on the three-body problem: a learning lab with an LLM tutor (
 
 ```text
 src/app/        Routes, layouts, metadata, thin API handlers ([locale]/, api/)
-src/features/   home, learning, orbits, tutor: each has components/, model/ (pure logic) and its 3D scene
+src/features/   home, calibration, learning, orbits, tutor: each has components/, model/ (pure logic) and its 3D scene
 src/shared/     ui/, three/ and constants/ (routes, site, HTTP)
 src/physics/    Equations, integrator, interpolation, orbit catalog: no React, Next or server imports
 src/server/     Env, LLM client, rate limiting, prompts, logging (sensitive modules use server-only)

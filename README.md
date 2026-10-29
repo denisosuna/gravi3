@@ -9,6 +9,7 @@ An interactive course on the **three-body problem**: learn Newton's law of gravi
 
 ## What it does
 
+- **Calibration** (`/{locale}/learn/calibration`): five short questions, four of them about a 3D animation that stops before the answer, suggest a starting level (explorer, student or advanced) that the learner can change. It lives only in the session.
 - **Learn** (`/{locale}/learn`): change masses and distance, predict what happens to the force and check it in a 3D laboratory. Then add a third body in a live simulator with energy readouts, velocity vectors and a 1% perturbation that reveals chaos.
 - **AI tutor:** answers with the values of your experiment, adapts to the misconception a wrong prediction reveals, and proposes one-click experiments. It is optional: every calculation works without it.
 - **Orbits** (`/{locale}/orbits`): gallery and detail pages for six periodic solutions (Lagrange, figure eight, Butterfly I, Goggles, Moth I, Yin-Yang I) generated offline from published initial conditions and validated numerically.
