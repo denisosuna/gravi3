@@ -241,7 +241,13 @@
     "checkIntro": "Duplica una magnitud y compara la nueva fuerza con la del principio.",
     "yourPrediction": "Tu predicción: {answer}",
     "noPrediction": "Aún no has predicho nada. Elige primero una respuesta en el paso anterior.",
-    "backToStart": "Volver a los valores iniciales"
+    "backToStart": "Volver a los valores iniciales",
+    "calibration": {
+      "prompt": "¿De dónde partes? Calibra tu punto de partida en un minuto.",
+      "start": "Calibrar",
+      "current": "Tu nivel: {level}",
+      "repeat": "Repetir la calibración"
+    }
   },
   "tutor": {
     "title": "Tutor IA",
@@ -300,7 +306,8 @@
     "homeTitle": "Explorador interactivo de la gravedad y el problema de los tres cuerpos",
     "learnTitle": "Aprende la ley de gravitación",
     "orbitsTitle": "Seis soluciones del problema de los tres cuerpos",
-    "description": "Aprende gravitación con experimentos y un tutor IA. Explora seis soluciones periódicas del problema de los tres cuerpos."
+    "description": "Aprende gravitación con experimentos y un tutor IA. Explora seis soluciones periódicas del problema de los tres cuerpos.",
+    "calibrationTitle": "Calibración: ¿de dónde partes?"
   },
   "simulator": {
     "title": "Añade un tercer cuerpo",
@@ -360,5 +367,105 @@
     "fallback": "La simulación necesita WebGL, que no está disponible en este dispositivo.",
     "next": "Las órbitas periódicas son la excepción: condiciones tan precisas que el movimiento se repite. Explora las seis más conocidas.",
     "explore": "Descubre las seis órbitas"
+  },
+  "calibration": {
+    "progress": "Calibración {step} de {total}",
+    "progressLabel": "Progreso de la calibración",
+    "skip": "Saltar la calibración",
+    "replay": "Repetir la animación",
+    "back": "Pregunta anterior",
+    "next": "Confirmar respuesta",
+    "finish": "Ver mi punto de partida",
+    "noGrade": "No hay nota. Solo elegimos por dónde empezar.",
+    "scenes": {
+      "attraction": "Una manzana cerca de la Tierra. Fíjate en cuál tira de cuál.",
+      "fall": "Sin aire. Las dos bolas se elevan a la misma altura y la animación se detiene antes de soltarlas.",
+      "distance": "Dos cuerpos se alejan. El medidor de atracción está oculto.",
+      "twins": "Dos simulaciones reales. La de la derecha empieza con un cuerpo desplazado un 1 %. Se detienen cuando aún van iguales."
+    },
+    "questions": {
+      "experience": {
+        "text": "¿Cuánta física has estudiado?",
+        "options": {
+          "none": "Nada o casi nada",
+          "school": "La del instituto",
+          "university": "En la universidad o más"
+        }
+      },
+      "attraction": {
+        "text": "La Tierra atrae a la manzana. ¿Qué dibujo muestra bien las fuerzas?",
+        "options": {
+          "apple-only": "Solo sobre la manzana",
+          "unequal": "Grande sobre la manzana, pequeña sobre la Tierra",
+          "equal": "Iguales y opuestas",
+          "unknown": "No lo sé"
+        }
+      },
+      "fall": {
+        "text": "Sin aire, ¿cuál toca el suelo primero?",
+        "options": {
+          "heavy": "La de 10 kg",
+          "light": "La de 1 kg",
+          "together": "Las dos a la vez",
+          "unknown": "No lo sé"
+        }
+      },
+      "distance": {
+        "text": "Mientras se alejan, ¿qué gráfica describe la atracción?",
+        "options": {
+          "linear": "Baja al mismo ritmo",
+          "inverse-square": "Cae deprisa y luego despacio",
+          "constant": "No cambia",
+          "unknown": "No lo sé"
+        }
+      },
+      "twins": {
+        "text": "Si las dejamos correr mucho tiempo, ¿qué pasará?",
+        "options": {
+          "same": "Seguirán casi iguales",
+          "diverge": "Se separarán hasta parecer distintas",
+          "random": "Se moverán al azar, sin reglas",
+          "unknown": "No lo sé"
+        }
+      }
+    },
+    "levels": {
+      "explorer": {
+        "name": "explorador",
+        "help": "Ideas con ejemplos cotidianos y sin fórmulas al principio."
+      },
+      "student": {
+        "name": "estudiante",
+        "help": "Verás la fórmula y números redondeados."
+      },
+      "advanced": {
+        "name": "avanzado",
+        "help": "Números exactos, notación científica y los límites del cálculo."
+      }
+    },
+    "result": {
+      "title": "Empiezas como {level}",
+      "chooseLevel": "Prefiero otro nivel",
+      "known": "Ya sabes",
+      "knownNone": "Lo vamos a descubrir juntos, paso a paso.",
+      "review": "Vamos a mirarlo con calma",
+      "reviewNone": "Nada pendiente: puedes ir directo a los tres cuerpos.",
+      "knownItems": {
+        "attraction": "Dos cuerpos se atraen con la misma fuerza.",
+        "fall": "Sin aire, lo pesado y lo ligero caen a la vez.",
+        "distance": "La atracción cae con el cuadrado de la distancia.",
+        "twins": "Tres cuerpos son muy sensibles a cambios mínimos."
+      },
+      "reviewItems": {
+        "one-way-gravity": "Quién atrae a quién",
+        "heavier-falls-faster": "Por qué todo cae a la vez",
+        "linear-distance": "Cómo cambia la fuerza con la distancia",
+        "constant-gravity": "Por qué la distancia importa",
+        "chaos-is-random": "Caos no es azar",
+        "no-sensitivity": "Por qué un cambio mínimo lo cambia todo"
+      },
+      "start": "Empezar a aprender",
+      "repeat": "Repetir la calibración"
+    }
   }
 }

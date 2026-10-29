@@ -241,7 +241,13 @@
     "checkIntro": "Double one quantity and compare the new force with the one you started with.",
     "yourPrediction": "Your prediction: {answer}",
     "noPrediction": "You have not predicted yet. Choose an answer in the previous step first.",
-    "backToStart": "Back to the starting values"
+    "backToStart": "Back to the starting values",
+    "calibration": {
+      "prompt": "Where are you starting from? Calibrate your starting point in a minute.",
+      "start": "Calibrate",
+      "current": "Your level: {level}",
+      "repeat": "Repeat the calibration"
+    }
   },
   "tutor": {
     "title": "AI tutor",
@@ -300,7 +306,8 @@
     "homeTitle": "Interactive three-body problem and gravity explorer",
     "learnTitle": "Learn the law of gravity",
     "orbitsTitle": "Six solutions of the three-body problem",
-    "description": "Learn gravity through experiments and an AI tutor. Explore six periodic solutions of the three-body problem."
+    "description": "Learn gravity through experiments and an AI tutor. Explore six periodic solutions of the three-body problem.",
+    "calibrationTitle": "Calibration: where are you starting from?"
   },
   "simulator": {
     "title": "Add a third body",
@@ -360,5 +367,105 @@
     "fallback": "The simulation needs WebGL, which is not available on this device.",
     "next": "Periodic orbits are the exception: conditions so precise that the motion repeats. Explore the six best known.",
     "explore": "Discover the six orbits"
+  },
+  "calibration": {
+    "progress": "Calibration {step} of {total}",
+    "progressLabel": "Calibration progress",
+    "skip": "Skip the calibration",
+    "replay": "Replay the animation",
+    "back": "Previous question",
+    "next": "Confirm answer",
+    "finish": "See my starting point",
+    "noGrade": "There is no grade. We only choose where to start.",
+    "scenes": {
+      "attraction": "An apple near the Earth. Notice which pulls on which.",
+      "fall": "No air. Both balls rise to the same height and the animation stops before they are released.",
+      "distance": "Two bodies move apart. The attraction meter is hidden.",
+      "twins": "Two real simulations. The one on the right starts with one body moved by 1 %. They stop while they still match."
+    },
+    "questions": {
+      "experience": {
+        "text": "How much physics have you studied?",
+        "options": {
+          "none": "None or almost none",
+          "school": "At school",
+          "university": "At university or beyond"
+        }
+      },
+      "attraction": {
+        "text": "The Earth pulls on the apple. Which drawing shows the forces correctly?",
+        "options": {
+          "apple-only": "Only on the apple",
+          "unequal": "Large on the apple, small on the Earth",
+          "equal": "Equal and opposite",
+          "unknown": "I don't know"
+        }
+      },
+      "fall": {
+        "text": "With no air, which one hits the ground first?",
+        "options": {
+          "heavy": "The 10 kg ball",
+          "light": "The 1 kg ball",
+          "together": "Both at the same time",
+          "unknown": "I don't know"
+        }
+      },
+      "distance": {
+        "text": "As they move apart, which graph describes the attraction?",
+        "options": {
+          "linear": "Drops at a steady rate",
+          "inverse-square": "Drops fast, then slowly",
+          "constant": "Stays the same",
+          "unknown": "I don't know"
+        }
+      },
+      "twins": {
+        "text": "If we let them run for a long time, what will happen?",
+        "options": {
+          "same": "They will stay almost the same",
+          "diverge": "They will drift apart until they look different",
+          "random": "They will move randomly, with no rules",
+          "unknown": "I don't know"
+        }
+      }
+    },
+    "levels": {
+      "explorer": {
+        "name": "explorer",
+        "help": "Ideas with everyday examples and no formulas at first."
+      },
+      "student": {
+        "name": "student",
+        "help": "You will see the formula and rounded numbers."
+      },
+      "advanced": {
+        "name": "advanced",
+        "help": "Exact numbers, scientific notation and the limits of the calculation."
+      }
+    },
+    "result": {
+      "title": "You start as {level}",
+      "chooseLevel": "I prefer another level",
+      "known": "You already know",
+      "knownNone": "We will discover it together, step by step.",
+      "review": "Let's look at this calmly",
+      "reviewNone": "Nothing pending: you can go straight to three bodies.",
+      "knownItems": {
+        "attraction": "Two bodies pull on each other with the same force.",
+        "fall": "With no air, heavy and light things fall together.",
+        "distance": "Attraction drops with the square of the distance.",
+        "twins": "Three bodies are very sensitive to tiny changes."
+      },
+      "reviewItems": {
+        "one-way-gravity": "Who pulls on whom",
+        "heavier-falls-faster": "Why everything falls together",
+        "linear-distance": "How force changes with distance",
+        "constant-gravity": "Why distance matters",
+        "chaos-is-random": "Chaos is not randomness",
+        "no-sensitivity": "Why a tiny change changes everything"
+      },
+      "start": "Start learning",
+      "repeat": "Repeat the calibration"
+    }
   }
 }

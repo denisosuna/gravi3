@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const NARROWEST_SUPPORTED_WIDTH = 320;
 // Spanish copy is the longest, so both languages are checked.
-const ROUTES = ['', '/learn', '/orbits', '/orbits/butterfly-i'];
+const ROUTES = ['', '/learn', '/learn/calibration', '/orbits', '/orbits/butterfly-i'];
 const LOCALES = ['en', 'es'];
 
 test('no page scrolls horizontally at the narrowest supported width', async ({ page }) => {

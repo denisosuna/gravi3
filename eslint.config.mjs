@@ -4,9 +4,9 @@ import nextTypescript from 'eslint-config-next/typescript';
 
 const UI_PACKAGES = ['react', 'react-dom', 'three', '@react-three/*', 'next', 'next/*', 'next-*'];
 
-const FEATURES = ['home', 'learning', 'orbits', 'tutor'];
+const FEATURES = ['calibration', 'home', 'learning', 'orbits', 'tutor'];
 // The tutor panel is embedded by other features, so only the rest are off limits.
-const ISOLATED_FEATURES = ['home', 'learning', 'orbits'];
+const ISOLATED_FEATURES = ['calibration', 'home', 'learning', 'orbits'];
 
 // Only the pure `model` folder of a feature is shared with the server and other features.
 function otherFeatures(current) {
