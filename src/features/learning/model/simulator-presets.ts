@@ -1,5 +1,11 @@
 import { toCenterOfMassFrame } from '@/physics/simulation';
-import type { Masses, OrbitSlug, State } from '@/physics/types';
+import {
+  BODY_INDICES,
+  VELOCITY_OFFSET,
+  type Masses,
+  type OrbitSlug,
+  type State,
+} from '@/physics/types';
 import { findOrbit } from '@/physics/orbit-catalog';
 
 export const SIMULATOR_PRESETS = [
@@ -21,7 +27,9 @@ export interface SimulatorSetup {
 // Editing limits for the sandbox controls (normalized units, G = 1).
 export const MASS_RANGE = { min: 0.0001, max: 6 } as const;
 export const VELOCITY_RANGE = { min: -3, max: 3, step: 0.01 } as const;
-// Relative velocity change applied by the "perturb" action to show sensitivity to initial conditions.
+// How far the tutor may scale one body's starting velocity in a "what if" experiment.
+export const VELOCITY_FACTOR_RANGE = { min: 0.5, max: 2 } as const;
+// Relative change applied by the "perturb" action to show sensitivity to initial conditions.
 export const PERTURBATION = 0.01;
 
 function fromCatalog(slug: OrbitSlug): SimulatorSetup {
@@ -66,4 +74,18 @@ export function simulatorPreset(id: SimulatorPresetId): SimulatorSetup {
     case 'sun-planet-moon':
       return SUN_PLANET_MOON;
   }
+}
+
+// Scales the first moving body's velocity by 1%. A system that starts at rest (Pythagorean) has no
+// velocity to scale, so body 1's position moves by 1% instead: either way the start changes slightly.
+export function perturbedState(state: State): State {
+  const next = [...state];
+  const moving = BODY_INDICES.find(
+    (body) =>
+      state[VELOCITY_OFFSET + 2 * body] !== 0 || state[VELOCITY_OFFSET + 2 * body + 1] !== 0,
+  );
+  const offset = moving === undefined ? 0 : VELOCITY_OFFSET + 2 * moving;
+  next[offset] = next[offset]! * (1 + PERTURBATION);
+  next[offset + 1] = next[offset + 1]! * (1 + PERTURBATION);
+  return next;
 }

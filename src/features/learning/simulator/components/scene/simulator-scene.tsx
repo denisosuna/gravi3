@@ -7,6 +7,7 @@ import {
 } from '@/features/learning/simulator/state/simulator-controller';
 import { useSimulatorState } from '@/features/learning/simulator/state/use-simulator-state';
 import { scenePalette } from '@/shared/three/scene-palette';
+import { ReferenceBodies } from './reference-bodies';
 import { SimulatorBodies } from './simulator-bodies';
 import { LiquidEnvironment } from '@/shared/three/liquid-body';
 
@@ -62,6 +63,11 @@ export default function SimulatorScene({
         controller={controller}
         colors={palette.bodies}
         showVectors={showVectors}
+      />
+      <ReferenceBodies
+        key={`reference-${revision}`}
+        controller={controller}
+        colors={palette.bodies}
       />
     </Canvas>
   );

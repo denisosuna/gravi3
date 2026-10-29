@@ -1,6 +1,6 @@
 import {
   CUSTOM_PRESET,
-  PERTURBATION,
+  perturbedState,
   simulatorPreset,
   type SimulatorPresetId,
   type SimulatorPresetSelection,
@@ -15,6 +15,7 @@ import {
 } from '@/physics/simulation';
 import { MAX_FRAME_DELTA_SECONDS } from '@/shared/constants/animation';
 import { VELOCITY_OFFSET, type Masses } from '@/physics/types';
+import { divergence } from '@/features/learning/model/divergence';
 
 export const SIMULATOR_SPEEDS = [0.5, 1, 2, 4] as const;
 export const ZOOM_LEVELS = [0.5, 0.75, 1, 1.5, 2, 3] as const;
@@ -38,6 +39,8 @@ export interface SimulatorSnapshot {
   diagnostics: SimulationDiagnostics;
   // Increments whenever the simulation restarts, so the scene can clear its trails.
   revision: number;
+  // Largest distance between the edited run and the original preset, while one is compared.
+  divergence: number | null;
 }
 
 function createSimulation({ masses, initialState }: SimulatorSetup) {
@@ -47,6 +50,9 @@ function createSimulation({ masses, initialState }: SimulatorSetup) {
 // Owns the live simulation; React reads throttled snapshots, the scene reads `simulation` per frame.
 export class SimulatorController {
   simulation: ThreeBodySimulation;
+  // The last loaded preset, run alongside an edited setup so the change can be compared.
+  reference: ThreeBodySimulation | null = null;
+  private referenceSetup: SimulatorSetup | null = null;
   private value: SimulatorSnapshot;
   private listeners = new Set<() => void>();
 
@@ -62,6 +68,7 @@ export class SimulatorController {
       time: 0,
       diagnostics: this.simulation.diagnostics(),
       revision: 0,
+      divergence: null,
     };
   }
 
@@ -96,16 +103,24 @@ export class SimulatorController {
     this.restart({ masses: nextMasses, initialState: nextState }, CUSTOM_PRESET);
   }
 
+  // Multiplies one body's starting velocity, keeping its direction: "what if body 2 were faster?"
+  scaleBodyVelocity(body: number, factor: number) {
+    const { initialState } = this.value.setup;
+    const vx = initialState[VELOCITY_OFFSET + 2 * body]!;
+    const vy = initialState[VELOCITY_OFFSET + 2 * body + 1]!;
+    this.editBody(body, { vx: vx * factor, vy: vy * factor });
+  }
+
   perturb() {
-    const nextState = [...this.value.setup.initialState];
-    nextState[VELOCITY_OFFSET] = nextState[VELOCITY_OFFSET]! * (1 + PERTURBATION);
-    this.restart({ ...this.value.setup, initialState: nextState }, CUSTOM_PRESET);
+    const initialState = perturbedState(this.value.setup.initialState);
+    this.restart({ ...this.value.setup, initialState }, CUSTOM_PRESET);
   }
 
   // Called every animation frame; does not notify React.
   step(delta: number) {
     if (!this.value.playing) return;
     const duration = Math.min(Math.max(0, delta), MAX_FRAME_DELTA_SECONDS) * this.value.speed;
+    this.reference?.advance(duration);
     const event = this.simulation.advance(duration);
     if (isHaltingEvent(event)) this.emit({ playing: false, event });
     else if (event) this.emit({ event });
@@ -115,6 +130,10 @@ export class SimulatorController {
   publish = () => this.emit({});
 
   private restart(setup: SimulatorSetup, presetId: SimulatorSnapshot['presetId']) {
+    // The first edit of a preset keeps that preset as the original; loading a preset ends the comparison.
+    if (presetId !== CUSTOM_PRESET) this.referenceSetup = null;
+    else if (this.value.presetId !== CUSTOM_PRESET) this.referenceSetup = this.value.setup;
+    this.reference = this.referenceSetup && createSimulation(this.referenceSetup);
     this.simulation = createSimulation(setup);
     this.emit({
       presetId,
@@ -131,6 +150,7 @@ export class SimulatorController {
       ...patch,
       time: this.simulation.time,
       diagnostics: this.simulation.diagnostics(),
+      divergence: this.reference && divergence(this.simulation.state, this.reference.state),
     };
     this.listeners.forEach((listener) => listener());
   }

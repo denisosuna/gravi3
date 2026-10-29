@@ -85,6 +85,33 @@ test('the tutor proposes experiments that run with one click', async ({ page }) 
   await expect(simulator.getByRole('button', { name: 'Pause' })).toBeVisible();
 });
 
+test('the tutor runs a "what if" on one body and the original stays as a ghost', async ({
+  page,
+}) => {
+  await page.route('**/api/tutor', (route) =>
+    route.fulfill(
+      route.request().method() === 'GET'
+        ? { json: { enabled: true } }
+        : {
+            json: {
+              reply: 'Press Try it to make body 2 faster and compare with the original.',
+              actions: [{ type: 'scaleBodyVelocity', body: 2, factor: 1.2 }],
+            },
+          },
+    ),
+  );
+  await page.goto('/en/learn');
+  await page.getByLabel('Your question', { exact: true }).fill('What if body 2 were faster?');
+  await page.getByRole('button', { name: 'Ask', exact: true }).click();
+  await page.getByRole('button', { name: 'Try it: body 2 velocity × 1.2' }).click();
+  await expect(page).toHaveURL(/#lab$/);
+  const lab = page.getByRole('region', { name: 'Free laboratory' });
+  await expect(lab.getByRole('button', { name: 'Pause' })).toBeVisible();
+  await expect(lab.getByTestId('simulator-comparison')).toContainText('Largest gap right now');
+  await lab.getByRole('button', { name: /^Figure eight/ }).click();
+  await expect(lab.getByTestId('simulator-comparison')).toHaveCount(0);
+});
+
 test('on an orbit page the tutor can move the player to the closest approach', async ({ page }) => {
   await page.route('**/api/tutor', (route) =>
     route.fulfill(

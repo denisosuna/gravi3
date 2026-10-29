@@ -1064,6 +1064,13 @@ button.control-button:hover {
   font-size: 13px;
   line-height: 1.6;
 }
+.simulator-comparison {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
 .simulator-controls {
   display: flex;
   flex-wrap: wrap;
