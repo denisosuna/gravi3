@@ -1,6 +1,8 @@
 import { STATE_LENGTH, type Masses, type State } from './types';
 
 export const GRAVITATIONAL_CONSTANT = 6.6743e-11;
+// Conventional acceleration at the Earth's surface (m/s²), used to compare a force with a weight.
+export const STANDARD_GRAVITY = 9.80665;
 
 export class UnresolvedEncounterError extends RangeError {
   constructor() {

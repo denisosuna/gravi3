@@ -1,0 +1,195 @@
+/* A deck of capsules: one idea on a glass slide, with dots, a recap and previous/next below. */
+.deck {
+  min-width: 0;
+  display: grid;
+  gap: 16px;
+  /* Vertical scrolling stays with the browser; horizontal swipes change capsule. */
+  touch-action: pan-y;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 16px;
+}
+
+.kicker {
+  margin: 0;
+  color: var(--accent);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.dots {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+/* Each dot is drawn small inside a full 44 px target. */
+.dots button {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.dots button::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
+}
+
+.dots button[aria-current='step']::before {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+  transform: scale(1.15);
+}
+
+.capsule {
+  min-width: 0;
+  scroll-margin-top: 16px;
+  padding: clamp(18px, 3vw, 32px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  box-shadow:
+    inset 0 1px 0 var(--glass-highlight),
+    var(--glass-shadow);
+  display: grid;
+  gap: 16px;
+  animation: capsule-in 0.35s ease-out;
+}
+
+.capsule h2 {
+  margin: 0;
+  font-size: var(--text-2xl);
+  line-height: 1.12;
+}
+
+.capsule h2:focus {
+  outline: none;
+}
+
+.body {
+  margin: 0;
+  max-width: 60ch;
+  font-size: var(--text-lg);
+  line-height: 1.55;
+}
+
+.more {
+  color: var(--muted);
+}
+
+.more summary {
+  width: fit-content;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.more p {
+  max-width: 68ch;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.recap {
+  padding: 0 4px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.recap h3 {
+  margin: 0 0 6px;
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+
+.recap ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+}
+
+/* The way forward stays in reach on long capsules. */
+.nav {
+  position: sticky;
+  bottom: 8px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+  backdrop-filter: blur(var(--glass-blur)) saturate(160%);
+}
+
+.progress {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* On the narrowest phones the dots already show the position; the count stays for screen readers. */
+@media (max-width: 400px) {
+  .progress {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+}
+
+/* Movement only: fading would briefly lower the text contrast. */
+@keyframes capsule-in {
+  from {
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .capsule {
+    animation: none;
+  }
+
+  .dots button::before {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .capsule,
+  .nav {
+    background: var(--surface-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

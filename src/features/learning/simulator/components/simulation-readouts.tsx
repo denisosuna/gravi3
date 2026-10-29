@@ -1,4 +1,5 @@
 import { useLocale, useTranslations } from 'next-intl';
+import type { Readout } from '@/features/learning/model/level-presentation';
 import type { SimulatorController } from '../state/simulator-controller';
 import { useSimulatorState } from '../state/use-simulator-state';
 import { numberFormat } from '@/shared/i18n/number-format';
@@ -11,7 +12,13 @@ function withoutNegativeZero(value: number): number {
   return Math.round(value * ROUNDING) / ROUNDING + 0;
 }
 
-export function SimulationReadouts({ controller }: { controller: SimulatorController }) {
+export function SimulationReadouts({
+  controller,
+  shown,
+}: {
+  controller: SimulatorController;
+  shown: readonly Readout[];
+}) {
   const t = useTranslations('simulator');
   const locale = useLocale();
   const time = useSimulatorState(controller, (state) => state.time);
@@ -29,16 +36,19 @@ export function SimulationReadouts({ controller }: { controller: SimulatorContro
       `(${number.format(withoutNegativeZero(centerX))}; ${number.format(withoutNegativeZero(centerY))})`,
     ],
     ['separation', number.format(diagnostics.minimumSeparation)],
-  ] as const;
+  ] as const satisfies readonly (readonly [Readout, string])[];
+  if (shown.length === 0) return null;
   return (
     <section className="simulation-readouts" aria-label={t('readouts')}>
       <dl>
-        {rows.map(([key, value]) => (
-          <div key={key}>
-            <dt>{t(key)}</dt>
-            <dd>{value}</dd>
-          </div>
-        ))}
+        {rows
+          .filter(([key]) => shown.includes(key))
+          .map(([key, value]) => (
+            <div key={key}>
+              <dt>{t(key)}</dt>
+              <dd>{value}</dd>
+            </div>
+          ))}
       </dl>
       <details>
         <summary>{t('readHelp')}</summary>

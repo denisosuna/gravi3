@@ -1,82 +1,99 @@
 import { expect, test } from '@playwright/test';
 
-test('experiment demonstrates inverse-square gravity and evaluates a prediction', async ({
-  page,
-}) => {
-  await page.goto('/es/learn');
-  await expect(page.getByTestId('force-lab-scene').locator('canvas')).toBeVisible();
+test('the deck moves capsule by capsule with buttons, dots and keys', async ({ page }) => {
+  await page.goto('/en/learn');
+  const deck = page.getByRole('navigation', { name: 'Capsules' });
+  await expect(
+    page.getByRole('heading', { name: 'Any two bodies attract each other' }),
+  ).toBeVisible();
+  await deck.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByRole('heading', { name: 'Same force, different motion' })).toBeFocused();
+  await expect(page).toHaveURL(/#mutual$/);
+  await page.getByRole('button', { name: /^Go to capsule 3:/ }).click();
+  await expect(page).toHaveURL(/#numbers$/);
+  await page.keyboard.press('ArrowLeft');
+  await expect(page.getByRole('heading', { name: 'Same force, different motion' })).toBeFocused();
+  await expect(page).toHaveURL(/#mutual$/);
+  await expect(page.getByText('Two masses always attract each other.')).toBeVisible();
+});
+
+test('a capsule can be linked, and Back returns across chapters', async ({ page }) => {
+  await page.goto('/en/learn#formula');
+  await expect(page.getByRole('heading', { name: 'It all fits in one law' })).toBeVisible();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByRole('heading', { name: 'Add a third body' })).toBeFocused();
+  await expect(page).toHaveURL(/#third$/);
+  await page.goBack();
+  await expect(page.getByRole('heading', { name: 'It all fits in one law' })).toBeVisible();
+});
+
+test('a prediction is checked against the inverse-square law', async ({ page }) => {
+  await page.goto('/es/learn#pull');
   const force = page.getByTestId('force-value');
   const original = Number(await force.getAttribute('data-force'));
-  await page.getByRole('button', { name: 'Duplicar la distancia' }).click();
-  expect(Number(await force.getAttribute('data-force')) / original).toBeCloseTo(0.25);
-  await expect(page.getByText('0,25 × la fuerza de la configuración inicial')).toBeVisible();
+  await page.goto('/es/learn#predict');
   await page.getByRole('button', { name: 'Un cuarto', exact: true }).click();
   await expect(page.getByText(/^Exacto\./)).toBeVisible();
+  await page.getByRole('button', { name: 'Siguiente' }).click();
+  await expect(page.getByText('Tu predicción: Un cuarto')).toBeVisible();
+  await page.getByRole('button', { name: 'Duplicar la distancia' }).click();
+  await expect(page.getByText('0,25 × la fuerza de la configuración inicial')).toBeVisible();
+  await page.getByRole('link', { name: /Atracción/ }).click();
+  await expect(page.getByRole('slider', { name: 'Distancia entre centros' })).toHaveValue('10');
+  expect(Number(await force.getAttribute('data-force')) / original).toBeCloseTo(0.25);
   await page.getByLabel('Idioma', { exact: true }).selectOption('en');
   await expect(page.getByRole('slider', { name: 'Center-to-center distance' })).toHaveValue('10');
-  await expect(page.getByRole('button', { name: 'One quarter' })).toHaveAttribute(
-    'aria-pressed',
-    'true',
-  );
-  await page.getByRole('button', { name: 'Double the first mass' }).click();
-  expect(Number(await force.getAttribute('data-force')) / original).toBeCloseTo(0.5);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
 });
 
-test('the experiment explains the two-body interaction before showing optional calculations', async ({
-  page,
-}) => {
-  await page.goto('/es/learn');
-  await expect(page.getByRole('heading', { name: 'Qué está pasando' })).toBeVisible();
-  await expect(
-    page.getByText('Hay solo dos cuerpos a propósito: así aislamos esta interacción.'),
-  ).toBeVisible();
-  await expect(
-    page.getByText(
-      'Cuanto más lejos están, más débil es la atracción. Si duplicas la distancia, queda en una cuarta parte.',
-    ),
-  ).toBeVisible();
-  await expect(page.getByText(/^a₁ =/)).toBeHidden();
-  await page.getByRole('slider', { name: 'Masa del cuerpo 2' }).press('ArrowRight');
-  await expect(
-    page.getByText('El cuerpo 1 tiene menos masa: con la misma fuerza, su movimiento cambia más.'),
-  ).toBeVisible();
-  await page.getByText('Ver los valores de aceleración').click();
-  await expect(page.getByText(/^a₁ =/)).toBeVisible();
+test('the level changes which capsules appear and how numbers are shown', async ({ page }) => {
+  await page.goto('/en/learn');
+  const chapters = page.getByRole('navigation', { name: 'Lesson chapters' });
+  await page.getByLabel('explorer').check();
+  await expect(page.getByTestId('force-value')).toHaveText('1 × the force of the starting setup');
+  await chapters.getByRole('link', { name: /Mass and distance/ }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await page.getByRole('button', { name: 'Next' }).click();
+  await expect(page.getByText('F = G · m₁ · m₂ / r²')).toBeHidden();
+  await page.getByText('See the formula').click();
+  await expect(page.getByText('F = G · m₁ · m₂ / r²')).toBeVisible();
+  await page.getByLabel('advanced').check();
+  await chapters.getByRole('link', { name: /Three bodies/ }).click();
+  await page.getByRole('button', { name: 'Go to capsule 4: Energy gives the error away' }).click();
+  await expect(page.getByRole('heading', { name: 'Energy gives the error away' })).toBeVisible();
+  await page.getByLabel('explorer').check();
+  await expect(page.getByRole('heading', { name: 'Add a third body' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Go to capsule/ })).toHaveCount(2);
+  await page.getByLabel('advanced').check();
+  await chapters.getByRole('link', { name: /Attraction/ }).click();
+  await expect(page.getByTestId('force-value')).toContainText('N');
 });
 
 test('the gravitational fall follows Newtonian motion and leaves setup measurements untouched', async ({
   page,
 }) => {
-  await page.goto('/es/learn');
-  const distance = page.getByRole('slider', { name: 'Distancia entre centros' });
-  const force = page.getByTestId('force-value');
-  const originalForce = Number(await force.getAttribute('data-force'));
+  await page.goto('/es/learn#mutual');
   await page.getByRole('button', { name: 'Ver cómo caen por gravedad' }).click();
   await expect(page.getByRole('button', { name: 'Simulación en curso…' })).toBeDisabled();
-  await expect(
-    page.getByText(
-      'Las flechas crecen al acercarse. La fuerza indicada es la inicial; el tiempo de simulación está acelerado.',
-      { exact: true },
-    ),
-  ).toHaveCount(1);
   await expect(
     page.getByText(/Tras .+ de tiempo simulado, los cuerpos se acercan mucho/),
   ).toBeVisible({ timeout: 10000 });
   await expect(page.getByRole('button', { name: 'Repetir la caída' })).toBeEnabled();
-  await expect(distance).toHaveValue('5');
-  expect(Number(await force.getAttribute('data-force'))).toBe(originalForce);
-  await distance.press('ArrowRight');
-  await expect(distance).toHaveValue('5.5');
+  const mass = page.getByRole('slider', { name: 'Masa del cuerpo 2' });
+  await expect(mass).toHaveValue('100');
+  await mass.press('ArrowRight');
+  await expect(
+    page.getByText('El cuerpo 1 tiene menos masa: con la misma fuerza, su movimiento cambia más.'),
+  ).toBeVisible();
   await expect(page.getByText(/Pulsa para simular en una dimensión/)).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Ver cómo caen por gravedad' })).toBeEnabled();
 });
 
 test('reduced-motion preference presents a still version of the physical fall', async ({
   page,
 }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/es/learn');
+  await page.goto('/es/learn#mutual');
   await page.getByRole('button', { name: 'Ver cómo caen por gravedad' }).click();
   await expect(
     page.getByText(/Vista estática de la caída calculada tras .+ de tiempo simulado/),
@@ -89,17 +106,16 @@ test('reduced-motion preference presents a still version of the physical fall', 
   await expect(page.getByRole('button', { name: 'Ver cómo caen por gravedad' })).toBeVisible();
 });
 
-test('the lesson rail follows the steps and the check step recalls the prediction', async ({
-  page,
-}) => {
-  await page.goto('/en/learn');
-  const rail = page.getByRole('navigation', { name: 'Lesson steps' });
-  await expect(rail.getByRole('link', { name: /Observe/ })).toHaveAttribute('aria-current', 'step');
-  await page.getByRole('button', { name: 'One quarter', exact: true }).click();
-  await rail.getByRole('link', { name: /Check/ }).click();
-  await expect(page).toHaveURL(/#check$/);
-  await expect(rail.getByRole('link', { name: /Check/ })).toHaveAttribute('aria-current', 'step');
-  await expect(page.getByText('Your prediction: One quarter')).toBeVisible();
-  await page.getByRole('link', { name: 'Ask the tutor' }).click();
+test('the chapter rail tracks progress and reaches the tutor', async ({ page }) => {
+  await page.goto('/en/learn#check');
+  const chapters = page.getByRole('navigation', { name: 'Lesson chapters' });
+  await expect(chapters.getByRole('link', { name: /Mass and distance/ })).toHaveAttribute(
+    'aria-current',
+    'step',
+  );
+  await chapters.getByRole('link', { name: /Three bodies/ }).click();
+  await expect(page).toHaveURL(/#third$/);
+  await chapters.getByRole('link', { name: 'Ask the tutor' }).click();
   await expect(page.getByRole('heading', { name: 'AI tutor' })).toBeInViewport();
+  await expect(page).toHaveURL(/#third$/);
 });

@@ -3,6 +3,8 @@
 
 export const LEVELS = ['explorer', 'student', 'advanced'] as const;
 export type Level = (typeof LEVELS)[number];
+// Used until the learner calibrates or picks a level: the middle path, formulas included.
+export const DEFAULT_LEVEL: Level = 'student';
 
 export const UNKNOWN_ANSWER = 'unknown';
 

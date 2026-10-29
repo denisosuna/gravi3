@@ -1,0 +1,124 @@
+/* Pieces shared by the capsules; the deck draws the frame around them. */
+.start {
+  justify-self: start;
+}
+
+.note {
+  margin: 0;
+  max-width: 68ch;
+  padding: 12px 16px;
+  border-inline-start: 3px solid var(--accent);
+  border-radius: 0 var(--radius-inner) var(--radius-inner) 0;
+  background: var(--surface-raised);
+  line-height: 1.6;
+}
+
+.facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 10px;
+}
+
+.facts div {
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-inner);
+  background: var(--surface-raised);
+}
+
+.facts dt {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+.facts dd {
+  margin: 4px 0 0;
+  font-family: var(--font-number);
+  font-size: var(--text-lg);
+  font-variant-numeric: tabular-nums;
+}
+
+.prediction mark {
+  background: var(--highlight);
+  color: var(--highlight-ink);
+  padding: 2px 6px;
+}
+
+.checkResult {
+  display: grid;
+  gap: 12px;
+  align-items: center;
+}
+
+.checkResult svg {
+  width: 100%;
+  max-height: 280px;
+}
+
+.checkForce {
+  margin: 0;
+  font-family: var(--font-number);
+  font-size: var(--text-lg);
+  font-variant-numeric: tabular-nums;
+}
+
+.formula {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: var(--text-2xl);
+  color: var(--accent);
+}
+
+.formulaToggle summary {
+  width: fit-content;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.constant {
+  margin: 0;
+  font-family: var(--font-number);
+  font-size: var(--text-sm);
+  color: var(--muted);
+}
+
+.orbits {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 140px), 1fr));
+  gap: 10px;
+}
+
+.orbits a {
+  min-height: 44px;
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-inner);
+  background: var(--surface-raised);
+  color: var(--text);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  text-align: center;
+}
+
+.orbits img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: contain;
+}
+
+@media (min-width: 720px) {
+  .checkResult {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+}

@@ -1,21 +1,18 @@
 import type { Experiment } from '@/features/learning/model/experiment';
 import type { TutorAction } from '@/features/tutor/model/tutor-actions';
 import type { SimulatorController } from '../simulator/state/simulator-controller';
-import type { LearnStep } from './learn-steps';
+import type { CapsuleId } from './capsules';
 
-const LABORATORY_ID: LearnStep = 'observe';
-const SIMULATOR_ID: LearnStep = 'three-bodies';
+// Where the effect of each kind of experiment can be seen.
+const LABORATORY: CapsuleId = 'pull';
+const SIMULATOR: CapsuleId = 'lab';
 
-function reveal(id: string) {
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.getElementById(id)?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
-}
-
-// Runs an experiment proposed by the tutor and scrolls to where its effect is visible.
+// Runs an experiment proposed by the tutor, then opens the capsule that shows its effect.
 export function applyTutorAction(
   action: TutorAction,
   updateExperiment: (patch: Partial<Experiment>) => void,
   simulator: SimulatorController,
+  reveal: (capsule: CapsuleId) => void,
 ) {
   switch (action.type) {
     case 'setExperiment': {
@@ -24,18 +21,18 @@ export function applyTutorAction(
         Object.entries({ mass1, mass2, distance }).filter(([, value]) => value !== undefined),
       );
       updateExperiment(patch);
-      reveal(LABORATORY_ID);
+      reveal(LABORATORY);
       return;
     }
     case 'loadPreset':
+      reveal(SIMULATOR);
       simulator.loadPreset(action.preset);
       simulator.update({ playing: true });
-      reveal(SIMULATOR_ID);
       return;
     case 'perturb':
+      reveal(SIMULATOR);
       simulator.perturb();
       simulator.update({ playing: true });
-      reveal(SIMULATOR_ID);
       return;
     // Orbit actions never reach the Learn page: the server only allows them on orbit pages.
     case 'openOrbit':

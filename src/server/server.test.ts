@@ -154,6 +154,18 @@ describe('configuration and deterministic context', () => {
     expect(prompt).toContain('with its unit');
     expect(prompt).toContain('what that value means');
   });
+  it('adapts the style to the level and accepts only known capsules', () => {
+    const explorer = {
+      ...payload,
+      context: { ...payload.context, level: 'explorer', capsule: 'check' },
+    };
+    const parsed = tutorRequestSchema.parse(explorer);
+    expect(tutorSystemPrompt(parsed)).toContain('explorer level');
+    expect(tutorSystemPrompt(parsed)).toContain('"capsule":"check"');
+    expect(tutorSystemPrompt(tutorRequestSchema.parse(payload))).toContain('student level');
+    const unknown = { ...payload, context: { ...payload.context, capsule: 'admin' } };
+    expect(tutorRequestSchema.safeParse(unknown).success).toBe(false);
+  });
   it('gives orbit pages the measured closest approach and the player actions', () => {
     const prompt = tutorSystemPrompt(
       tutorRequestSchema.parse({ ...payload, context: { kind: 'orbit', slug: 'butterfly-i' } }),

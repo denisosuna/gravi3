@@ -181,23 +181,15 @@
   "learn": {
     "title": "La gravedad empieza con dos.",
     "description": "Para entender tres cuerpos primero hay que entender cómo se atraen dos. Mueve las masas, cambia la distancia y predice qué ocurrirá antes de comprobarlo.",
-    "formulaTitle": "Una ley, tres ingredientes",
     "formulaText": "La fuerza F aumenta con las masas m₁ y m₂ y disminuye con el cuadrado de la distancia r entre sus centros. G es la constante de gravitación universal.",
     "constant": "G = 6,67430 × 10⁻¹¹ m³ kg⁻¹ s⁻²",
     "mass1": "Masa del cuerpo 1",
     "mass2": "Masa del cuerpo 2",
     "distance": "Distancia entre centros",
     "force": "Fuerza inicial de atracción en cada cuerpo",
-    "equal": "La fuerza tiene el mismo valor en ambos y sentidos opuestos. Si las masas difieren, la más ligera acelera más.",
-    "whatHappensTitle": "Qué está pasando",
-    "mutualAttraction": "Los dos cuerpos se atraen a la vez: la fuerza tiene el mismo valor en ambos, pero apunta en sentidos contrarios.",
     "equalMasses": "Como tienen la misma masa, esa fuerza cambia su movimiento por igual.",
     "body1Lighter": "El cuerpo 1 tiene menos masa: con la misma fuerza, su movimiento cambia más.",
     "body2Lighter": "El cuerpo 2 tiene menos masa: con la misma fuerza, su movimiento cambia más.",
-    "distanceEffect": "Cuanto más lejos están, más débil es la atracción. Si duplicas la distancia, queda en una cuarta parte.",
-    "twoBodyPurpose": "Hay solo dos cuerpos a propósito: así aislamos esta interacción. En el último paso añadimos un tercero y verás qué cambia.",
-    "accelerationDetails": "Ver los valores de aceleración",
-    "accelerationMeaning": "La aceleración indica cuánto cambia el movimiento. Para cada cuerpo, se calcula dividiendo la fuerza entre su masa.",
     "showFall": "Ver cómo caen por gravedad",
     "replayFall": "Repetir la caída",
     "resetFall": "Volver a la posición inicial",
@@ -209,7 +201,6 @@
     "animationDone": "Tras {time} de tiempo simulado, los cuerpos se acercan mucho. El modelo de masas puntuales se detiene antes de la colisión matemática.",
     "animationUnavailable": "La animación no está disponible en esta vista.",
     "scale": "Distancia a escala; radios ilustrativos; flechas de fuerza en escala logarítmica. Las posiciones siguen la gravedad de Newton; el modelo no describe un choque entre cuerpos reales.",
-    "predictionTitle": "Antes de probar, ¿qué intuyes?",
     "predictionQuestion": "Si duplicamos la distancia y mantenemos las masas, la fuerza será…",
     "half": "La mitad",
     "quarter": "Un cuarto",
@@ -219,35 +210,119 @@
     "tryDistance": "Duplicar la distancia",
     "tryMass": "Duplicar la primera masa",
     "reset": "Restablecer experimento",
-    "forceUnits": "newtons (N)",
-    "acceleration": "Aceleración",
     "predictionHint": "Elige una respuesta y después comprueba el efecto en el laboratorio.",
     "rotateHint": "Arrastra la escena para girarla.",
     "fallback3d": "La vista 3D no está disponible en este dispositivo. Este diagrama muestra el mismo experimento.",
     "ratio": "{ratio} × la fuerza de la configuración inicial",
     "legend": "Valores del experimento",
-    "steps": {
-      "label": "Pasos de la lección",
-      "observe": "Observa",
-      "predict": "Predice",
-      "check": "Comprueba",
-      "explain": "Explica",
+    "yourPrediction": "Tu predicción: {answer}",
+    "noPrediction": "Aún no has predicho nada. Elige primero una respuesta en la cápsula anterior.",
+    "backToStart": "Volver a los valores iniciales",
+    "chapters": {
+      "label": "Capítulos de la lección",
+      "attraction": "Atracción",
+      "mass-distance": "Masa y distancia",
       "three-bodies": "Tres cuerpos",
+      "periodic": "Orden en el caos",
+      "lab": "Laboratorio",
       "askTutor": "Pregunta al tutor"
     },
-    "stepOf": "Paso {step} de {total}",
-    "observeTitle": "Mueve las masas y la distancia",
-    "checkTitle": "Comprueba tu predicción",
-    "checkIntro": "Duplica una magnitud y compara la nueva fuerza con la del principio.",
-    "yourPrediction": "Tu predicción: {answer}",
-    "noPrediction": "Aún no has predicho nada. Elige primero una respuesta en el paso anterior.",
-    "backToStart": "Volver a los valores iniciales",
-    "calibration": {
-      "prompt": "¿De dónde partes? Calibra tu punto de partida en un minuto.",
-      "start": "Calibrar",
-      "current": "Tu nivel: {level}",
-      "repeat": "Repetir la calibración"
-    }
+    "deck": {
+      "chapterOf": "Capítulo {number} · {name}",
+      "capsulesLabel": "Cápsulas de este capítulo",
+      "goTo": "Ir a la cápsula {number}: {title}",
+      "discoveries": "Lo que ya has descubierto",
+      "more": "Saber más",
+      "navigation": "Cápsulas",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "progress": "{current} de {total}",
+      "finish": "Explora las órbitas"
+    },
+    "level": {
+      "label": "Nivel",
+      "notChosen": "Empiezas como estudiante. Calibra tu nivel o elige otro cuando quieras.",
+      "calibrate": "Calibrar mi nivel"
+    },
+    "numbers": {
+      "force": "Atracción entre los dos cuerpos",
+      "weight": "Peso del cuerpo 1 en la Tierra",
+      "weightRatio": "Veces que el peso supera a la atracción"
+    },
+    "showFormula": "Ver la fórmula",
+    "capsules": {
+      "pull": {
+        "title": "Dos cuerpos cualesquiera se atraen",
+        "body": "Mueve las masas y la distancia. Las flechas muestran con qué fuerza tira cada cuerpo del otro: nunca hay uno que atrae y otro que solo es atraído.",
+        "discovery": "Dos masas siempre se atraen mutuamente.",
+        "more": "Hay solo dos cuerpos a propósito: así aislamos esta interacción. Más adelante añadimos un tercero y verás qué cambia."
+      },
+      "mutual": {
+        "title": "La misma fuerza, distinto movimiento",
+        "body": "Suelta los cuerpos. La fuerza vale lo mismo en los dos, pero el más ligero se mueve más: con menos masa, la misma fuerza le cambia más el movimiento.",
+        "discovery": "Fuerzas iguales; el más ligero acelera más.",
+        "more": "La aceleración indica cuánto cambia el movimiento. Para cada cuerpo se calcula dividiendo la fuerza entre su masa."
+      },
+      "numbers": {
+        "title": "¿Por qué no notas que otra persona te atrae?",
+        "body": "Entre objetos cotidianos la atracción es diminuta comparada con su peso. La gravedad solo se nota cuando una de las masas es enorme, como la Tierra.",
+        "discovery": "Entre objetos cotidianos la gravedad es diminuta."
+      },
+      "mass": {
+        "title": "El doble de masa, el doble de fuerza",
+        "body": "Duplica la primera masa y mira la nueva fuerza comparada con la del principio. Cada kilo más tira un poco más.",
+        "discovery": "Masa × 2 → fuerza × 2."
+      },
+      "predict": {
+        "title": "¿Y si separas los cuerpos al doble?",
+        "body": "Antes de probarlo, elige qué crees que pasará con la fuerza. No hay nota: equivocarse aquí es parte del experimento.",
+        "discovery": "Primero predices, luego mides."
+      },
+      "check": {
+        "title": "Compruébalo",
+        "body": "Duplica la distancia y compara la fuerza con la del principio. ¿Coincide con lo que predijiste?",
+        "discovery": "Distancia × 2 → fuerza ÷ 4."
+      },
+      "formula": {
+        "title": "Todo cabe en una ley",
+        "body": "Lo que has descubierto se escribe en una línea: la fuerza crece con las dos masas y cae con el cuadrado de la distancia.",
+        "discovery": "F = G · m₁ · m₂ / r².",
+        "more": "La fuerza tiene el mismo valor en ambos cuerpos y sentidos opuestos. Si las masas difieren, la más ligera acelera más."
+      },
+      "third": {
+        "title": "Añade un tercer cuerpo",
+        "body": "Cada par se atrae con la misma ley. Con tres, cada cuerpo tira de los otros dos a la vez y ya no hay fórmula: hay que calcularlo paso a paso. Pulsa reproducir.",
+        "discovery": "Con tres cuerpos se calcula paso a paso.",
+        "more": "Física exacta de Newton con masas puntuales y G = 1, sin suavizar la fuerza. Unidades normalizadas."
+      },
+      "chaos": {
+        "title": "Un 1 % lo cambia todo",
+        "body": "Reproduce el sistema pitagórico y fíjate en cómo acaba. Después pulsa «Perturbar 1 %»: un cambio mínimo en una velocidad lleva a otro final. Eso es el caos.",
+        "discovery": "Caos: un cambio mínimo, otro final.",
+        "more": "Caos no es azar: las reglas son exactas y deterministas. Lo que falla es nuestra capacidad de medir el punto de partida con precisión infinita."
+      },
+      "unstable": {
+        "title": "Repetirse no es ser estable",
+        "body": "La solución de Lagrange es periódica, pero tras unas vueltas los errores de redondeo crecen y el triángulo se rompe. La figura de ocho, en cambio, aguanta.",
+        "discovery": "Periódica no significa estable."
+      },
+      "energy": {
+        "title": "La energía delata el error",
+        "body": "Sin fuerzas externas, la energía total se conserva. Su pequeña variación mide el error numérico del cálculo, no física nueva.",
+        "discovery": "La deriva de energía mide el error numérico."
+      },
+      "periodic": {
+        "title": "Orden dentro del caos",
+        "body": "Hay condiciones iniciales tan precisas que el movimiento se repite para siempre. Se conocen miles; aquí tienes seis de las más famosas.",
+        "discovery": "Algunas órbitas se repiten para siempre."
+      },
+      "lab": {
+        "title": "Laboratorio libre",
+        "body": "Todo a la vez y sin guion: elige un punto de partida, edita masas y velocidades y observa qué pasa.",
+        "discovery": "Has experimentado sin guion."
+      }
+    },
+    "equal": "La fuerza tiene el mismo valor en ambos y sentidos opuestos. Si las masas difieren, la más ligera acelera más."
   },
   "tutor": {
     "title": "Tutor IA",
@@ -310,8 +385,6 @@
     "calibrationTitle": "Calibración: ¿de dónde partes?"
   },
   "simulator": {
-    "title": "Añade un tercer cuerpo",
-    "intro": "Cada par de cuerpos se atrae con la misma ley que acabas de probar. Con tres, cada uno tira de los otros dos a la vez y el movimiento ya no tiene fórmula: hay que calcularlo paso a paso. Elige un punto de partida y obsérvalo.",
     "presets": "Puntos de partida",
     "preset": {
       "figure-eight": {
