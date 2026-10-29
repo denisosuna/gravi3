@@ -443,8 +443,9 @@
     "fallback": "The simulation needs WebGL, which is not available on this device.",
     "next": "Periodic orbits are the exception: conditions so precise that the motion repeats. Explore the six best known.",
     "explore": "Discover the six orbits",
-    "comparison": "The translucent spheres replay the original starting point. Largest gap right now between a body and its original: {distance}.",
-    "fromGallery": "Loaded from the gallery: {name}. Edit a body or perturb it by 1% to see how stable it is."
+    "comparison": "The translucent spheres follow the original ({name}). Largest gap right now between a body and its original: {distance}.",
+    "fromGallery": "Loaded from the gallery: {name}. Edit a body or perturb it by 1% to see how stable it is.",
+    "comparisonStopped": "The original ({name}) stopped at an extreme close approach; the comparison freezes here."
   },
   "calibration": {
     "progress": "Calibration {step} of {total}",

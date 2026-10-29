@@ -19,7 +19,13 @@ function subscribe(listener: () => void) {
 }
 
 function readHash() {
-  return decodeURIComponent(window.location.hash.slice(1));
+  const hash = window.location.hash.slice(1);
+  try {
+    return decodeURIComponent(hash);
+  } catch {
+    // A malformed escape such as "#50%" names no capsule; the deck then opens at its start.
+    return hash;
+  }
 }
 
 export type HistoryMode = 'push' | 'replace';

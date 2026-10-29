@@ -2,6 +2,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { initialExperiment, UNITS } from '@/features/learning/model/experiment';
 import { LEVEL_PRESENTATION } from '@/features/learning/model/level-presentation';
 import { gravitationalForce } from '@/physics/gravity';
+import type { Level } from '@/features/calibration/model/calibration';
 import { numberFormat } from '@/shared/i18n/number-format';
 import type { Lesson } from './lesson';
 
@@ -11,11 +12,19 @@ export const INITIAL_FORCE = gravitationalForce(
   initialExperiment.distance,
 );
 
+// Newtons in scientific notation with the level's digits; `null` for explorers, who see ratios.
+export function levelForceFormat(locale: string, level: Level) {
+  const digits = LEVEL_PRESENTATION[level].forceDigits;
+  return digits === null
+    ? null
+    : numberFormat(locale, { notation: 'scientific', maximumSignificantDigits: digits });
+}
+
 // The same measured force, in newtons from the student level up and as a ratio for explorers.
 export function ForceReadout({ lesson }: { lesson: Lesson }) {
   const t = useTranslations('learn');
   const locale = useLocale();
-  const digits = LEVEL_PRESENTATION[lesson.level].forceDigits;
+  const newtons = levelForceFormat(locale, lesson.level);
   const ratio = numberFormat(locale, { maximumSignificantDigits: 3 }).format(
     lesson.force / INITIAL_FORCE,
   );
@@ -23,19 +32,15 @@ export function ForceReadout({ lesson }: { lesson: Lesson }) {
     <div className="force-result" aria-live="polite">
       <span>{t('force')}</span>
       <output data-testid="force-value" data-force={lesson.force}>
-        {digits === null ? (
+        {newtons === null ? (
           t('ratio', { ratio })
         ) : (
           <>
-            {numberFormat(locale, {
-              notation: 'scientific',
-              maximumSignificantDigits: digits,
-            }).format(lesson.force)}{' '}
-            <small>{UNITS.force}</small>
+            {newtons.format(lesson.force)} <small>{UNITS.force}</small>
           </>
         )}
       </output>
-      {digits === null ? null : <p className="force-ratio">{t('ratio', { ratio })}</p>}
+      {newtons === null ? null : <p className="force-ratio">{t('ratio', { ratio })}</p>}
     </div>
   );
 }

@@ -139,3 +139,10 @@ test('the level lives in a header menu that opens on demand', async ({ page }) =
   await expect(page).toHaveURL(/\/es\/learn\/calibration$/);
   await expect(page.getByRole('button', { name: /Cambiar nivel/ })).toHaveCount(0);
 });
+
+test('a malformed link opens the start of the deck instead of failing', async ({ page }) => {
+  await page.goto('/en/learn#50%');
+  await expect(
+    page.getByRole('heading', { name: 'Any two bodies attract each other' }),
+  ).toBeVisible();
+});

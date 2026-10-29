@@ -74,6 +74,18 @@ describe('simulator controller', () => {
     expect(controller.snapshot().divergence).toBeNull();
   });
 
+  it('ignores a velocity change for a body at rest and names the original', () => {
+    const controller = new SimulatorController('pythagorean');
+    const revision = controller.snapshot().revision;
+    controller.scaleBodyVelocity(1, 1.5);
+    expect(controller.snapshot()).toMatchObject({ presetId: 'pythagorean', revision });
+    controller.editBody(1, { mass: 4.5 });
+    expect(controller.snapshot()).toMatchObject({
+      original: 'pythagorean',
+      originalStopped: false,
+    });
+  });
+
   it('only advances while playing and pauses on an unresolved close encounter', () => {
     const controller = new SimulatorController();
     controller.step(1);

@@ -5,7 +5,7 @@ import { STANDARD_GRAVITY } from '@/physics/gravity';
 import { numberFormat } from '@/shared/i18n/number-format';
 import { ForceLab } from '../lab/force-lab';
 import { ExperimentSliders } from './experiment-sliders';
-import { ForceReadout } from './force-readout';
+import { ForceReadout, levelForceFormat } from './force-readout';
 import type { Lesson } from './lesson';
 import styles from './capsules.module.css';
 
@@ -46,11 +46,9 @@ export function NumbersCapsule({ lesson }: { lesson: Lesson }) {
   const t = useTranslations('learn');
   const locale = useLocale();
   const { experiment, force } = lesson;
-  const digits = LEVEL_PRESENTATION[lesson.level].forceDigits ?? undefined;
-  const scientific = numberFormat(locale, {
-    notation: 'scientific',
-    maximumSignificantDigits: digits,
-  });
+  // This capsule starts at the student level, so a level format always exists.
+  const scientific =
+    levelForceFormat(locale, lesson.level) ?? numberFormat(locale, { notation: 'scientific' });
   const weight = experiment.mass1 * STANDARD_GRAVITY;
   const facts = [
     ['force', `${scientific.format(force)} ${UNITS.force}`],
