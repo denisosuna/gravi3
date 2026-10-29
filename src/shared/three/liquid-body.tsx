@@ -1,7 +1,6 @@
-import { useEffect, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { Environment, Lightformer } from '@react-three/drei';
-import { createLiquidMaterial, LIQUID_BODIES, liquidTime } from './liquid-marble';
+import { LIQUID_BODIES, liquidMaterial, liquidTime } from './liquid-marble';
 import { useReducedMotion } from './use-reduced-motion';
 
 // Enough segments for the ripple to stay smooth on the largest bodies.
@@ -10,17 +9,15 @@ const ENVIRONMENT_RESOLUTION = 64;
 
 // A body in liquid marble. `index` picks its colours, so body 1 always looks the same everywhere.
 export function LiquidBody({ index, radius }: { index: number; radius: number }) {
-  const colors = LIQUID_BODIES[index % LIQUID_BODIES.length]!;
-  const material = useMemo(() => createLiquidMaterial(colors, radius), [colors, radius]);
+  const material = liquidMaterial(LIQUID_BODIES[index % LIQUID_BODIES.length]!);
   const reduced = useReducedMotion();
-  useEffect(() => () => material.dispose(), [material]);
   useFrame(() => {
     // A still frame under reduced motion; scenes that render on demand only move when they redraw.
     if (!reduced) liquidTime.value = performance.now() / 1000;
   });
   return (
-    <mesh material={material}>
-      <sphereGeometry args={[radius, SEGMENTS.width, SEGMENTS.height]} />
+    <mesh material={material} scale={radius}>
+      <sphereGeometry args={[1, SEGMENTS.width, SEGMENTS.height]} />
     </mesh>
   );
 }

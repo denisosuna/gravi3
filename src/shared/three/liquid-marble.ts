@@ -55,13 +55,26 @@ float fbm3(vec3 p) {
 // One clock for every liquid body on the page, in seconds, so bodies in different canvases stay in step.
 export const liquidTime = { value: 0 };
 
+// Materials are built for a unit sphere and bodies are scaled, so one material per colour serves every
+// size and every canvas. They are never disposed: rebuilding one would recompile its heavy shader.
+const UNIT_RADIUS = 1;
+const materials = new Map<LiquidColors, MeshPhysicalMaterial>();
+
+export function liquidMaterial(colors: LiquidColors): MeshPhysicalMaterial {
+  const cached = materials.get(colors);
+  if (cached) return cached;
+  const material = createLiquidMaterial(colors);
+  materials.set(colors, material);
+  return material;
+}
+
 // A glossy physical material whose colour is a flowing marble and whose surface ripples slightly.
 // The ripple is cosmetic: positions in the scene still come from the physics.
-export function createLiquidMaterial(colors: LiquidColors, radius: number): MeshPhysicalMaterial {
+function createLiquidMaterial(colors: LiquidColors): MeshPhysicalMaterial {
   const uniforms = {
     uTime: liquidTime,
-    uRadius: { value: radius },
-    uRipple: { value: radius * RIPPLE_AMPLITUDE },
+    uRadius: { value: UNIT_RADIUS },
+    uRipple: { value: UNIT_RADIUS * RIPPLE_AMPLITUDE },
     uDeep: { value: new Color(colors.deep) },
     uBase: { value: new Color(colors.base) },
     uLight: { value: new Color(colors.light) },

@@ -3,7 +3,11 @@ import { useTranslations } from 'next-intl';
 import { ArrowRight } from 'lucide-react';
 import { Link } from '@/i18n/routing';
 import { ROUTES } from '@/shared/constants/routes';
-import { LEVEL_PRESENTATION, READOUTS } from '@/features/learning/model/level-presentation';
+import {
+  LEVEL_PRESENTATION,
+  READOUTS,
+  type Readout,
+} from '@/features/learning/model/level-presentation';
 import {
   CUSTOM_PRESET,
   isSimulatorPreset,
@@ -22,15 +26,21 @@ function useStartingPoint(simulator: SimulatorController, preset: SimulatorPrese
   useEffect(() => simulator.loadPreset(preset), [simulator, preset]);
 }
 
-function GuidedSimulation({ lesson, preset }: { lesson: Lesson; preset: SimulatorPresetId }) {
+function GuidedSimulation({
+  lesson,
+  preset,
+  shown = LEVEL_PRESENTATION[lesson.level].readouts,
+}: {
+  lesson: Lesson;
+  preset: SimulatorPresetId;
+  // The readouts on screen; by default, those of the learner's level.
+  shown?: readonly Readout[];
+}) {
   useStartingPoint(lesson.simulator, preset);
   return (
     <div className="simulator-panel">
       <SimulatorStage controller={lesson.simulator} />
-      <SimulationReadouts
-        controller={lesson.simulator}
-        shown={LEVEL_PRESENTATION[lesson.level].readouts}
-      />
+      <SimulationReadouts controller={lesson.simulator} shown={shown} />
     </div>
   );
 }
@@ -48,13 +58,7 @@ export function UnstableCapsule({ lesson }: { lesson: Lesson }) {
 }
 
 export function EnergyCapsule({ lesson }: { lesson: Lesson }) {
-  useStartingPoint(lesson.simulator, 'figure-eight');
-  return (
-    <div className="simulator-panel">
-      <SimulatorStage controller={lesson.simulator} />
-      <SimulationReadouts controller={lesson.simulator} shown={READOUTS} />
-    </div>
-  );
+  return <GuidedSimulation lesson={lesson} preset="figure-eight" shown={READOUTS} />;
 }
 
 // Everything at once and no script: every preset, every readout and the body editor.

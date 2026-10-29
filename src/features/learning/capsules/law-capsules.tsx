@@ -10,7 +10,7 @@ import { LEVEL_PRESENTATION } from '@/features/learning/model/level-presentation
 import { numberFormat } from '@/shared/i18n/number-format';
 import { Prediction } from '../components/prediction';
 import { ForceDiagram } from '../lab/force-diagram';
-import { INITIAL_FORCE } from './force-readout';
+import { INITIAL_FORCE, levelForceFormat } from './force-readout';
 import type { Lesson } from './lesson';
 import styles from './capsules.module.css';
 
@@ -30,7 +30,7 @@ function DoublingCheck({ quantity, lesson }: { quantity: Doubling; lesson: Lesso
   const t = useTranslations('learn');
   const locale = useLocale();
   const { experiment, force, update } = lesson;
-  const digits = LEVEL_PRESENTATION[lesson.level].forceDigits;
+  const newtons = levelForceFormat(locale, lesson.level);
   const ratio = numberFormat(locale, { maximumSignificantDigits: 3 });
   const restart: Partial<Experiment> = {
     mass1: initialExperiment.mass1,
@@ -44,7 +44,13 @@ function DoublingCheck({ quantity, lesson }: { quantity: Doubling; lesson: Lesso
           type="button"
           className="button primary"
           disabled={experiment[quantity] * 2 > DOUBLING_LIMITS[quantity]}
-          onClick={() => update({ [quantity]: experiment[quantity] * 2, checked: true })}
+          onClick={() =>
+            update({
+              [quantity]: experiment[quantity] * 2,
+              // Only doubling the distance tests the prediction the tutor asks about.
+              checked: experiment.checked || quantity === 'distance',
+            })
+          }
         >
           {t(DOUBLING_LABELS[quantity])}
         </button>
@@ -55,14 +61,9 @@ function DoublingCheck({ quantity, lesson }: { quantity: Doubling; lesson: Lesso
       <div className={styles.checkResult}>
         <ForceDiagram experiment={experiment} force={force} />
         <div aria-live="polite">
-          {digits === null ? null : (
+          {newtons === null ? null : (
             <p className={styles.checkForce}>
-              F ={' '}
-              {numberFormat(locale, {
-                notation: 'scientific',
-                maximumSignificantDigits: digits,
-              }).format(force)}{' '}
-              {UNITS.force}
+              F = {newtons.format(force)} {UNITS.force}
             </p>
           )}
           <p className="force-ratio">

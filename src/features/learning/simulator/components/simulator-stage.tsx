@@ -3,6 +3,10 @@ import dynamic from 'next/dynamic';
 import { useLocale, useTranslations } from 'next-intl';
 import { numberFormat } from '@/shared/i18n/number-format';
 import { SceneBoundary } from '@/shared/three/scene-boundary';
+import {
+  isSimulatorPreset,
+  type SimulatorStart,
+} from '@/features/learning/model/simulator-presets';
 import { useDocumentVisible } from '@/shared/three/use-document-visible';
 import type { SimulatorController } from '../state/simulator-controller';
 import { SimulatorControls } from './simulator-controls';
@@ -12,6 +16,14 @@ const SimulatorScene = dynamic(() => import('./scene/simulator-scene'), { ssr: f
 const READOUT_INTERVAL_MS = 200;
 const DIVERGENCE_DIGITS = 2;
 
+// Presets and gallery orbits are named in different message groups.
+function useStartName() {
+  const presets = useTranslations('simulator.preset');
+  const orbits = useTranslations('orbits');
+  return (start: SimulatorStart) =>
+    isSimulatorPreset(start) ? presets(`${start}.name`) : orbits(`${start}.name`);
+}
+
 // The live scene with its playback controls; capsules add presets, readouts or the editor around it.
 export function SimulatorStage({ controller }: { controller: SimulatorController }) {
   const t = useTranslations('simulator');
@@ -20,6 +32,9 @@ export function SimulatorStage({ controller }: { controller: SimulatorController
   const playing = useSimulatorState(controller, (state) => state.playing);
   const event = useSimulatorState(controller, (state) => state.event);
   const divergence = useSimulatorState(controller, (state) => state.divergence);
+  const original = useSimulatorState(controller, (state) => state.original);
+  const originalStopped = useSimulatorState(controller, (state) => state.originalStopped);
+  const startName = useStartName();
   const distance = numberFormat(useLocale(), { maximumFractionDigits: DIVERGENCE_DIGITS });
 
   useEffect(() => {
@@ -39,9 +54,14 @@ export function SimulatorStage({ controller }: { controller: SimulatorController
         <p className="simulator-event" role="status">
           {event ? t(event) : null}
         </p>
-        {divergence === null ? null : (
+        {original === null ? null : (
           <p className="simulator-comparison" data-testid="simulator-comparison">
-            {t('comparison', { distance: distance.format(divergence) })}
+            {originalStopped
+              ? t('comparisonStopped', { name: startName(original) })
+              : t('comparison', {
+                  name: startName(original),
+                  distance: distance.format(divergence ?? 0),
+                })}
           </p>
         )}
       </div>

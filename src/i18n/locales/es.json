@@ -443,8 +443,9 @@
     "fallback": "La simulación necesita WebGL, que no está disponible en este dispositivo.",
     "next": "Las órbitas periódicas son la excepción: condiciones tan precisas que el movimiento se repite. Explora las seis más conocidas.",
     "explore": "Descubre las seis órbitas",
-    "comparison": "Las esferas translúcidas repiten el punto de partida original. Mayor separación ahora entre un cuerpo y su original: {distance}.",
-    "fromGallery": "Cargada desde la galería: {name}. Edita un cuerpo o perturba un 1 % para ver qué tan estable es."
+    "comparison": "Las esferas translúcidas siguen el original ({name}). Mayor separación ahora entre un cuerpo y su original: {distance}.",
+    "fromGallery": "Cargada desde la galería: {name}. Edita un cuerpo o perturba un 1 % para ver qué tan estable es.",
+    "comparisonStopped": "El original ({name}) se detuvo por un acercamiento extremo; la comparación se congela aquí."
   },
   "calibration": {
     "progress": "Calibración {step} de {total}",
